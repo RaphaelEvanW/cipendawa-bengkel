@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reservation System ERD</title>
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --panel: #121214;
+      --panel-2: #18181b;
+      --card: #2b2b2f;
+      --card-header: #666666;
+      --row-odd: #4d4d4d;
+      --row-even: #3f3f3f;
+      --border: #777;
+      --line: #a5a5a5;
+      --text: #f5f5f5;
+      --muted: #b9b9b9;
+      --type: #d0d0d0;
+      --pk: #facc15;
+      --fk: #60a5fa;
+      --badge-bg: #232326;
+      --badge-border: #4b4b50;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 25%),
+        radial-gradient(circle at top right, rgba(255,255,255,0.02), transparent 20%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .title {
+      margin-bottom: 18px;
+    }
+
+    .title h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .diagram-panel {
+      position: relative;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .diagram-grid-wrap {
+      position: relative;
+      min-height: 980px;
+    }
+
+    .diagram-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 280px 360px 280px 240px;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        ". service shop-config settings"
+        "admin reservation shop-closures ."
+        "reservation-log reservation notification .";
+      gap: 34px 44px;
+      align-items: start;
+      z-index: 2;
+    }
+
+    .entity {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .entity.service { grid-area: service; }
+    .entity.shop-config { grid-area: shop-config; }
+    .entity.settings { grid-area: settings; }
+    .entity.admin { grid-area: admin; }
+    .entity.reservation { grid-area: reservation; }
+    .entity.shop-closures { grid-area: shop-closures; }
+    .entity.reservation-log { grid-area: reservation-log; }
+    .entity.notification { grid-area: notification; }
+
+    .entity.reservation {
+      width: 360px;
+    }
+
+    .entity .header {
+      padding: 12px 16px;
+      background: var(--card-header);
+      color: white;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 78px 1fr 42px;
+      min-height: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 12px;
+    }
+
+    .field:nth-child(odd) {
+      background: var(--row-odd);
+    }
+
+    .field:nth-child(even) {
+      background: var(--row-even);
+    }
+
+    .field:last-child {
+      border-bottom: none;
+    }
+
+    .field > div {
+      display: flex;
+      align-items: center;
+      padding: 7px 10px;
+      min-width: 0;
+    }
+
+    .field .type {
+      border-right: 1px solid rgba(255,255,255,0.12);
+      color: var(--type);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .field .name {
+      border-right: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      font-family: Consolas, "Courier New", monospace;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .field .key {
+      justify-content: center;
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .field .key.pk {
+      color: var(--pk);
+    }
+
+    .field .key.fk {
+      color: var(--fk);
+    }
+
+    .line-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .line-path {
+      stroke: var(--line);
+      stroke-width: 2;
+      fill: none;
+      opacity: 0.9;
+    }
+
+    .line-dot {
+      fill: var(--line);
+    }
+
+    .line-label-bg {
+      fill: #0f0f11;
+      stroke: rgba(255,255,255,0.18);
+      stroke-width: 1;
+      rx: 6;
+      ry: 6;
+    }
+
+    .line-label-text {
+      fill: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    .legend {
+      margin-top: 20px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .dot.pk { background: var(--pk); }
+    .dot.fk { background: var(--fk); }
+
+    .summary-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-title {
+      margin: 0 0 18px;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .summary-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+
+    .summary-box h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .summary-box h2 .small {
+      font-size: 22px;
+    }
+
+    .summary-box ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .summary-box li {
+      margin-bottom: 14px;
+      color: #f3f3f3;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: #ffb39a;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92em;
+      vertical-align: middle;
+    }
+
+    .arrow {
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0 4px;
+    }
+
+    .note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1400px) {
+      .page {
+        overflow-x: auto;
+      }
+
+      .diagram-panel,
+      .summary-panel {
+        min-width: 1320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="title">
+      <h1>Reservation System ERD</h1>
+      <p>
+        Entity relationship diagram for service reservation, logs, notifications, shop configuration,
+        and readable relationship summary.
+      </p>
+    </section>
+
+    <section class="diagram-panel">
+      <div class="diagram-grid-wrap" id="diagramWrap">
+        <svg class="line-layer" id="lineLayer"></svg>
+        <div class="diagram-grid" id="diagramGrid"></div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="dot pk"></span> Primary Key</div>
+        <div class="legend-item"><span class="dot fk"></span> Foreign Key</div>
+      </div>
+    </section>
+
+    <section class="summary-panel">
+      <h2 class="summary-title">Relationship Summary</h2>
+      <div class="summary-grid">
+        <div class="summary-box">
+          <h2><span class="small">ONE to MANY</span> (1 → Many)</h2>
+          <ul id="oneToManyList"></ul>
+        </div>
+
+        <div class="summary-box">
+          <h2><span class="small">MANY to ONE</span> (Many → 1)</h2>
+          <ul id="manyToOneList"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const entities = [
+      {
+        id: "SERVICE",
+        className: "service",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["varchar", "name", ""],
+          ["text", "description", ""],
+          ["decimal", "price_estimate", ""],
+          ["int", "duration_minutes", ""],
+          ["boolean", "is_active", ""],
+          ["timestamp", "created_at", ""],
+        ],
+      },
+      {
+        id: "SHOP_CONFIG",
+        className: "shop-config",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["int[]", "open_days", ""],
+          ["time", "open_time", ""],
+          ["time", "close_time", ""],
+          ["int", "max_bookings_per_day", ""],
+          ["timestamp", "updated_at", ""],
+        ],
+      },
+      {
+        id: "SETTINGS",
+        className: "settings",
+        fields: [
+          ["varchar", "key", "PK"],
+          ["text", "value", ""],
+          ["timestamp", "updated_at", ""],
+        ],
+      },
+      {
+        id: "ADMIN",
+        className: "admin",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["varchar", "username", ""],
+          ["varchar", "password_hash", ""],
+          ["varchar", "email", ""],
+          ["timestamp", "created_at", ""],
+        ],
+      },
+      {
+        id: "RESERVATION",
+        className: "reservation",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["varchar", "booking_code", ""],
+          ["uuid", "service_id", "FK"],
+          ["date", "reservation_date", ""],
+          ["time", "reservation_time", ""],
+          ["varchar", "customer_name", ""],
+          ["varchar", "customer_phone", ""],
+          ["varchar", "customer_vehicle", ""],
+          ["text", "notes", ""],
+          ["boolean", "reschedule_willing", ""],
+          ["date", "reschedule_date_from", ""],
+          ["date", "reschedule_date_to", ""],
+          ["time", "reschedule_time_from", ""],
+          ["time", "reschedule_time_to", ""],
+          ["enum", "status", ""],
+          ["timestamp", "created_at", ""],
+          ["timestamp", "updated_at", ""],
+        ],
+      },
+      {
+        id: "SHOP_CLOSURES",
+        className: "shop-closures",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["date", "date", ""],
+          ["boolean", "is_national_holiday", ""],
+          ["boolean", "is_overridden", ""],
+          ["boolean", "is_closed", ""],
+          ["text", "note", ""],
+        ],
+      },
+      {
+        id: "RESERVATION_LOG",
+        className: "reservation-log",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["uuid", "reservation_id", "FK"],
+          ["uuid", "admin_id", "FK"],
+          ["varchar", "old_status", ""],
+          ["varchar", "new_status", ""],
+          ["text", "note", ""],
+          ["timestamp", "changed_at", ""],
+        ],
+      },
+      {
+        id: "NOTIFICATION",
+        className: "notification",
+        fields: [
+          ["uuid", "id", "PK"],
+          ["uuid", "reservation_id", "FK"],
+          ["enum", "channel", ""],
+          ["enum", "status", ""],
+          ["text", "payload", ""],
+          ["timestamp", "sent_at", ""],
+        ],
+      },
+    ];
+
+    const relationships = [
+      {
+        one: "SERVICE",
+        many: "RESERVATION",
+        shortLabel: "1:N",
+        oneToManyText: "satu layanan bisa punya banyak reservasi",
+        manyToOneText: "banyak reservasi bisa memilih satu layanan yang sama",
+      },
+      {
+        one: "RESERVATION",
+        many: "RESERVATION_LOG",
+        shortLabel: "1:N",
+        oneToManyText: "satu reservasi bisa punya banyak log perubahan",
+        manyToOneText: "banyak log bisa milik satu reservasi",
+      },
+      {
+        one: "RESERVATION",
+        many: "NOTIFICATION",
+        shortLabel: "1:N",
+        oneToManyText: "satu reservasi bisa trigger banyak notif",
+        manyToOneText: "banyak notif bisa terikat ke satu reservasi",
+      },
+      {
+        one: "ADMIN",
+        many: "RESERVATION_LOG",
+        shortLabel: "1:N",
+        oneToManyText: "satu admin bisa bikin banyak log",
+        manyToOneText: "banyak log bisa dicatat oleh satu admin",
+      },
+    ];
+
+    const diagramGrid = document.getElementById("diagramGrid");
+    const lineLayer = document.getElementById("lineLayer");
+    const oneToManyList = document.getElementById("oneToManyList");
+    const manyToOneList = document.getElementById("manyToOneList");
+
+    function renderEntities() {
+      entities.forEach((entity) => {
+        const article = document.createElement("article");
+        article.className = `entity ${entity.className}`;
+        article.dataset.entity = entity.id;
+
+        article.innerHTML = `
+          <div class="header">${entity.id}</div>
+          ${entity.fields.map(([type, name, key]) => `
+            <div class="field">
+              <div class="type">${type}</div>
+              <div class="name">${name}</div>
+              <div class="key ${key === "PK" ? "pk" : key === "FK" ? "fk" : ""}">${key || ""}</div>
+            </div>
+          `).join("")}
+        `;
+
+        diagramGrid.appendChild(article);
+      });
+    }
+
+    function badge(text) {
+      return `<span class="badge">${text}</span>`;
+    }
+
+    function renderRelationshipSummary() {
+      oneToManyList.innerHTML = relationships.map(rel => `
+        <li>
+          ${badge(rel.one)}
+          <span class="arrow">→</span>
+          ${badge(rel.many)}
+          — ${rel.oneToManyText}
+        </li>
+      `).join("");
+
+      manyToOneList.innerHTML = relationships.map(rel => `
+        <li>
+          ${badge(rel.many)}
+          <span class="arrow">→</span>
+          ${badge(rel.one)}
+          — ${rel.manyToOneText}
+        </li>
+      `).join("");
+    }
+
+    function getAnchorPoints(sourceRect, targetRect, containerRect) {
+      const source = {
+        left: sourceRect.left - containerRect.left,
+        right: sourceRect.right - containerRect.left,
+        top: sourceRect.top - containerRect.top,
+        bottom: sourceRect.bottom - containerRect.top,
+        centerX: sourceRect.left - containerRect.left + sourceRect.width / 2,
+        centerY: sourceRect.top - containerRect.top + sourceRect.height / 2,
+      };
+
+      const target = {
+        left: targetRect.left - containerRect.left,
+        right: targetRect.right - containerRect.left,
+        top: targetRect.top - containerRect.top,
+        bottom: targetRect.bottom - containerRect.top,
+        centerX: targetRect.left - containerRect.left + targetRect.width / 2,
+        centerY: targetRect.top - containerRect.top + targetRect.height / 2,
+      };
+
+      const dx = target.centerX - source.centerX;
+      const dy = target.centerY - source.centerY;
+
+      let start = {};
+      let end = {};
+
+      if (Math.abs(dy) > Math.abs(dx)) {
+        // mostly vertical
+        if (dy > 0) {
+          start = { x: source.centerX, y: source.bottom };
+          end = { x: target.centerX, y: target.top };
+        } else {
+          start = { x: source.centerX, y: source.top };
+          end = { x: target.centerX, y: target.bottom };
+        }
+      } else {
+        // mostly horizontal
+        if (dx > 0) {
+          start = { x: source.right, y: source.centerY };
+          end = { x: target.left, y: target.centerY };
+        } else {
+          start = { x: source.left, y: source.centerY };
+          end = { x: target.right, y: target.centerY };
+        }
+      }
+
+      return { start, end };
+    }
+
+    function buildElbowPath(start, end) {
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+
+      if (Math.abs(dy) > Math.abs(dx)) {
+        const midY = start.y + dy / 2;
+        return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
+      } else {
+        const midX = start.x + dx / 2;
+        return `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`;
+      }
+    }
+
+    function addLabel(svg, x, y, text) {
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+      const paddingX = 8;
+      const width = 40;
+      const height = 22;
+
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", x - width / 2);
+      rect.setAttribute("y", y - height / 2);
+      rect.setAttribute("width", width);
+      rect.setAttribute("height", height);
+      rect.setAttribute("class", "line-label-bg");
+
+      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      label.setAttribute("x", x);
+      label.setAttribute("y", y + 4);
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("class", "line-label-text");
+      label.textContent = text;
+
+      group.appendChild(rect);
+      group.appendChild(label);
+      svg.appendChild(group);
+    }
+
+    function renderLines() {
+      lineLayer.innerHTML = "";
+
+      const wrap = document.getElementById("diagramWrap");
+      const wrapRect = wrap.getBoundingClientRect();
+
+      lineLayer.setAttribute("viewBox", `0 0 ${wrap.clientWidth} ${wrap.clientHeight}`);
+      lineLayer.setAttribute("width", wrap.clientWidth);
+      lineLayer.setAttribute("height", wrap.clientHeight);
+
+      relationships.forEach((rel) => {
+        const sourceEl = document.querySelector(`[data-entity="${rel.one}"]`);
+        const targetEl = document.querySelector(`[data-entity="${rel.many}"]`);
+        if (!sourceEl || !targetEl) return;
+
+        const sourceRect = sourceEl.getBoundingClientRect();
+        const targetRect = targetEl.getBoundingClientRect();
+
+        const { start, end } = getAnchorPoints(sourceRect, targetRect, wrapRect);
+        const d = buildElbowPath(start, end);
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", d);
+        path.setAttribute("class", "line-path");
+        lineLayer.appendChild(path);
+
+        const startDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        startDot.setAttribute("cx", start.x);
+        startDot.setAttribute("cy", start.y);
+        startDot.setAttribute("r", 3.5);
+        startDot.setAttribute("class", "line-dot");
+        lineLayer.appendChild(startDot);
+
+        const endDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        endDot.setAttribute("cx", end.x);
+        endDot.setAttribute("cy", end.y);
+        endDot.setAttribute("r", 3.5);
+        endDot.setAttribute("class", "line-dot");
+        lineLayer.appendChild(endDot);
+
+        const labelX = (start.x + end.x) / 2;
+        const labelY = (start.y + end.y) / 2;
+        addLabel(lineLayer, labelX, labelY, rel.shortLabel);
+      });
+    }
+
+    renderEntities();
+    renderRelationshipSummary();
+
+    window.addEventListener("load", renderLines);
+    window.addEventListener("resize", renderLines);
+    setTimeout(renderLines, 100);
+  </script>
+</body>
+</html>
