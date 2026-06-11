@@ -16,16 +16,18 @@ func main() {
 	cfg := config.Load()
 	db := pkg.InitDB(cfg)
 
+	// auth
 	authService := auth.NewService(db, cfg)
 	authHandler := auth.NewHandler(authService)
 
-	// inisialisasi service module
+	// service
 	serviceRepo := service.NewRepository(db)
 	serviceService := service.NewService(serviceRepo)
 	serviceHandler := service.NewHandler(serviceService)
 
+	// schedule
 	scheduleRepo := schedule.NewRepository(db)
-	scheduleService := schedule.NewService(scheduleRepo)
+	scheduleService := schedule.NewService(scheduleRepo, cfg)
 	scheduleHandler := schedule.NewHandler(scheduleService)
 
 	r := gin.Default()
@@ -36,31 +38,41 @@ func main() {
 
 	api := r.Group("/api")
 	{
+		// auth
 		authRoutes := api.Group("/auth")
 		{
 			authRoutes.POST("/login", authHandler.Login)
 		}
-		//Routes buat public
-		api.GET("/services", serviceHandler.GetAll)
-		api.GET("/service/:id", serviceHandler.GetByID)
-		api.GET("/schedule/available", scheduleHandler.GetAvailable)
 
-		// Routes buat admin
+		// public routes
+		api.GET("/services", serviceHandler.GetAll)
+		api.GET("/services/:id", serviceHandler.GetByID)
+		api.GET("/book/config", scheduleHandler.GetConfig)
+		api.POST("/book/availability", scheduleHandler.CheckAvailability)
+
+		// admin routes
 		adminRoutes := api.Group("/admin")
 		adminRoutes.Use(auth.AuthMiddleware(cfg))
 		{
-			//Service routes
+			// service
 			adminRoutes.GET("/services", serviceHandler.GetAllAdmin)
 			adminRoutes.POST("/services", serviceHandler.Create)
-			adminRoutes.PUT("/services:id", serviceHandler.Update)
+			adminRoutes.PUT("/services/:id", serviceHandler.Update)
 			adminRoutes.DELETE("/services/:id", serviceHandler.Delete)
 
-			//Schedule routes
-			adminRoutes.GET("/schedule", scheduleHandler.GetAll)
-			adminRoutes.GET("/schedule/:id", scheduleHandler.GetByID)
-			adminRoutes.POST("/schedule", scheduleHandler.Create)
-			adminRoutes.PATCH("/schedule/:id", scheduleHandler.Update)
-			adminRoutes.DELETE("/schedule/:id", scheduleHandler.Delete)
+			// booking config
+			adminRoutes.PUT("/book/config", scheduleHandler.UpdateConfig)
+
+			// book closures
+			adminRoutes.GET("/book/closures", scheduleHandler.GetClosures)
+			adminRoutes.POST("/book/closures", scheduleHandler.CreateClosure)
+			adminRoutes.POST("/book/closures/bulk", scheduleHandler.CreateClosureBulk)
+			adminRoutes.POST("/book/closures/range", scheduleHandler.CreateClosureRange)
+			adminRoutes.PATCH("/book/closures/:id", scheduleHandler.UpdateClosure)
+			adminRoutes.DELETE("/book/closures/:id", scheduleHandler.DeleteClosure)
+
+			// sync libur nasional
+			adminRoutes.POST("/book/sync-holidays", scheduleHandler.SyncNationalHolidays)
 		}
 	}
 
