@@ -5,6 +5,9 @@ import (
 
 	"bengkel-backend/config"
 	"bengkel-backend/internal/auth"
+	"bengkel-backend/internal/dashboard"
+	"bengkel-backend/internal/notification"
+	"bengkel-backend/internal/reservation"
 	"bengkel-backend/internal/schedule"
 	"bengkel-backend/internal/service"
 	"bengkel-backend/pkg"
@@ -30,6 +33,20 @@ func main() {
 	scheduleService := schedule.NewService(scheduleRepo, cfg)
 	scheduleHandler := schedule.NewHandler(scheduleService)
 
+	// reservation
+	reservationRepo := reservation.NewRepository(db)
+	reservationService := reservation.NewService(reservationRepo, scheduleRepo, cfg)
+	reservationHandler := reservation.NewHandler(reservationService)
+
+	// notification
+	notificationRepo := notification.NewRepository(db)
+	notificationService := notification.NewService(notificationRepo, cfg)
+	notificationHandler := notification.NewHandler(notificationService)
+
+	// dashboard
+	dashboardService := dashboard.NewService(db)
+	dashboardHandler := dashboard.NewHandler(dashboardService)
+
 	r := gin.Default()
 
 	r.GET("/ping", func(c *gin.Context) {
@@ -49,6 +66,8 @@ func main() {
 		api.GET("/services/:id", serviceHandler.GetByID)
 		api.GET("/book/config", scheduleHandler.GetConfig)
 		api.POST("/book/availability", scheduleHandler.CheckAvailability)
+		api.POST("/reservations", reservationHandler.Create)
+		api.POST("/reservations/status", reservationHandler.CheckStatus)
 
 		// admin routes
 		adminRoutes := api.Group("/admin")
@@ -60,19 +79,33 @@ func main() {
 			adminRoutes.PUT("/services/:id", serviceHandler.Update)
 			adminRoutes.DELETE("/services/:id", serviceHandler.Delete)
 
-			// booking config
+			// shop config
 			adminRoutes.PUT("/book/config", scheduleHandler.UpdateConfig)
 
-			// book closures
+			// shop closures
 			adminRoutes.GET("/book/closures", scheduleHandler.GetClosures)
 			adminRoutes.POST("/book/closures", scheduleHandler.CreateClosure)
 			adminRoutes.POST("/book/closures/bulk", scheduleHandler.CreateClosureBulk)
 			adminRoutes.POST("/book/closures/range", scheduleHandler.CreateClosureRange)
 			adminRoutes.PATCH("/book/closures/:id", scheduleHandler.UpdateClosure)
 			adminRoutes.DELETE("/book/closures/:id", scheduleHandler.DeleteClosure)
-
-			// sync libur nasional
 			adminRoutes.POST("/book/sync-holidays", scheduleHandler.SyncNationalHolidays)
+
+			// reservation
+			adminRoutes.GET("/reservations", reservationHandler.GetAll)
+			adminRoutes.GET("/reservations/:id", reservationHandler.GetByID)
+			adminRoutes.PATCH("/reservations/:id/status", reservationHandler.UpdateStatus)
+			adminRoutes.DELETE("/reservations/:id", reservationHandler.Delete)
+			adminRoutes.GET("/reservations/:id/logs", reservationHandler.GetLogs)
+
+			// notification
+			adminRoutes.GET("/notifications", notificationHandler.GetAll)
+			adminRoutes.GET("/notifications/reservation/:reservation_id", notificationHandler.GetByReservationID)
+			adminRoutes.POST("/notifications/:id/retry", notificationHandler.Retry)
+
+			// dashboard
+			adminRoutes.GET("/dashboard/summary", dashboardHandler.GetSummary)
+			adminRoutes.GET("/dashboard/chart", dashboardHandler.GetChartData)
 		}
 	}
 
