@@ -12,6 +12,8 @@ import (
 	"bengkel-backend/internal/service"
 	"bengkel-backend/pkg"
 
+	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -48,6 +50,14 @@ func main() {
 	dashboardHandler := dashboard.NewHandler(dashboardService)
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	r.GET("/ping", func(c *gin.Context) {
 		pkg.SendSuccess(c, 200, "pong", nil)
