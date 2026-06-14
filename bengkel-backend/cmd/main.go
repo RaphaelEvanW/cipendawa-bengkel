@@ -10,6 +10,7 @@ import (
 	"bengkel-backend/internal/reservation"
 	"bengkel-backend/internal/schedule"
 	"bengkel-backend/internal/service"
+	"bengkel-backend/internal/settings"
 	"bengkel-backend/pkg"
 
 	"github.com/gin-gonic/gin"
@@ -46,6 +47,11 @@ func main() {
 	// dashboard
 	dashboardService := dashboard.NewService(db)
 	dashboardHandler := dashboard.NewHandler(dashboardService)
+
+	// settings
+	settingsRepo := settings.NewRepository(db)
+	settingsService := settings.NewService(settingsRepo)
+	settingsHandler := settings.NewHandler(settingsService)
 
 	r := gin.Default()
 
@@ -106,6 +112,10 @@ func main() {
 			// dashboard
 			adminRoutes.GET("/dashboard/summary", dashboardHandler.GetSummary)
 			adminRoutes.GET("/dashboard/chart", dashboardHandler.GetChartData)
+
+			adminRoutes.GET("/settings", settingsHandler.GetAll)
+			adminRoutes.GET("/settings/:key", settingsHandler.GetByKey)
+			adminRoutes.PUT("/settings/:key", settingsHandler.Update)
 		}
 	}
 
