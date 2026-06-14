@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cipendawa Motor Design System */
+  --background: #0b0f24;
+  --foreground: #ffffff;
+
+  --navy: #0b0f24;
+  --navy-light: #0f1533;
+  --navy-medium: #1a2040;
+  --lime: #bcff61;
+  --lime-dark: #a0e040;
+  --brand-blue: #2219b4;
+
+  --status-pending: #f59e0b;
+  --status-confirmed: #3b82f6;
+  --status-in-progress: #8b5cf6;
+  --status-done: #10b981;
+  --status-rejected: #ef4444;
+  --status-cancelled: #6b7280;
+
+  --radius: 0.5rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-navy: var(--navy);
+  --color-navy-light: var(--navy-light);
+  --color-navy-medium: var(--navy-medium);
+  --color-lime: var(--lime);
+  --color-lime-dark: var(--lime-dark);
+  --color-brand-blue: var(--brand-blue);
+
+  --color-status-pending: var(--status-pending);
+  --color-status-confirmed: var(--status-confirmed);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-done: var(--status-done);
+  --color-status-rejected: var(--status-rejected);
+  --color-status-cancelled: var(--status-cancelled);
+
+  --font-sans: "Inter", Arial, sans-serif;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
