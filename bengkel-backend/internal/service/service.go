@@ -38,6 +38,7 @@ func (s *ServiceUsecase) Create(req CreateServiceRequest) (*Service, error) {
 		Description:     req.Description,
 		PriceEstimate:   req.PriceEstimate,
 		DurationMinutes: req.DurationMinutes,
+		Category:        req.Category,
 		IsActive:        true,
 	}
 	err := s.repo.Create(service)
@@ -58,6 +59,7 @@ func (s *ServiceUsecase) Update(id string, req UpdateServiceRequest) (*Service, 
 	service.PriceEstimate = req.PriceEstimate
 	service.DurationMinutes = req.DurationMinutes
 	service.IsActive = req.IsActive
+	service.Category = req.Category
 
 	err = s.repo.Update(service)
 	return service, err

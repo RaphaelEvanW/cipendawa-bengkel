@@ -23,6 +23,7 @@ CREATE TABLE service (
   description TEXT,
   price_estimate DECIMAL(12,2),
   duration_minutes INT,
+  category VARCHAR(50) DEFAULT 'service',
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT NOW()
 );

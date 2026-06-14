@@ -8,6 +8,7 @@ type Service struct {
 	Description     string    `json:"description"`
 	PriceEstimate   float64   `json:"price_estimate"`
 	DurationMinutes int       `json:"duration_minutes"`
+	Category        string    `json:"category" gorm:"default:service"`
 	IsActive        bool      `json:"is_active" gorm:"default:true"`
 	CreatedAt       time.Time `json:"created_at"`
 }
@@ -20,6 +21,7 @@ type CreateServiceRequest struct {
 	Name            string  `json:"name" binding:"required"`
 	Description     string  `json:"description"`
 	PriceEstimate   float64 `json:"price_estimate"`
+	Category        string  `json:"category"`
 	DurationMinutes int     `json:"duration_minutes"`
 }
 
@@ -28,5 +30,6 @@ type UpdateServiceRequest struct {
 	Description     string  `json:"description"`
 	PriceEstimate   float64 `json:"price_estimate"`
 	DurationMinutes int     `json:"duration_minutes"`
+	Category        string  `json:"category"`
 	IsActive        bool    `json:"is_active"`
 }
