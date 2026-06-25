@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { isLoggedIn } from "@/lib/api/auth";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 
@@ -11,12 +11,13 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoggedIn()) {
       router.push("/login");
     }
-  }, [router]);
+  }, [router, pathname]);
 
   if (!isLoggedIn()) return null;
 
