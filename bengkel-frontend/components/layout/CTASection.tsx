@@ -5,7 +5,6 @@ export default function CTASection() {
     <section className="py-20 bg-navy">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative bg-gradient-to-br from-brand-blue via-brand-blue/80 to-navy-light rounded-3xl p-12 text-center overflow-hidden">
-          {/* Background decoration */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-lime/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-lime/5 rounded-full blur-3xl" />
 
@@ -33,3 +32,15 @@ export default function CTASection() {
                 Booking Sekarang →
               </Link>
               <Link
+                href="/cek-status"
+                className="inline-flex items-center gap-2 bg-white/10 text-white font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/20 transition-all border border-white/20"
+              >
+                Cek Status Reservasi
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

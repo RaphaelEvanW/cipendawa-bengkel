@@ -43,7 +43,6 @@ export default function WhyUsSection() {
   return (
     <section className="py-20 bg-navy">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <span className="text-lime text-sm font-semibold uppercase tracking-widest">
             Keunggulan Kami
@@ -57,7 +56,6 @@ export default function WhyUsSection() {
           </p>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => {
             const Icon = feature.icon;
@@ -66,4 +64,20 @@ export default function WhyUsSection() {
                 key={feature.title}
                 className="bg-navy-light border border-white/10 rounded-xl p-6 hover:border-lime/30 transition-all group"
               >
-                <div className="w-12 h-12 rounded-xl bg-lime/10 flex items-center justify-center text-lime mb-4 group-hover:bg-lime group-hover:text-navy
+                <div className="w-12 h-12 rounded-xl bg-lime/10 flex items-center justify-center text-lime mb-4 group-hover:bg-lime group-hover:text-navy transition-colors">
+                  <Icon size={22} />
+                </div>
+                <h3 className="text-white font-semibold text-lg mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-white/50 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
