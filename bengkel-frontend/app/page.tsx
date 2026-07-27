@@ -14,10 +14,9 @@ export default function HomePage() {
       <Navbar />
       <main className="flex-1 pt-16">
         <Hero />
-        <WhyUsSection />
-        <ServiceSection />
         <AboutSection />
         <TestimonialSection />
+        <ServiceSection />
         <LocationSection />
         <CTASection />
       </main>

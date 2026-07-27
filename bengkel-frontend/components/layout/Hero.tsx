@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden bg-navy"
+      className="relative min-h-screen flex items-start overflow-hidden bg-navy"
       style={{
         backgroundImage: "url('/photos/1.jpg')",
         backgroundSize: "cover",
@@ -20,16 +20,16 @@ export default function Hero() {
       />
 
       {/* Left dark vignette */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/60 to-transparent" />
 
       {/* Bottom vignette */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-navy to-transparent" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-15 pb-16 w-full">
         <div className="max-w-2xl">
           {/* Since 1976 label */}
           <p className="text-lime text-xs font-bold uppercase tracking-[0.2em] mb-6">
-            — Spesialis Bengkel Mobil Sejak 1976
+            — Spesialis body Repair Mobil Sejak 1976
           </p>
 
           {/* Heading */}
@@ -55,17 +55,19 @@ export default function Hero() {
             >
               Reservasi Bengkel Sekarang →
             </Link>
-            <Link
-              href="/cek-status"
+            <a
+              href="https://linktr.ee/CipendawaMotor"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-transparent text-white font-bold px-8 py-4 text-sm uppercase tracking-wider hover:bg-white/10 transition-colors border border-white/30"
               style={{ borderRadius: 0 }}
             >
               Hubungi Kami
-            </Link>
+            </a>
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap gap-10 mt-14 pt-10 border-t border-white/10">
+          <div className="flex flex-wrap gap-10 mt-4 pt-4 border-t border-white/10">
             {[
               { value: "48+", label: "Tahun Pengalaman" },
               { value: "3", label: "Cabang" },
