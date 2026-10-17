@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section
-      className="relative min-h-screen flex items-start overflow-hidden bg-navy"
+      className="relative min-h-[calc(100svh-4rem)] flex items-center overflow-hidden bg-navy"
       style={{
         backgroundImage: "url('/photos/1.jpg')",
         backgroundSize: "cover",
@@ -16,7 +16,7 @@ export default function Hero() {
       {/* Bottom vignette */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-navy to-transparent" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-15 pb-16 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 w-full">
         <div className="max-w-2xl">
           {/* Since 1976 label */}
           <p className="text-lime text-xs font-bold uppercase tracking-[0.2em] mb-6">

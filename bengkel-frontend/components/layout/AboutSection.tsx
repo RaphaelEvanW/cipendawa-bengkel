@@ -14,9 +14,9 @@ const highlights = [
 ];
 
 const pairs = [
-  { before: "/photos/beforeafter/before1.jpg", after: "/photos/beforeafter/after1.jpg", label: "Body Repair" },
-  { before: "/photos/beforeafter/before2.jpg", after: "/photos/beforeafter/after2.jpg", label: "Cat Ulang" },
-  { before: "/photos/beforeafter/before3.jpg", after: "/photos/beforeafter/after3.jpg", label: "Dent Removal" },
+  { before: "/images/before_after/Body_repair/repair_before.jpg", after: "/images/before_after/Body_repair/repair_after.jpg", label: "Body Repair" },
+  { before: "/images/before_after/Repaint/before_repaint.jpg", after: "/images/before_after/Repaint/after_repaint.jpg", label: "Cat Ulang" },
+  { before: "/images/before_after/Dent/dent_before.jpg", after: "/images/before_after/Dent/dent_after.jpg", label: "Dent Removal" },
 ];
 
 function BeforeAfterSlider({ before, after, label }: { before: string; after: string; label: string }) {
@@ -90,19 +90,33 @@ function BeforeAfterSlider({ before, after, label }: { before: string; after: st
     >
       {/* After image (full) */}
       <div className="absolute inset-0">
-        <Image src={after} alt={`Mobil sesudah ${label}`} fill className="object-cover" />
+        <Image
+          src={after}
+          alt={`Mobil sesudah ${label}`}
+          fill
+          sizes="(min-width: 1024px) 480px, (min-width: 640px) 80vw, 75vw"
+          draggable={false}
+          className="object-contain"
+        />
         <div className="absolute top-3 right-3 bg-lime text-navy text-xs font-black px-2 py-1 uppercase tracking-wider">
           Sesudah
         </div>
       </div>
 
-      {/* Before image (clipped) */}
+      {/* Clip the full frame so both photos keep the same scale while dragging. */}
       <div
         className="absolute inset-0 overflow-hidden"
-        style={{ width: `${position}%` }}
+        style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
-        <Image src={before} alt={`Mobil sebelum ${label}`} fill className="object-cover" />
-        <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm text-white text-xs font-black px-2 py-1 uppercase tracking-wider">
+        <Image
+          src={before}
+          alt={`Mobil sebelum ${label}`}
+          fill
+          sizes="(min-width: 1024px) 480px, (min-width: 640px) 80vw, 75vw"
+          draggable={false}
+          className="object-contain"
+        />
+        <div className="absolute top-3 left-3 bg-navy text-white text-xs font-black px-2 py-1 uppercase tracking-wider">
           Sebelum
         </div>
       </div>
@@ -130,7 +144,7 @@ export default function AboutSection() {
   const next = () => setCurrentPair((p) => (p === pairs.length - 1 ? 0 : p + 1));
 
   return (
-    <section className="py-20 bg-navy-light">
+    <section id="hasil-pekerjaan" aria-labelledby="about-heading" className="scroll-mt-24 py-20 bg-navy-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -148,7 +162,7 @@ export default function AboutSection() {
                 <ChevronLeft size={16} />
               </button>
 
-              <div className="min-w-0 flex-1 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 focus-within:ring-2 focus-within:ring-lime">
+              <div className="min-w-0 flex-1 aspect-[4/5] rounded-2xl overflow-hidden bg-navy border border-white/10 focus-within:ring-2 focus-within:ring-lime">
                 <BeforeAfterSlider
                   key={currentPair}
                   before={pairs[currentPair].before}
@@ -205,7 +219,7 @@ export default function AboutSection() {
             <span className="text-lime text-xs font-bold uppercase tracking-[0.2em]">
               Tentang Kami
             </span>
-            <h2 className="text-4xl font-black text-white mt-3 mb-4 uppercase leading-tight">
+            <h2 id="about-heading" className="text-4xl font-black text-white mt-3 mb-4 uppercase leading-tight">
               Bengkel Terpercaya<br />
               <span className="text-lime">Keluarga Cianjur</span>
             </h2>

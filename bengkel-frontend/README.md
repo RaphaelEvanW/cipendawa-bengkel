@@ -11,11 +11,24 @@ Keputusan scope dan gambaran seluruh repository tersedia di [README utama](../RE
 - Alamat, Google Maps, jam operasional, dan kontak resmi.
 - Akses ke WhatsApp atau kanal kontak yang sudah dipakai bengkel.
 
-Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
+Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart & Variasi. Kebutuhan variasi menggunakan nomor WhatsApp Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
 
-Reservasi, cek status, panel admin, n8n, dan katalog produk berada di luar scope saat ini. Kontak pelanggan dilakukan melalui kanal yang sudah tersedia. Pengunjung tidak perlu akun.
+Reservasi online masuk kembali ke rencana pengembangan, dengan automation ke WhatsApp pribadi pemilik untuk testing. Form dan integrasinya belum dipasang di website publik. Panel admin masih dipertimbangkan; cek status publik dan katalog produk belum masuk rencana yang disepakati. Nomor WA pribadi dan alat automation belum ditetapkan. Pengunjung beranda saat ini tidak perlu akun.
 
-Pemilik project mengonfirmasi bahwa kontak, foto, dan informasi yang tersedia adalah benar. Materi before-after belum ditambahkan. Jangan menggantinya dengan foto atau hasil pekerjaan rekaan.
+## Rencana Reservasi Berikutnya
+
+Pemilik memberi referensi form tiga langkah: pilih layanan → data pelanggan → kendaraan, jadwal, dan ringkasan konfirmasi. Detail keputusan dan hal yang belum diputuskan ada di [rencana reservasi README utama](../README.md#rencana-reservasi-dan-automation-whatsapp).
+
+- Langkah layanan mengacu pada kebutuhan bengkel Cipendawa; daftar serta durasi pada screenshot tidak otomatis menjadi layanan resmi.
+- Data pelanggan pada referensi mencakup nama, nomor telepon/WhatsApp, dan email opsional.
+- Langkah terakhir menampilkan tahun/merek/model kendaraan, tanggal/jam pilihan, keluhan opsional, dan ringkasan. Field wajib dan aturan slot masih perlu ditentukan.
+- Pengiriman reservasi direncanakan memicu automation ke WA pribadi pemilik untuk testing. Jangan memakai nomor Service, Body Repair, atau Sparepart sebagai tujuan testing tanpa konfirmasi nomor.
+- Panel admin, penyedia WhatsApp, alat automation seperti n8n, penyimpanan, serta mekanisme konfirmasi jadwal belum diputuskan.
+- Screenshot menjadi acuan alur; tampilan nanti mengikuti identitas Cipendawa. Klaim garansi, durasi, konfirmasi 24 jam, dan batas pemesanan 18 jam dalam contoh belum disetujui sebagai kebijakan bengkel.
+
+Instruksi saat ini hanya memperbarui Markdown. CSS, JavaScript/TypeScript, HTML/JSX, route, dan tampilan yang sudah ada tetap seperti sekarang; implementasi reservasi menunggu instruksi berikutnya.
+
+Pemilik project mengonfirmasi bahwa kontak, foto, dan informasi yang tersedia adalah benar. Materi before-after sudah ditambahkan di public/images/before_after/ dan terhubung ke slider. Gunakan foto asli yang tersedia.
 
 ## Identitas Visual
 
@@ -35,19 +48,23 @@ Sumber token: [app/globals.css](app/globals.css).
 
 Gunakan lime untuk mengarahkan perhatian ke aksi penting. Foto bengkel dan pekerjaan asli membantu pengunjung mengenali perusahaan serta pekerjaan yang ditangani. Layout dan jarak antarelemen perlu membantu pengunjung membaca informasi layanan dan kontak di HP.
 
-CSS mendeklarasikan Inter dengan fallback Arial, sans-serif dan radius dasar 8px. Deklarasi ini belum berarti font Inter sudah dimuat. Token warna status reservasi masih ada sebagai peninggalan scope sebelumnya.
+CSS mendeklarasikan Inter dengan fallback Arial, sans-serif dan radius dasar 8px. Deklarasi ini belum berarti font Inter sudah dimuat. Token warna status reservasi masih tersimpan dari implementasi sebelumnya; penggunaannya pada rencana baru belum ditetapkan.
 
 ## Implementasi Saat Ini
 
-Beranda pada app/page.tsx merangkai navbar, hero, profil, testimoni, layanan, lokasi, CTA, dan footer.
+Beranda pada app/page.tsx merangkai navbar, hero, profil, Instagram, layanan, testimoni, lokasi, CTA, dan footer. InstagramSection memuat widget Zyff lbwI2zYe3hkE2g melalui https://www.zyff.app/w/instagram.js setelah hidrasi. Feed membutuhkan koneksi ke Zyff dan JavaScript pengunjung.
 
-ServiceSection menampilkan ringkasan statis Body Repair, Service, Sparepart, dan Variasi. Beranda tidak mengambil layanan dari API dan tidak memerlukan backend atau database. Kontak, navigasi publik, serta jam operasional bersumber dari lib/content/workshop.ts.
+TestimonialSection menampilkan Google Reviews melalui widget Elfsight 2bb9cb75-042f-4397-aaf8-042019b45792 dari pemilik project, menggantikan daftar testimoni statis. Script https://elfsightcdn.com/platform.js dimuat setelah hidrasi dan widget menggunakan pemuatan lazy bawaan Elfsight. Konten ulasan serta tampilannya dikelola melalui Elfsight; widget membutuhkan JavaScript dan koneksi ke layanan tersebut.
 
-Navbar, hero, dan footer mengarah ke section layanan, lokasi, dan kontak yang tersedia. CTA menampilkan tiga WhatsApp berdasarkan layanan. Halaman detail /layanan belum dibuat; ringkasan di beranda menyebutkan keterbatasan tersebut dan mengarahkan pengunjung ke kontak yang sesuai. Reservasi dan cek status tidak dipromosikan pada website publik.
+ServiceSection menampilkan tiga ringkasan statis: Body Repair, Service, serta Sparepart & Variasi. Beranda tidak mengambil layanan dari API dan tidak memerlukan backend atau database. Kontak, navigasi publik, serta jam operasional bersumber dari lib/content/workshop.ts.
+
+Foto layanan menggunakan public/images/layanan/body_repair.png, service.png, dan sparepart_variasi.png. Pada desktop, pengantar section mengikuti scroll di kolom kiri, sementara foto dan informasi tiap layanan tampil di kanan. Pada HP, teks ditempatkan di bawah foto agar tidak menutupi subjek. Foto dimuat melalui next/image sesuai ukuran layar.
+
+Navbar, hero, dan footer mengarah ke section layanan, lokasi, dan kontak yang tersedia. CTA menampilkan tiga WhatsApp berdasarkan layanan. Halaman detail /layanan belum dibuat; ringkasan di beranda menyebutkan keterbatasan tersebut dan mengarahkan pengunjung ke kontak yang sesuai. Reservasi belum ditampilkan di beranda meskipun sudah masuk rencana berikutnya. Cek status publik belum diminta kembali.
 
 Menu mobile memiliki nama aksesibel, status buka/tutup, dan kendali Escape. Perbandingan foto dapat dioperasikan dengan tombol arah, Page Up/Down, Home, serta End; tombol pemilih foto memiliki label dan target sentuh yang lebih besar. Pemeriksaan tampilan dan interaksi di browser tetap diperlukan sebelum rilis.
 
-Halaman /login, layout admin, sidebar, dashboard placeholder, hook auth, serta API client modul operasional masih tersimpan. Keberadaan file-file itu tidak menjadikannya target pengembangan aktif.
+Halaman /login, layout admin, sidebar, dashboard placeholder, hook auth, serta API client modul operasional masih tersimpan. Panel admin belum diputuskan. API client reservasi yang sudah ada perlu ditinjau sebelum digunakan untuk alur baru; belum ada perubahan integrasi pada pembaruan dokumentasi ini.
 
 ## Teknologi
 
@@ -69,6 +86,7 @@ Versi dependensi terpasang mengacu pada lockfile. Perubahan versi perlu mengikut
 | app/(public)/layout.tsx | Layout route publik |
 | components/layout/ | Section website publik |
 | public/logo/ dan public/photos/ | Logo dan materi visual |
+| public/images/before_after/ | Pasangan foto Body_repair, Repaint, dan Dent |
 | lib/content/workshop.ts | Kontak, jam operasional, dan navigasi publik bersama |
 | components/layout/ServiceSection.tsx | Ringkasan layanan statis |
 | lib/api/services.ts | API client layanan dari implementasi lama |
@@ -121,8 +139,11 @@ npm run build -- --webpack
 - Edit ringkasan layanan statis pada ServiceSection; kontak, navigasi, dan jam operasional pada lib/content/workshop.ts.
 - Jaga keterbacaan, fokus keyboard, ukuran target sentuh, dan layout di HP.
 
-## Pengingat Materi dan Halaman yang Belum Selesai
+## Foto Before-After dan Pekerjaan Berikutnya
 
-- Tambahkan foto asli before1.jpg/after1.jpg, before2.jpg/after2.jpg, dan before3.jpg/after3.jpg ke public/photos/beforeafter/. Path pada AboutSection sudah disiapkan untuk ketiga pasangan tersebut; materi masih menunggu pemilik.
-- Periksa seluruh pasangan foto dan kendali perbandingan setelah aset ditambahkan. Galeri belum lengkap sebelum langkah ini selesai.
+- Body Repair memakai Body_repair/repair_before.jpg dan Body_repair/repair_after.jpg.
+- Cat Ulang memakai Repaint/before_repaint.jpg dan Repaint/after_repaint.jpg.
+- Dent Removal memakai Dent/dent_before.jpg dan Dent/dent_after.jpg.
+- Semua path di atas relatif terhadap public/images/before_after/. Pasangan diatur pada AboutSection, dengan frame portrait 4:5 dan object-contain agar foto tidak terpotong. Lapisan sebelum memakai clip-path sehingga gambar tidak mengecil ketika slider digeser.
+- Section dapat dibuka langsung melalui /#hasil-pekerjaan. Periksa kontrol geser, keyboard, dan pergantian kategori setelah mengganti materi.
 - Siapkan halaman detail layanan dan konten rinci ketika materi tersedia. Untuk sekarang, gunakan ringkasan pada section layanan dan kontak WhatsApp.

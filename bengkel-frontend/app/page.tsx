@@ -6,6 +6,7 @@ import AboutSection from "@/components/layout/AboutSection";
 import TestimonialSection from "@/components/layout/TestimonialSection";
 import LocationSection from "@/components/layout/LocationSection";
 import CTASection from "@/components/layout/CTASection";
+import InstagramSection from "@/components/layout/InstagramSection";
 
 export default function HomePage() {
   return (
@@ -14,8 +15,9 @@ export default function HomePage() {
       <main className="flex-1 pt-16">
         <Hero />
         <AboutSection />
-        <TestimonialSection />
+        <InstagramSection />
         <ServiceSection />
+        <TestimonialSection />
         <LocationSection />
         <CTASection />
       </main>

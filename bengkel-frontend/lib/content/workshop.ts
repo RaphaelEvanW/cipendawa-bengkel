@@ -1,7 +1,7 @@
 export const workshopContacts = [
   { id: "service", label: "Service", number: "6287881285526" },
   { id: "body_repair", label: "Body Repair", number: "6287770350243" },
-  { id: "sparepart", label: "Sparepart", number: "6287770350306" },
+  { id: "sparepart", label: "Sparepart & Variasi", number: "6287770350306" },
 ] as const;
 
 export const workshopHours = {

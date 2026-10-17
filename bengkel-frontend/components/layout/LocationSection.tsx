@@ -1,5 +1,5 @@
-import { MapPin, Phone, Clock } from "lucide-react";
-import { workshopContacts, workshopHours } from "@/lib/content/workshop";
+import { MapPin, Clock } from "lucide-react";
+import { workshopHours } from "@/lib/content/workshop";
 
 const branches = [
   {
@@ -67,7 +67,7 @@ export default function LocationSection() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="max-w-xl mx-auto">
           <div className="bg-navy border border-white/10 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center text-lime">
@@ -84,31 +84,6 @@ export default function LocationSection() {
                 <span className="text-white/70">{workshopHours.closedDay}</span>
                 <span className="text-red-400">Tutup</span>
               </div>
-            </div>
-          </div>
-
-          <div className="bg-navy border border-white/10 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center text-lime">
-                <Phone size={18} />
-              </div>
-              <h3 className="text-white font-semibold">Hubungi Kami</h3>
-            </div>
-            <div className="flex flex-col gap-3">
-              {workshopContacts.map((c) => (
-                <a
-                  key={c.id}
-                  href={"https://wa.me/" + c.number}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime"
-                >
-                  <span className="text-sm text-white/70">{c.label}</span>
-                  <span className="text-sm text-lime group-hover:underline">
-                    +{c.number}
-                  </span>
-                </a>
-              ))}
             </div>
           </div>
         </div>

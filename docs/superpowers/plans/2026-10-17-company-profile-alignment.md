@@ -1,5 +1,7 @@
 # Company Profile Alignment Implementation Plan
 
+> Catatan keputusan terbaru: dokumen ini merekam pekerjaan penyelarasan profil perusahaan yang sudah dilakukan. Pemilik kemudian memasukkan kembali reservasi online dan automation WhatsApp ke rencana, dengan WA pribadi sebagai tujuan testing; panel admin masih dipertimbangkan. Keputusan menghapus promosi reservasi di bawah adalah konteks historis, bukan pembatalan rencana terbaru. Lihat README utama untuk scope terkini. Pembaruan terbaru hanya dokumentasi dan tidak mengubah implementasi website.
+
 **Goal:** Selaraskan website publik dengan keputusan pemilik: profil bengkel mobil, informasi layanan statis, dan tiga kontak WhatsApp sesuai layanan.
 
 **Architecture:** Gunakan komponen Next.js yang sudah ada. Kontak, navigasi publik, dan jam operasional menggunakan satu modul data statis bersama. Informasi layanan tampil tanpa API; state client dibatasi pada menu dan perbandingan foto.
