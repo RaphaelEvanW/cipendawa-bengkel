@@ -1,212 +1,122 @@
 # Bengkel Cipendawa
 
-Website Bengkel Cipendawa untuk memperkenalkan bengkel, membangun kepercayaan pelanggan, menampilkan layanan dan produk, serta menerima pengajuan reservasi. Panel admin membantu bengkel mengelola reservasi dan jadwal operasional, sementara WhatsApp menjadi kanal komunikasi dengan pelanggan.
+Website profil perusahaan untuk bengkel mobil Cipendawa Motor. Website membantu calon pelanggan mengenal bengkel, memahami layanan, melihat hasil pekerjaan, dan menemukan kontak serta lokasi untuk berkunjung.
 
 ## Arah Project
 
-**Kenali bengkelnya, percaya kualitasnya, lalu ajukan reservasi dengan mudah.**
+Fokus pengembangan adalah website publik yang memperkenalkan perusahaan dan layanan bengkel mobil. Pelanggan menghubungi bengkel melalui kontak yang tersedia untuk bertanya tentang kebutuhan kendaraan dan rencana kunjungan.
 
-Project ini bukan aplikasi kasir atau e-commerce. Tidak ada payment gateway, checkout, atau pembayaran online dalam scope saat ini. Produk ditampilkan sebagai katalog; pelanggan dapat bertanya atau membeli melalui komunikasi dengan bengkel atau datang langsung.
+Keputusan scope dikonfirmasi pemilik project pada 17 Oktober 2026:
 
-## Fitur Website Publik
+- Kendaraan yang dilayani: mobil.
+- Fokus konten: profil perusahaan dan layanan bengkel.
+- WhatsApp, kontak, dan lokasi menjadi jalur pelanggan untuk menghubungi bengkel.
+- Tiga WhatsApp tetap dipisahkan berdasarkan Service, Body Repair, dan Sparepart.
+- Ringkasan layanan menggunakan konten statis untuk sekarang. Halaman detail layanan belum dibuat.
+- Jam operasional Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup.
+- Reservasi online dan pengecekan status dibatalkan dari scope saat ini.
+- Panel admin ditunda tanpa komitmen jadwal pengembangan.
+- Integrasi n8n dan notifikasi WhatsApp otomatis tidak diperlukan untuk scope saat ini.
+- Katalog produk tidak masuk scope. Informasi sparepart atau variasi dapat menjelaskan layanan yang memang tersedia, tanpa katalog jual beli.
 
-Fitur yang dituju:
+Keputusan ini menjadi acuan ketika dokumentasi lama atau kode yang masih tersimpan menggambarkan rencana reservasi dan admin.
 
-- Profil bengkel, lokasi/Google Maps, kontak, dan jam operasional.
-- Foto bengkel dan galeri hasil pekerjaan.
-- Reputasi melalui testimoni asli dan tautan review Google Maps.
-- Daftar layanan dengan deskripsi dan estimasi harga.
-- Katalog produk dengan foto, deskripsi, harga, dan status tersedia/habis.
-- Form pengajuan reservasi tanpa akun pelanggan.
-- Pengecekan status reservasi menggunakan kode booking atau nomor HP.
-- Tombol chat WhatsApp.
+## Konten Website Publik
 
-Estimasi harga layanan bukan harga final. Harga akhir menyesuaikan kondisi kendaraan dan pekerjaan yang disepakati dengan pelanggan. Tampilan estimasi berupa rentang harga atau "mulai dari" masih perlu dikembangkan; model saat ini menyimpan satu nilai estimasi.
+- Identitas, profil, dan informasi perusahaan.
+- Layanan bengkel mobil beserta penjelasan pekerjaan yang ditangani.
+- Foto bengkel dan hasil pekerjaan.
+- Testimoni atau reputasi bengkel yang sudah tersedia.
+- Lokasi, tautan Google Maps, jam operasional, dan kontak.
+- Akses ke WhatsApp atau kanal kontak resmi.
 
-## Alur Reservasi
+Pemilik project mengonfirmasi bahwa informasi perusahaan, kontak, foto, dan materi yang sudah tersedia adalah benar. Materi before-after belum ditambahkan dan menunggu aset dari pemilik. Jangan membuat hasil pekerjaan, angka, atau testimoni pengganti untuk mengisi kekosongan tersebut.
 
-1. Pelanggan memilih layanan, tanggal, dan jam yang diinginkan.
-2. Website memeriksa hari operasional, tanggal libur, dan kepadatan jadwal.
-3. Pelanggan mengisi nama, nomor WhatsApp, kendaraan, dan catatan/keluhan.
-4. Pengajuan disimpan dengan status `pending` dan kode booking.
-5. Sistem mengirim pemberitahuan ke WhatsApp admin melalui integrasi n8n.
-6. Admin menghubungi pelanggan untuk memastikan apakah jadwal bisa diterima atau menawarkan jadwal lain.
-7. Setelah ada kesepakatan, admin memperbarui jadwal dan status di panel.
+## Alur Pengunjung
 
-**Mengirim pengajuan tidak berarti jadwal langsung terkonfirmasi.** Konfirmasi dilakukan admin melalui WhatsApp. Data reservasi di panel admin tetap menjadi sumber data utama; kegagalan pengiriman notifikasi tidak boleh menghilangkan pengajuan.
+1. Mengenal Cipendawa Motor dan jenis layanan mobil yang ditangani.
+2. Membaca profil, melihat foto, hasil pekerjaan, dan reputasi bengkel.
+3. Memilih layanan yang relevan dengan kebutuhan kendaraan.
+4. Menghubungi bengkel atau membuka petunjuk lokasi untuk berkunjung.
 
-### Jadwal Sibuk dan Tanggal Tutup
+Keberhasilan website dinilai dari kemudahan memahami layanan dan menemukan kontak atau lokasi. Pengunjung tidak perlu membuat akun maupun mengisi form reservasi.
 
-- **Normal:** pelanggan dapat mengajukan reservasi.
-- **Sibuk/penuh:** pelanggan tetap boleh mengajukan, dengan peringatan bahwa jadwal belum pasti dan perlu konfirmasi admin.
-- **Tutup/libur:** tanggal tidak tersedia untuk reservasi.
+## Kondisi Implementasi
 
-Contoh peringatan saat jadwal sibuk:
+Beranda sudah diarahkan ke informasi perusahaan, layanan statis, lokasi, dan pilihan WhatsApp. Repository juga masih memuat kode operasional dari scope sebelumnya.
 
-> Jadwal tanggal ini sedang padat. Kamu tetap bisa mengajukan reservasi. Admin akan menghubungi melalui WhatsApp untuk memastikan apakah masih bisa dilayani atau menawarkan jadwal lain.
+| Bagian | Kondisi kode | Hubungan dengan scope sekarang |
+| --- | --- | --- |
+| Landing page | Navbar, hero, profil, testimoni, layanan, lokasi, CTA, dan footer sudah ada | Dasar website profil perusahaan |
+| Daftar layanan | ServiceSection menampilkan ringkasan statis | Dapat dibaca tanpa backend; halaman detail belum dibuat |
+| Navigasi dan CTA | Anchor layanan, lokasi, dan pilihan tiga WhatsApp | Mengarahkan pengunjung ke informasi dan kontak yang tersedia |
+| Login dan layout admin | Login, sidebar, dan dashboard placeholder tersedia | Peninggalan scope sebelumnya; pengembangannya ditunda |
+| API backend | Auth, layanan, jadwal, reservasi, notifikasi, dashboard, dan pengaturan tersedia | Tidak diperlukan oleh beranda statis; tersimpan dari implementasi lama |
+| n8n | Pemanggilan webhook masih ada dalam kode reservasi/notifikasi | Integrasi otomatis tidak menjadi kebutuhan website saat ini |
+| Database dan ERD | Skema operasional tersimpan | Dokumentasi implementasi yang masih ada, bukan target fitur publik |
 
-Contoh pesan setelah pengajuan berhasil:
+Kontak, navigasi publik, dan jam operasional menggunakan data bersama di bengkel-frontend/lib/content/workshop.ts. Ringkasan layanan berada di komponen ServiceSection. Tidak ada pengambilan data layanan dari API pada beranda.
 
-> Pengajuan berhasil. Jadwal belum dikonfirmasi. Tunggu admin menghubungi kamu melalui WhatsApp.
+### Materi yang Masih Perlu Dilengkapi
 
-Backend saat ini tetap menerima pengajuan ketika kapasitas harian penuh dan mengirim penanda `is_over_capacity` ke webhook. Fitur penandaan sibuk secara manual masih merupakan rencana pengembangan.
+- Pemilik perlu menambahkan tiga pasangan foto asli sebelum dan sesudah di bengkel-frontend/public/photos/beforeafter/: before1.jpg dan after1.jpg, before2.jpg dan after2.jpg, before3.jpg dan after3.jpg.
+- Komponen perbandingan tetap tersedia untuk materi tersebut, dengan kendali keyboard dan sentuh. Foto belum lengkap; jangan menganggap galeri siap produksi sebelum seluruh pasangan tersedia dan diperiksa.
+- Halaman detail layanan masih merupakan pekerjaan berikutnya. Beranda menjelaskan bahwa halaman tersebut belum tersedia dan mengarahkan pertanyaan ke WhatsApp yang sesuai.
 
-### Status Reservasi
-
-| Status | Arti |
-| --- | --- |
-| `pending` | Menunggu konfirmasi admin |
-| `confirmed` | Jadwal sudah disepakati |
-| `in_progress` | Kendaraan sedang dikerjakan |
-| `done` | Pekerjaan selesai |
-| `rejected` | Pengajuan ditolak |
-| `cancelled` | Reservasi dibatalkan |
-
-Alur umum: `pending → confirmed → in_progress → done`, dengan kemungkinan ditolak atau dibatalkan. Kode saat ini memvalidasi nilai status, tetapi belum membatasi transisi antarstatus.
-
-## Rencana Panel Admin
-
-### 1. Dashboard
-
-- Jumlah pengajuan dan booking terkonfirmasi untuk hari ini, ditampilkan terpisah.
-- Ringkasan reservasi menunggu, dikonfirmasi, dikerjakan, dan selesai.
-- Daftar pelanggan yang dijadwalkan datang hari ini.
-- Pengajuan yang belum dihubungi.
-- Peringatan notifikasi WhatsApp gagal.
-
-### 2. Reservasi
-
-- Filter tanggal dan status.
-- Detail pelanggan, kendaraan, layanan, dan keluhan.
-- Penanda pengajuan yang masuk saat jadwal padat.
-- Tombol chat WhatsApp dengan pesan awal.
-- Konfirmasi, ubah jadwal, ubah status, dan tolak/batalkan reservasi.
-- Catatan internal dan riwayat perubahan.
-- Penanda "sudah dihubungi" yang terpisah dari status reservasi.
-
-### 3. Kalender & Jadwal
-
-- Jumlah pengajuan dan booking terkonfirmasi per tanggal.
-- Detail reservasi saat tanggal dipilih.
-- Penanda tanggal normal, sibuk, atau tutup.
-- Pengaturan hari/jam operasional dan ambang kapasitas harian.
-- Pengaturan libur per tanggal atau rentang tanggal.
-- Penandaan sibuk manual, misalnya karena banyak pelanggan datang langsung.
-
-### 4. Layanan
-
-- Kelola nama, deskripsi, foto, estimasi harga, dan durasi layanan.
-- Aktif/nonaktif layanan dan pengaturan urutan tampil.
-
-### 5. Produk
-
-- Kelola nama, kategori, foto, deskripsi, dan harga produk.
-- Status tersedia/habis dan tampil/sembunyikan.
-- Penanda produk unggulan.
-- Tidak memerlukan stok angka, keranjang, checkout, atau pencatatan transaksi untuk versi awal.
-
-### 6. Website & Pengaturan
-
-- Profil, alamat, Maps, kontak, dan nomor WhatsApp admin.
-- Banner, tentang bengkel, dan galeri.
-- Testimoni dan tautan review.
-- Pemantauan notifikasi dan pengiriman ulang yang gagal.
-- Pengaturan akun/password admin.
-
-Bagian di atas adalah arah fitur, bukan daftar fitur yang semuanya sudah selesai.
-
-## Teknologi
+## Teknologi dan Struktur
 
 | Bagian | Teknologi |
 | --- | --- |
-| Backend | Go, Gin, GORM |
-| Database | PostgreSQL |
-| Autentikasi admin | JWT dan bcrypt |
 | Frontend | Next.js 16, React 19, TypeScript |
 | Styling | Tailwind CSS 4 |
 | HTTP client | Axios |
-| Dependensi pengelolaan data frontend | TanStack React Query (belum terpasang sebagai provider di aplikasi) |
-| Integrasi notifikasi | Webhook n8n; workflow WhatsApp berada di luar repo |
+| Backend yang masih tersedia | Go, Gin, GORM |
+| Database backend | PostgreSQL |
+| Auth admin yang masih tersedia | JWT dan bcrypt |
 
-## Struktur Repository
+Versi dependensi mengacu pada bengkel-frontend/package.json, lockfile, dan bengkel-backend/go.mod. React Query dan shadcn tercantum sebagai dependensi frontend; keberadaannya tidak menjadikan panel admin atau alur data lain bagian dari scope aktif.
 
-```text
-.
-├── bengkel-backend/
-│   ├── cmd/main.go          # Entry point dan route API
-│   ├── config/              # Konfigurasi environment
-│   ├── internal/
-│   │   ├── auth/
-│   │   ├── dashboard/
-│   │   ├── notification/
-│   │   ├── reservation/
-│   │   ├── schedule/
-│   │   ├── service/
-│   │   └── settings/
-│   └── pkg/                 # Database, JWT, response helper
-├── bengkel-frontend/
-│   ├── app/                 # Halaman dan layout Next.js
-│   └── lib/
-│       ├── api/             # API client
-│       └── types/           # Tipe data TypeScript
-├── migrations/001_init.sql  # Skema dan seed database
-└── bengkel_erd.html         # Diagram relasi database
+- bengkel-frontend/app/: halaman publik serta route admin lama.
+- bengkel-frontend/components/layout/: section website publik.
+- bengkel-frontend/lib/api/: API client, termasuk modul scope lama.
+- bengkel-frontend/lib/content/workshop.ts: kontak, navigasi publik, dan jam operasional bersama.
+- bengkel-frontend/public/: logo dan foto.
+- bengkel-backend/cmd/main.go: entry point dan route API.
+- bengkel-backend/internal/: modul backend.
+- migrations/001_init.sql: skema dan seed database.
+- bengkel_erd.html: diagram database.
+- .opencode/skills/: skill antislop yang dipasang di project.
+
+Backend umumnya memakai pola handler -> service -> repository. Dokumentasi frontend dan identitas visual tersedia di [README frontend](bengkel-frontend/README.md).
+
+## Menjalankan Website Secara Lokal
+
+Dari folder bengkel-frontend, jalankan:
+
+```sh
+npm install
+npm run dev
 ```
 
-Backend umumnya memakai pola `handler → service → repository`. Route admin dilindungi middleware JWT.
+Buka http://localhost:3000. Beranda dan ringkasan layanan dapat ditampilkan tanpa backend atau database. Jika menjalankan route lama yang masih memakai API, buat bengkel-frontend/.env.local:
 
-## Kondisi Implementasi Saat Ini
+```dotenv
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+```
 
-### Sudah Ada di Kode
+### Menjalankan Backend yang Masih Ada
 
-- Login admin berbasis JWT.
-- API pengelolaan layanan dan estimasi harga.
-- Konfigurasi hari/jam operasional dan kapasitas harian.
-- Pengelolaan tanggal tutup, termasuk bulk/rentang tanggal dan endpoint sinkronisasi libur nasional.
-- Pengajuan reservasi, cek status, filter reservasi, perubahan status, dan log perubahan status.
-- Penyimpanan preferensi alternatif jadwal pelanggan.
-- Ringkasan dashboard dan grafik tujuh hari.
-- Modul notifikasi dengan status dan retry.
-- Pemanggilan webhook n8n saat reservasi dibuat.
-- API client dan tipe data frontend.
+Backend memerlukan Go yang kompatibel dengan go.mod (deklarasi saat ini: Go 1.25.5), PostgreSQL, dan client psql.
 
-### Belum Selesai / Perlu Dikembangkan
-
-- UI publik dan panel admin; halaman utama masih template Next.js.
-- Profil, galeri, dan pengelolaan reputasi/testimoni.
-- Modul katalog produk.
-- Kalender admin dan indikator sibuk manual.
-- Perubahan jadwal reservasi setelah kesepakatan.
-- Penanda pelanggan sudah dihubungi.
-- Estimasi harga berbentuk rentang dan foto layanan.
-- Integrasi notifikasi end-to-end ke WhatsApp admin.
-- Penyatuan pemanggilan webhook reservasi dengan pencatatan di modul notifikasi.
-- Pengaturan akun/password admin.
-
-Keberadaan endpoint belum berarti seluruh fitur sudah diuji atau siap produksi.
-
-## Menjalankan Secara Lokal
-
-### Prasyarat
-
-- Go yang kompatibel dengan `bengkel-backend/go.mod` (deklarasi saat ini: Go 1.25.5).
-- Node.js yang kompatibel dengan Next.js 16 dan npm.
-- PostgreSQL dan client `psql`.
-- n8n beserta workflow WhatsApp jika ingin menguji notifikasi.
-
-### 1. Database
-
-Buat database `bengkel_db`, kemudian jalankan dari root repository:
+Buat database bengkel_db, lalu jalankan dari root repository:
 
 ```sh
 psql -U postgres -d bengkel_db -f migrations/001_init.sql
 ```
 
-Migration ini ditujukan untuk database baru dan tidak idempotent. Backend tidak menjalankan migration otomatis. Seed mencakup konfigurasi bengkel, pengaturan WhatsApp placeholder, dan akun admin dengan hash password bawaan; ganti kredensial tersebut sebelum deployment.
+Migration ditujukan untuk database baru dan tidak idempotent. Backend tidak menjalankan migration otomatis. Seed mencakup akun admin dengan hash password bawaan dan pengaturan WhatsApp placeholder.
 
-### 2. Backend
-
-Buat file `bengkel-backend/.env`:
+Buat bengkel-backend/.env:
 
 ```dotenv
 DB_HOST=localhost
@@ -218,96 +128,30 @@ JWT_SECRET=ganti_dengan_secret_yang_kuat
 PORT=8080
 ```
 
-Jalankan dari direktori `bengkel-backend`:
+Dari folder bengkel-backend, jalankan:
 
 ```sh
 go run ./cmd
 ```
 
-Backend tersedia di `http://localhost:8080`. Health check: `GET /ping`.
+Backend berjalan di http://localhost:8080 dengan health check GET /ping. CORS saat ini mengizinkan origin http://localhost:3000.
 
-### 3. Frontend
+Endpoint layanan publik adalah GET /api/services dan GET /api/services/:id. Backend juga masih mendaftarkan endpoint /api/auth/login, /api/book/*, /api/reservations*, dan /api/admin/* dari scope lama. Semua response menggunakan wrapper success, message, dan data.
 
-Buat file `bengkel-frontend/.env.local`:
-
-```dotenv
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
-```
-
-Jalankan dari direktori `bengkel-frontend`:
-
-```sh
-npm install
-npm run dev
-```
-
-Frontend tersedia di `http://localhost:3000`.
-
-> Middleware CORS belum dikonfigurasi di backend. Integrasi API dari browser pada origin berbeda perlu konfigurasi CORS atau proxy sebelum dapat digunakan.
-
-### 4. Notifikasi
-
-URL webhook saat ini masih hardcoded:
-
-```text
-http://localhost:5678/webhook/reservasi-baru
-```
-
-Workflow n8n, kredensial/provider WhatsApp, dan penentuan penerima admin tidak disertakan dalam repository. Pengiriman WhatsApp harus dikonfigurasi dan diuji secara terpisah. URL webhook perlu dipindahkan ke konfigurasi environment sebelum deployment.
-
-## Ringkasan API
-
-Base path: `/api`.
-
-### Publik
-
-| Method | Endpoint | Fungsi |
-| --- | --- | --- |
-| `POST` | `/auth/login` | Login admin |
-| `GET` | `/services` | Daftar layanan aktif |
-| `GET` | `/services/:id` | Detail layanan |
-| `GET` | `/book/config` | Konfigurasi operasional |
-| `POST` | `/book/availability` | Cek ketersediaan/kepadatan |
-| `POST` | `/reservations` | Ajukan reservasi |
-| `POST` | `/reservations/status` | Cek status dengan kode booking/nomor HP |
-
-### Admin
-
-Endpoint di bawah `/api/admin` memerlukan header `Authorization: Bearer <access_token>` dan mencakup:
-
-- `/services`: pengelolaan layanan.
-- `/book/config`, `/book/closures`, `/book/sync-holidays`: jadwal dan libur.
-- `/reservations`: daftar/detail reservasi, perubahan status, hapus, dan log.
-- `/notifications`: daftar, notifikasi per reservasi, dan retry.
-- `/dashboard/summary`, `/dashboard/chart`: ringkasan dan grafik.
-- `/settings`: baca dan ubah pengaturan.
-
-Response menggunakan wrapper `success`, `message`, dan `data`.
+n8n tidak diperlukan untuk website profil perusahaan. Pemanggilan webhook hardcoded http://localhost:5678/webhook/reservasi-baru masih terdapat dalam kode lama. Keberadaan route dan integrasi tersebut perlu diperhitungkan jika backend ikut dideploy.
 
 ## Prioritas Pengembangan
 
-1. Website publik: profil/reputasi, layanan, form reservasi, dan cek status.
-2. Panel admin: dashboard, reservasi, kalender, dan pengaturan jadwal.
-3. Konfirmasi lewat WhatsApp, perubahan jadwal, dan notifikasi yang dapat dipantau.
-4. Katalog produk tanpa checkout.
-5. Pengelolaan konten website dan penguatan keamanan, validasi, serta pengujian.
+1. Lengkapi hasil pekerjaan dengan foto sebelum dan sesudah asli dari pemilik.
+2. Siapkan konten rinci dan halaman detail layanan ketika materi siap.
+3. Periksa tampilan di HP, akses keyboard, pemuatan gambar, dan metadata pencarian sebelum rilis.
+4. Tentukan kebutuhan backend dan route yang akan disertakan sebelum deployment.
 
-## Catatan Sebelum Produksi
-
-- Ganti JWT secret default dan kredensial admin bawaan.
-- Perbaiki parsing jam pada cek availability dan validasi jam operasional saat membuat reservasi.
-- Samakan perilaku waktu/tanggal dengan zona waktu operasional bengkel.
-- Konfigurasikan CORS/proxy, koneksi database aman, dan URL integrasi.
-- Lengkapi penanganan error, timeout HTTP, pencatatan notifikasi, dan pengujian.
-- Tinjau privasi endpoint cek status berbasis nomor HP serta perlindungan terhadap spam/penyalahgunaan.
+Domain, hosting, dan cara pengelolaan konten setelah rilis belum diputuskan. Penundaan panel admin tidak berarti backend harus langsung dihapus; keputusan arsitektur mengikuti kebutuhan website publik.
 
 ## Di Luar Scope Saat Ini
 
-- Payment gateway dan pembayaran online.
-- Keranjang belanja dan checkout produk.
-- Kasir, invoice, serta akuntansi.
-- Manajemen stok/inventori detail.
-- Penugasan mekanik dan multi-cabang.
+Reservasi online, cek status reservasi, kalender operasional untuk booking, panel admin, n8n, notifikasi otomatis, katalog produk, keranjang, checkout, pembayaran online, kasir, invoice, akuntansi, dan inventori.
 
 ## Lisensi
 

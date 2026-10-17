@@ -1,126 +1,79 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getServices } from "@/lib/api/services";
-import { Service } from "@/lib/types";
-import { formatRupiah } from "@/lib/utils";
-import { Wrench, Car, Package, Sparkles } from "lucide-react";
+import { workshopContacts } from "@/lib/content/workshop";
 
-const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  service: <Wrench size={20} />,
-  body_repair: <Car size={20} />,
-  sparepart: <Package size={20} />,
-  variasi: <Sparkles size={20} />,
-};
+const services = [
+  {
+    id: "body_repair",
+    name: "Body Repair",
+    description: "Layanan perbaikan bodi mobil. Diskusikan kondisi kendaraan Anda dengan tim Body Repair.",
+  },
+  {
+    id: "service",
+    name: "Service",
+    description: "Layanan perawatan mobil. Sampaikan kebutuhan kendaraan Anda kepada tim Service.",
+  },
+  {
+    id: "sparepart",
+    name: "Sparepart",
+    description: "Kebutuhan suku cadang mobil. Tanyakan ketersediaan dan kesesuaian untuk kendaraan Anda.",
+  },
+  {
+    id: "variasi",
+    name: "Variasi",
+    description: "Kebutuhan variasi mobil. Hubungi kami untuk menanyakan pilihan yang tersedia.",
+  },
+] as const;
 
-const CATEGORY_LABELS: Record<string, string> = {
-  service: "Service",
-  body_repair: "Body Repair",
-  sparepart: "Sparepart",
-  variasi: "Variasi",
-};
+const contactLinkClass =
+  "inline-flex min-h-11 items-center py-2 text-sm font-medium text-lime underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime";
 
 export default function ServiceSection() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string>("all");
-
-  useEffect(() => {
-    getServices()
-      .then(setServices)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const categories = ["all", ...Array.from(new Set(services.map((s) => s.category)))];
-
-  const filtered =
-    activeCategory === "all"
-      ? services
-      : services.filter((s) => s.category === activeCategory);
-
   return (
-    <section className="py-20 bg-navy-light">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <span className="text-lime text-sm font-semibold uppercase tracking-widest">
-            Layanan Kami
-          </span>
-          <h2 className="text-4xl font-bold text-white mt-2">
-            Solusi Lengkap untuk Kendaraan Anda
+    <section id="layanan" aria-labelledby="layanan-heading" className="scroll-mt-24 bg-navy-light py-14 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 max-w-2xl">
+          <h2 id="layanan-heading" className="text-3xl font-bold text-white sm:text-4xl">
+            Layanan untuk mobil Anda
           </h2>
-          <p className="text-white/50 mt-3 max-w-xl mx-auto">
-            Dari body repair hingga variasi, kami siap menangani semua kebutuhan
-            kendaraan Anda dengan teknisi berpengalaman.
+          <p className="mt-3 leading-relaxed text-white/70">
+            Body repair, service, sparepart, dan variasi di Cipendawa Motor.
+            Hubungi tim sesuai kebutuhan kendaraan Anda.
           </p>
         </div>
 
-        {/* Category filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === cat
-                  ? "bg-lime text-navy"
-                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/10"
-              }`}
-            >
-              {cat === "all" ? "Semua" : CATEGORY_LABELS[cat] || cat}
-            </button>
-          ))}
+        <div className="grid gap-x-12 md:grid-cols-2">
+          {services.map((service) => {
+            const contact = workshopContacts.find((item) => item.id === service.id);
+
+            return (
+              <article key={service.id} className="border-t border-white/20 py-6">
+                <h3 className="text-xl font-semibold text-white">{service.name}</h3>
+                <p className="mt-2 max-w-prose leading-relaxed text-white/70">{service.description}</p>
+                {contact ? (
+                  <a
+                    href={`https://wa.me/${contact.number}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${contactLinkClass} mt-2`}
+                  >
+                    WhatsApp {contact.label}
+                  </a>
+                ) : (
+                  <Link href="/#kontak" className={`${contactLinkClass} mt-2`}>
+                    Pilih tim untuk dihubungi
+                  </Link>
+                )}
+              </article>
+            );
+          })}
         </div>
 
-        {/* Service cards */}
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-navy rounded-xl p-6 animate-pulse h-40"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((service) => (
-              <div
-                key={service.id}
-                className="bg-navy border border-white/10 rounded-xl p-6 hover:border-lime/30 transition-all group"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center text-lime group-hover:bg-lime group-hover:text-navy transition-colors">
-                    {CATEGORY_ICONS[service.category] || <Wrench size={20} />}
-                  </div>
-                  <span className="text-xs text-white/40 uppercase tracking-wider">
-                    {CATEGORY_LABELS[service.category] || service.category}
-                  </span>
-                </div>
-                <h3 className="text-white font-semibold text-lg mb-1">
-                  {service.name}
-                </h3>
-                <p className="text-white/50 text-sm mb-4 line-clamp-2">
-                  {service.description}
-                </p>
-                <p className="text-lime font-bold">
-                  Mulai dari {formatRupiah(service.price_estimate)}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* CTA */}
-        <div className="text-center mt-10">
-          <Link
-            href="/layanan"
-            className="inline-flex items-center gap-2 text-lime font-medium hover:underline"
-          >
-            Lihat Semua Layanan →
-          </Link>
-        </div>
+        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/70">
+          Halaman detail layanan belum tersedia. Untuk informasi lebih lanjut,{" "}
+          <Link href="/#kontak" className={contactLinkClass}>
+            pilih WhatsApp sesuai kebutuhan Anda
+          </Link>.
+        </p>
       </div>
     </section>
   );

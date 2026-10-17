@@ -83,7 +83,7 @@ export default function TestimonialSection() {
 
               {/* Review */}
               <p className="text-white/70 text-sm leading-relaxed mb-5">
-                "{t.review}"
+                &quot;{t.review}&quot;
               </p>
 
               {/* Author */}

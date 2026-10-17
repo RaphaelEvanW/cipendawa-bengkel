@@ -1,7 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/layout/Hero";
-import WhyUsSection from "@/components/layout/WhyUsSection";
 import ServiceSection from "@/components/layout/ServiceSection";
 import AboutSection from "@/components/layout/AboutSection";
 import TestimonialSection from "@/components/layout/TestimonialSection";

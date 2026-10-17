@@ -10,15 +10,6 @@ export default function Hero() {
         backgroundPosition: "center",
       }}
     >
-      {/* Dot grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.07]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #bcff61 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
       {/* Left dark vignette */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/60 to-transparent" />
 
@@ -29,7 +20,7 @@ export default function Hero() {
         <div className="max-w-2xl">
           {/* Since 1976 label */}
           <p className="text-lime text-xs font-bold uppercase tracking-[0.2em] mb-6">
-            — Spesialis body Repair Mobil Sejak 1976
+            Spesialis Body Repair Mobil Sejak 1976
           </p>
 
           {/* Heading */}
@@ -40,7 +31,7 @@ export default function Hero() {
           </h1>
 
           {/* Description */}
-          <p className="text-base text-white/55 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-white/80 leading-relaxed mb-10 max-w-md">
             Body repair, service, sparepart, dan variasi mobil.
             Lebih dari 48 tahun melayani puluhan ribu pelanggan
             di Cianjur dan Sukabumi.
@@ -49,21 +40,19 @@ export default function Hero() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/reservasi"
+              href="/#kontak"
               className="inline-flex items-center gap-2 bg-lime text-navy font-black px-8 py-4 text-sm uppercase tracking-wider hover:bg-lime-dark transition-colors"
               style={{ borderRadius: 0 }}
             >
-              Reservasi Bengkel Sekarang →
+              Hubungi Bengkel
             </Link>
-            <a
-              href="https://linktr.ee/CipendawaMotor"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/#layanan"
               className="inline-flex items-center gap-2 bg-transparent text-white font-bold px-8 py-4 text-sm uppercase tracking-wider hover:bg-white/10 transition-colors border border-white/30"
               style={{ borderRadius: 0 }}
             >
-              Hubungi Kami
-            </a>
+              Lihat Layanan
+            </Link>
           </div>
 
           {/* Stats */}
@@ -75,7 +64,7 @@ export default function Hero() {
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-3xl font-black text-lime leading-none">{stat.value}</p>
-                <p className="text-xs text-white/40 uppercase tracking-widest mt-2">{stat.label}</p>
+                <p className="text-xs text-white/75 uppercase tracking-widest mt-2">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -83,13 +72,13 @@ export default function Hero() {
       </div>
 
       {/* Vertical text decoration */}
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-3">
+      <div aria-hidden="true" className="absolute right-8 top-1/2 -translate-y-1/2 hidden lg:flex flex-col items-center gap-3">
         <div className="w-px h-16 bg-white/10" />
         <p
           className="text-white/15 text-xs uppercase tracking-[0.3em] font-bold"
           style={{ writingMode: "vertical-rl" }}
         >
-          Cipendawa Motor — Est. 1976
+          Cipendawa Motor. Est. 1976
         </p>
         <div className="w-px h-16 bg-white/10" />
       </div>

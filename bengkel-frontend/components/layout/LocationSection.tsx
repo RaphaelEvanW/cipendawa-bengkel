@@ -1,4 +1,5 @@
 import { MapPin, Phone, Clock } from "lucide-react";
+import { workshopContacts, workshopHours } from "@/lib/content/workshop";
 
 const branches = [
   {
@@ -24,24 +25,15 @@ const branches = [
   },
 ];
 
-const contacts = [
-  { label: "Service", number: "6287881285526" },
-  { label: "Body Repair", number: "6287770350243" },
-  { label: "Sparepart", number: "6287770350306" },
-];
-
 export default function LocationSection() {
   return (
-    <section className="py-20 bg-navy-light">
+    <section id="lokasi" aria-labelledby="lokasi-heading" className="scroll-mt-24 py-14 sm:py-20 bg-navy-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <span className="text-lime text-sm font-semibold uppercase tracking-widest">
-            Lokasi
-          </span>
-          <h2 className="text-4xl font-bold text-white mt-2">
+          <h2 id="lokasi-heading" className="text-3xl sm:text-4xl font-bold text-white">
             Temukan Kami di 3 Lokasi
           </h2>
-          <p className="text-white/50 mt-3 max-w-xl mx-auto">
+          <p className="text-white/70 mt-3 max-w-xl mx-auto">
             Hadir di Cianjur dan Sukabumi untuk memudahkan akses pelanggan kami.
           </p>
         </div>
@@ -58,7 +50,7 @@ export default function LocationSection() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold">{branch.name}</h3>
-                  <p className="text-white/50 text-sm mt-1 leading-relaxed">
+                  <p className="text-white/70 text-sm mt-1 leading-relaxed">
                     {branch.address}
                   </p>
                 </div>
@@ -67,7 +59,7 @@ export default function LocationSection() {
                 href={branch.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-lime text-sm font-medium hover:underline"
+                className="inline-flex min-h-11 items-center gap-2 py-2 text-lime text-sm font-medium hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime"
               >
                 Buka di Google Maps
               </a>
@@ -84,16 +76,12 @@ export default function LocationSection() {
               <h3 className="text-white font-semibold">Jam Operasional</h3>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-white/60">Senin - Jumat</span>
-                <span className="text-white">08.00 - 17.00 WIB</span>
+              <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">
+                <span className="text-white/70">{workshopHours.days}</span>
+                <span className="text-white">{workshopHours.time}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-white/60">Sabtu</span>
-                <span className="text-white">08.00 - 15.00 WIB</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-white/60">Minggu</span>
+              <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">
+                <span className="text-white/70">{workshopHours.closedDay}</span>
                 <span className="text-red-400">Tutup</span>
               </div>
             </div>
@@ -107,15 +95,15 @@ export default function LocationSection() {
               <h3 className="text-white font-semibold">Hubungi Kami</h3>
             </div>
             <div className="flex flex-col gap-3">
-              {contacts.map((c) => (
+              {workshopContacts.map((c) => (
                 <a
-                  key={c.label}
+                  key={c.id}
                   href={"https://wa.me/" + c.number}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between group"
+                  className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-2 group focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime"
                 >
-                  <span className="text-sm text-white/60">{c.label}</span>
+                  <span className="text-sm text-white/70">{c.label}</span>
                   <span className="text-sm text-lime group-hover:underline">
                     +{c.number}
                   </span>

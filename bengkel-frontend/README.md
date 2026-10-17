@@ -1,201 +1,99 @@
-# Cipendawa Motor — Frontend
+# Cipendawa Motor: Frontend
 
-Frontend website Bengkel Cipendawa untuk memperkenalkan bengkel, menampilkan reputasi, layanan dan katalog produk, serta menerima pengajuan reservasi. Panel admin membantu mengelola pengajuan dan jadwal operasional; komunikasi dan konfirmasi pelanggan dilakukan melalui WhatsApp.
+Website publik untuk memperkenalkan perusahaan dan layanan bengkel mobil Cipendawa Motor. Pengunjung dapat mengenal bengkel, melihat foto serta hasil pekerjaan, membaca informasi layanan, lalu menghubungi bengkel atau membuka petunjuk lokasi.
 
-Gambaran seluruh project dan setup backend tersedia di [README utama](../README.md).
+Keputusan scope dan gambaran seluruh repository tersedia di [README utama](../README.md).
 
-## Arah Produk
+## Scope Aktif
 
-**Kenali bengkelnya, percaya kualitasnya, lalu ajukan reservasi dengan mudah.**
+- Profil perusahaan dan layanan bengkel mobil.
+- Foto bengkel, hasil pekerjaan, dan testimoni yang tersedia.
+- Alamat, Google Maps, jam operasional, dan kontak resmi.
+- Akses ke WhatsApp atau kanal kontak yang sudah dipakai bengkel.
 
-- Website publik mengutamakan kepercayaan pelanggan dan kemudahan reservasi.
-- Layanan menampilkan estimasi harga, bukan harga final pekerjaan.
-- Produk ditampilkan sebagai katalog dengan keterangan tersedia/habis. Pembelian atau pertanyaan diarahkan ke WhatsApp atau kunjungan langsung.
-- Reservasi tidak memerlukan akun pelanggan.
-- Tidak ada payment gateway, keranjang, checkout, atau pembayaran online dalam scope saat ini.
+Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
+
+Reservasi, cek status, panel admin, n8n, dan katalog produk berada di luar scope saat ini. Kontak pelanggan dilakukan melalui kanal yang sudah tersedia. Pengunjung tidak perlu akun.
+
+Pemilik project mengonfirmasi bahwa kontak, foto, dan informasi yang tersedia adalah benar. Materi before-after belum ditambahkan. Jangan menggantinya dengan foto atau hasil pekerjaan rekaan.
 
 ## Identitas Visual
 
-Palet yang sudah ada menjadi dasar pengembangan berikutnya. Arahnya mengikuti identitas visual Instagram bengkel: **navy gelap, aksen lime, putih, dan brand blue sebagai warna tambahan**. Jangan mengganti palet dengan tema generik tanpa kesepakatan.
+Identitas yang sudah ada mengikuti visual Instagram bengkel: navy gelap, lime, putih, dan brand blue sebagai warna tambahan. Palet ini menjadi acuan untuk menjaga kesinambungan dengan identitas bengkel.
 
-Sumber token warna: [`app/globals.css`](app/globals.css).
+Sumber token: [app/globals.css](app/globals.css).
 
-| Token | Hex | Panduan penggunaan |
+| Token | Hex | Penggunaan |
 | --- | --- | --- |
-| `navy` / `background` | `#0B0F24` | Background utama |
-| `navy-light` | `#0F1533` | Section, card, dan variasi permukaan |
-| `navy-medium` | `#1A2040` | Permukaan tambahan dan pembeda elemen |
-| `lime` | `#BCFF61` | CTA utama, highlight, dan aksen brand |
-| `lime-dark` | `#A0E040` | Variasi aksen/interaksi |
-| `brand-blue` | `#2219B4` | Aksen tambahan, tidak menggantikan lime sebagai fokus utama |
-| `foreground` | `#FFFFFF` | Teks utama |
+| navy / background | #0B0F24 | Background utama |
+| navy-light | #0F1533 | Variasi permukaan dan section |
+| navy-medium | #1A2040 | Permukaan tambahan |
+| lime | #BCFF61 | Aksi penting dan aksen brand |
+| lime-dark | #A0E040 | Variasi interaksi |
+| brand-blue | #2219B4 | Aksen tambahan |
+| foreground | #FFFFFF | Teks utama |
 
-### Prinsip Tampilan
+Gunakan lime untuk mengarahkan perhatian ke aksi penting. Foto bengkel dan pekerjaan asli membantu pengunjung mengenali perusahaan serta pekerjaan yang ditangani. Layout dan jarak antarelemen perlu membantu pengunjung membaca informasi layanan dan kontak di HP.
 
-- Pertahankan konsistensi identitas antara website publik dan panel admin.
-- Gunakan lime secara terarah untuk aksi penting, bukan seluruh elemen.
-- Utamakan foto bengkel dan hasil pekerjaan asli untuk membangun kepercayaan.
-- Buat tampilan responsif dan nyaman di HP, terutama form reservasi dan tombol WhatsApp.
-- Pastikan teks, tombol, dan status mudah dibaca; jangan mengandalkan warna saja untuk menyampaikan informasi.
-- Panel admin mengutamakan keterbacaan dan efisiensi, bukan efek dekoratif berlebihan.
-- Pakai token Tailwind seperti `bg-navy`, `text-lime`, dan `bg-brand-blue` agar warna tidak tersebar sebagai nilai hardcoded.
+CSS mendeklarasikan Inter dengan fallback Arial, sans-serif dan radius dasar 8px. Deklarasi ini belum berarti font Inter sudah dimuat. Token warna status reservasi masih ada sebagai peninggalan scope sebelumnya.
 
-CSS saat ini menetapkan font `Inter` dengan fallback `Arial, sans-serif` dan radius dasar `8px`. Deklarasi font tersebut belum berarti file/font Inter sudah dimuat; pastikan pemuatan font saat merapikan desain.
+## Implementasi Saat Ini
 
-### Warna Status
+Beranda pada app/page.tsx merangkai navbar, hero, profil, testimoni, layanan, lokasi, CTA, dan footer.
 
-Warna status memiliki fungsi semantik dan bukan pengganti palet brand:
+ServiceSection menampilkan ringkasan statis Body Repair, Service, Sparepart, dan Variasi. Beranda tidak mengambil layanan dari API dan tidak memerlukan backend atau database. Kontak, navigasi publik, serta jam operasional bersumber dari lib/content/workshop.ts.
 
-| Status | Token | Hex |
-| --- | --- | --- |
-| Menunggu | `status-pending` | `#F59E0B` |
-| Dikonfirmasi | `status-confirmed` | `#3B82F6` |
-| Dikerjakan | `status-in-progress` | `#8B5CF6` |
-| Selesai | `status-done` | `#10B981` |
-| Ditolak | `status-rejected` | `#EF4444` |
-| Dibatalkan | `status-cancelled` | `#6B7280` |
+Navbar, hero, dan footer mengarah ke section layanan, lokasi, dan kontak yang tersedia. CTA menampilkan tiga WhatsApp berdasarkan layanan. Halaman detail /layanan belum dibuat; ringkasan di beranda menyebutkan keterbatasan tersebut dan mengarahkan pengunjung ke kontak yang sesuai. Reservasi dan cek status tidak dipromosikan pada website publik.
 
-## Website Publik yang Dituju
+Menu mobile memiliki nama aksesibel, status buka/tutup, dan kendali Escape. Perbandingan foto dapat dioperasikan dengan tombol arah, Page Up/Down, Home, serta End; tombol pemilih foto memiliki label dan target sentuh yang lebih besar. Pemeriksaan tampilan dan interaksi di browser tetap diperlukan sebelum rilis.
 
-- Beranda: profil, foto/hasil pekerjaan, reputasi, layanan, lokasi, dan CTA.
-- Layanan: deskripsi, estimasi harga, dan durasi jika diperlukan.
-- Produk: foto, deskripsi, harga atau "Hubungi untuk harga", dan ketersediaan.
-- Pengajuan reservasi: layanan, jadwal, nama, nomor WhatsApp, kendaraan, dan keluhan.
-- Hasil pengajuan: kode booking, ringkasan, dan pemberitahuan bahwa jadwal belum dikonfirmasi.
-- Cek status: menggunakan kode booking atau nomor HP.
-- Akses cepat ke WhatsApp dan Google Maps.
-
-Gunakan testimoni/review asli. Data contoh yang dipakai selama pengembangan tidak boleh ditampilkan sebagai klaim pelanggan nyata saat produksi.
-
-## Perilaku Reservasi
-
-```text
-Pilih layanan dan jadwal
-    ↓
-Cek hari operasional, libur, dan kepadatan
-    ↓
-Isi data pelanggan dan kendaraan
-    ↓
-Kirim pengajuan → tersimpan dengan status pending
-    ↓
-Backend memberi notifikasi ke WhatsApp admin melalui n8n
-    ↓
-Admin menghubungi pelanggan dan menyepakati jadwal
-```
-
-### Jadwal Sibuk Tetap Bisa Diajukan
-
-Jika kapasitas tanggal yang dipilih penuh, tampilkan peringatan tetapi jangan otomatis memblokir pengajuan:
-
-> Jadwal tanggal ini sedang padat. Kamu tetap bisa mengajukan reservasi. Admin akan menghubungi melalui WhatsApp untuk memastikan apakah masih bisa dilayani atau menawarkan jadwal lain.
-
-Bedakan kondisi sibuk dari tutup/libur:
-
-- **Sibuk:** pengajuan tetap diizinkan, dengan peringatan.
-- **Tutup/libur:** tanggal tidak dapat digunakan untuk reservasi.
-
-Respons availability saat ini sama-sama memakai `available: false` untuk kondisi penuh maupun tidak beroperasi. Jangan memakai nilai ini sendirian untuk menonaktifkan submit. Sebaiknya backend menyediakan kode alasan yang terstruktur agar frontend dapat membedakan kondisi tanpa bergantung pada teks pesan.
-
-Setelah submit berhasil:
-
-> Pengajuan berhasil. Jadwal belum dikonfirmasi. Tunggu admin menghubungi kamu melalui WhatsApp.
-
-Jangan menampilkan pesan "booking terkonfirmasi" sebelum admin menyetujuinya. Notifikasi WhatsApp diproses di backend/integrasi, bukan dikirim langsung oleh browser pelanggan.
-
-## Rencana Panel Admin
-
-| Menu | Fokus |
-| --- | --- |
-| Dashboard | Pengajuan hari ini, booking terkonfirmasi, pelanggan yang akan datang, dan pengajuan belum dihubungi |
-| Reservasi | Filter tanggal/status, detail, chat WhatsApp, konfirmasi, perubahan jadwal/status, dan riwayat |
-| Kalender & Jadwal | Jumlah pengajuan/booking per tanggal, indikator sibuk/libur, jam operasional, kapasitas, dan tanggal tutup |
-| Layanan | Kelola deskripsi, foto, estimasi harga, durasi, dan status aktif |
-| Produk | Kelola katalog, harga, foto, tersedia/habis, dan tampil/sembunyikan |
-| Website & Pengaturan | Profil, kontak, galeri, testimoni, notifikasi, dan akun admin |
-
-Jumlah **pengajuan** dan **booking terkonfirmasi** perlu ditampilkan terpisah. Penanda **sudah dihubungi** juga terpisah dari status reservasi: pelanggan bisa sudah dichat tetapi belum menyepakati jadwal.
-
-## Kondisi Implementasi
-
-### Sudah Ada
-
-- Landing page dengan navbar, hero, profil/hasil pekerjaan, testimoni, layanan, lokasi, CTA, dan footer.
-- Palet warna dan token status di `app/globals.css`.
-- Halaman login, hook autentikasi, layout admin, dan sidebar.
-- API client untuk auth, layanan, reservasi, jadwal, dashboard, notifikasi, dan pengaturan.
-- Tipe data TypeScript dan helper frontend.
-
-### Belum Selesai
-
-- Halaman dashboard masih berupa placeholder.
-- Form reservasi dan halaman cek status end-to-end.
-- Pengelolaan reservasi dan kalender admin.
-- Integrasi seluruh tampilan dengan data API nyata.
-- Katalog produk dan pengelolaannya; backend produk belum tersedia.
-- Pengelolaan konten, foto, dan reputasi dari panel admin.
-- Fitur perubahan jadwal, penanda sudah dihubungi, dan sibuk manual memerlukan dukungan backend.
-
-Keberadaan komponen atau API client tidak berarti alur tersebut sudah terintegrasi, diuji, atau siap produksi.
+Halaman /login, layout admin, sidebar, dashboard placeholder, hook auth, serta API client modul operasional masih tersimpan. Keberadaan file-file itu tidak menjadikannya target pengembangan aktif.
 
 ## Teknologi
 
-- Next.js `16.2.9` dengan App Router.
-- React `19.2.4` dan TypeScript.
-- Tailwind CSS 4.
-- Axios untuk HTTP client.
-- Lucide React untuk ikon.
-- TanStack React Query dan shadcn sudah tercantum sebagai dependensi; penggunaannya perlu dicek/dilengkapi sesuai fitur.
+- Next.js dengan App Router; package.json saat ini mendeklarasikan ^16.4.2.
+- React dan React DOM 19.2.4, serta TypeScript.
+- Tailwind CSS 4 dan Lucide React.
+- Axios masih tersedia untuk API client dari scope lama; beranda memakai konten statis.
+- TanStack React Query dan shadcn tercantum sebagai dependensi; lihat penggunaan nyata sebelum menambah pola baru.
+
+Versi dependensi terpasang mengacu pada lockfile. Perubahan versi perlu mengikuti kebutuhan implementasi dan kompatibilitas project.
 
 ## Struktur Frontend
 
-```text
-app/
-├── layout.tsx               # Root layout dan metadata
-├── globals.css              # Palet, token, dan style global
-├── page.tsx                 # Landing page
-├── login/page.tsx           # Login admin
-├── (public)/layout.tsx      # Layout route publik
-└── (admin)/
-    ├── layout.tsx           # Layout admin
-    └── dashboard/page.tsx   # Dashboard (placeholder)
-components/
-├── layout/                  # Section website publik
-└── admin/                   # Komponen panel admin
-lib/
-├── api/                     # Axios instance dan fungsi API
-├── hooks/                   # Hook, termasuk autentikasi
-├── types/                   # Kontrak data TypeScript
-└── utils/                   # Helper
-public/                     # Aset statis dan foto
-```
+| Lokasi | Isi |
+| --- | --- |
+| app/page.tsx | Beranda publik |
+| app/layout.tsx | Root layout, metadata, dan bahasa dokumen |
+| app/globals.css | Token warna dan style global |
+| app/(public)/layout.tsx | Layout route publik |
+| components/layout/ | Section website publik |
+| public/logo/ dan public/photos/ | Logo dan materi visual |
+| lib/content/workshop.ts | Kontak, jam operasional, dan navigasi publik bersama |
+| components/layout/ServiceSection.tsx | Ringkasan layanan statis |
+| lib/api/services.ts | API client layanan dari implementasi lama |
+| lib/api/axios.ts dan lib/types/ | Konfigurasi HTTP client dan kontrak data |
+| app/login/, app/(admin)/, components/admin/ | Login, layout, dashboard, dan sidebar dari scope lama |
+| lib/api/ | Juga memuat API client scope lama |
 
 ## Menjalankan Secara Lokal
 
-Jalankan perintah berikut dari direktori `bengkel-frontend`.
+Dari direktori bengkel-frontend:
 
-1. Instal dependensi:
+```sh
+npm install
+npm run dev
+```
 
-   ```sh
-   npm install
-   ```
+Buka http://localhost:3000. Beranda dan informasi layanan dapat ditampilkan tanpa backend. Jika menjalankan route lama yang memakai API, jalankan backend mengikuti README utama dan buat .env.local:
 
-2. Buat `.env.local`:
+```dotenv
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+```
 
-   ```dotenv
-   NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
-   ```
+Backend saat ini mengizinkan CORS dari http://localhost:3000. Origin lain memerlukan konfigurasi yang sesuai.
 
-3. Jalankan development server:
-
-   ```sh
-   npm run dev
-   ```
-
-4. Buka `http://localhost:3000`.
-
-Backend harus berjalan untuk fitur yang memakai API. Pastikan konfigurasi CORS backend atau proxy mengizinkan akses frontend pada origin yang berbeda.
-
-### Perintah Lain
+Perintah yang tersedia:
 
 ```sh
 npm run lint
@@ -203,22 +101,28 @@ npm run build
 npm run start
 ```
 
-`npm run start` digunakan setelah build berhasil.
+npm run start digunakan setelah build berhasil.
 
-## Konvensi Pengembangan
+Jika Turbopack gagal memulai atau menghubungkan proses CSS pada lingkungan lokal, gunakan opsi build Webpack bawaan Next.js:
 
-- Baca [`AGENTS.md`](AGENTS.md) sebelum mengubah kode. Untuk API/perilaku Next.js, baca panduan relevan di `node_modules/next/dist/docs/` sesuai versi yang terpasang.
-- Pertahankan palet brand dan gunakan token di `app/globals.css`.
-- Pisahkan komponen publik dan admin sesuai struktur yang ada.
-- Gunakan API client di `lib/api/` dan kontrak tipe di `lib/types/`.
-- Sediakan loading, empty state, error state, dan validasi form yang jelas.
-- Bedakan data contoh dari data produksi; hindari klaim harga, stok, rating, atau testimoni yang belum diverifikasi.
-- Kembangkan per alur sampai terhubung frontend–backend, bukan hanya halaman dengan data dummy.
+```sh
+npm run build -- --webpack
+```
 
-## Prioritas Berikutnya
+## Acuan Pengembangan
 
-1. Rapikan landing page dan hubungkan layanan ke API.
-2. Selesaikan pengajuan reservasi, peringatan sibuk, hasil pengajuan, dan cek status.
-3. Bangun daftar/detail reservasi admin, chat WhatsApp, serta perubahan status/jadwal.
-4. Bangun kalender dan pengaturan jadwal/libur.
-5. Tambahkan katalog produk dan pengelolaan konten.
+- Baca [AGENTS.md](AGENTS.md) dan instruksi di root repository. Untuk API atau perilaku Next.js, baca panduan versi terpasang di node_modules/next/dist/docs/.
+- Gunakan keputusan scope dalam README utama sebagai acuan ketika menemukan kode reservasi atau admin.
+- Pertahankan informasi perusahaan, kontak, dan aset yang sudah dikonfirmasi pemilik.
+- Buat CTA yang menjelaskan tindakan sebenarnya, seperti menghubungi bengkel atau membuka lokasi.
+- Arahkan navigasi hanya ke halaman, section, atau kontak yang tersedia.
+- Jelaskan jenis pekerjaan dan kebutuhan mobil yang dapat ditangani; katalog produk tidak diperlukan.
+- Jika harga ditampilkan, jelaskan bahwa nilai itu estimasi dan dapat menyesuaikan kondisi kendaraan serta pekerjaan yang disepakati.
+- Edit ringkasan layanan statis pada ServiceSection; kontak, navigasi, dan jam operasional pada lib/content/workshop.ts.
+- Jaga keterbacaan, fokus keyboard, ukuran target sentuh, dan layout di HP.
+
+## Pengingat Materi dan Halaman yang Belum Selesai
+
+- Tambahkan foto asli before1.jpg/after1.jpg, before2.jpg/after2.jpg, dan before3.jpg/after3.jpg ke public/photos/beforeafter/. Path pada AboutSection sudah disiapkan untuk ketiga pasangan tersebut; materi masih menunggu pemilik.
+- Periksa seluruh pasangan foto dan kendali perbandingan setelah aset ditambahkan. Galeri belum lengkap sebelum langkah ini selesai.
+- Siapkan halaman detail layanan dan konten rinci ketika materi tersedia. Untuk sekarang, gunakan ringkasan pada section layanan dan kontak WhatsApp.

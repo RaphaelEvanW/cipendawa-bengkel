@@ -19,7 +19,7 @@ const pairs = [
   { before: "/photos/beforeafter/before3.jpg", after: "/photos/beforeafter/after3.jpg", label: "Dent Removal" },
 ];
 
-function BeforeAfterSlider({ before, after }: { before: string; after: string }) {
+function BeforeAfterSlider({ before, after, label }: { before: string; after: string; label: string }) {
   const [position, setPosition] = useState(50);
   const [dragging, setDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,11 +27,11 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
+    if (rect.width === 0) return;
     const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
     setPosition((x / rect.width) * 100);
   }, []);
 
-  const onMouseDown = () => setDragging(true);
   const onMouseUp = () => setDragging(false);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
@@ -54,13 +54,43 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden cursor-col-resize select-none"
-      onMouseDown={onMouseDown}
+      role="slider"
+      tabIndex={0}
+      aria-label={`Perbandingan sebelum dan sesudah ${label}`}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-orientation="horizontal"
+      aria-valuenow={Math.round(position)}
+      aria-valuetext={`${Math.round(position)} persen foto sebelum ditampilkan`}
+      className="relative w-full h-full overflow-hidden cursor-col-resize select-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-lime"
+      onMouseDown={(event) => {
+        setDragging(true);
+        updatePosition(event.clientX);
+      }}
+      onTouchStart={(event) => updatePosition(event.touches[0].clientX)}
       onTouchMove={(e) => onTouchMove(e.nativeEvent)}
+      onKeyDown={(event) => {
+        const changes: Record<string, number> = {
+          ArrowLeft: -5,
+          ArrowDown: -5,
+          ArrowRight: 5,
+          ArrowUp: 5,
+          PageDown: -10,
+          PageUp: 10,
+        };
+
+        if (event.key === "Home" || event.key === "End") {
+          event.preventDefault();
+          setPosition(event.key === "Home" ? 0 : 100);
+        } else if (event.key in changes) {
+          event.preventDefault();
+          setPosition((current) => Math.max(0, Math.min(100, current + changes[event.key])));
+        }
+      }}
     >
       {/* After image (full) */}
       <div className="absolute inset-0">
-        <Image src={after} alt="After" fill className="object-cover" />
+        <Image src={after} alt={`Mobil sesudah ${label}`} fill className="object-cover" />
         <div className="absolute top-3 right-3 bg-lime text-navy text-xs font-black px-2 py-1 uppercase tracking-wider">
           Sesudah
         </div>
@@ -71,7 +101,7 @@ function BeforeAfterSlider({ before, after }: { before: string; after: string })
         className="absolute inset-0 overflow-hidden"
         style={{ width: `${position}%` }}
       >
-        <Image src={before} alt="Before" fill className="object-cover" />
+        <Image src={before} alt={`Mobil sebelum ${label}`} fill className="object-cover" />
         <div className="absolute top-3 left-3 bg-white/20 backdrop-blur-sm text-white text-xs font-black px-2 py-1 uppercase tracking-wider">
           Sebelum
         </div>
@@ -104,30 +134,34 @@ export default function AboutSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-          {/* Left — Before/After Slider */}
           <div className="relative">
 
             {/* Slider + prev/next sejajar */}
             <div className="flex items-center gap-3">
               <button
+                type="button"
+                aria-label="Lihat perbandingan sebelumnya"
                 onClick={prev}
-                className="flex items-center justify-center w-9 h-9 shrink-0 border border-white/20 text-white hover:bg-white/10 transition-colors"
+                className="flex items-center justify-center w-11 h-11 shrink-0 border border-white/20 text-white hover:bg-white/10 transition-colors"
                 style={{ borderRadius: 0 }}
               >
                 <ChevronLeft size={16} />
               </button>
 
-              <div className="flex-1 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10">
+              <div className="min-w-0 flex-1 aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 focus-within:ring-2 focus-within:ring-lime">
                 <BeforeAfterSlider
                   key={currentPair}
                   before={pairs[currentPair].before}
                   after={pairs[currentPair].after}
+                  label={pairs[currentPair].label}
                 />
               </div>
 
               <button
+                type="button"
+                aria-label="Lihat perbandingan berikutnya"
                 onClick={next}
-                className="flex items-center justify-center w-9 h-9 shrink-0 border border-white/20 text-white hover:bg-white/10 transition-colors"
+                className="flex items-center justify-center w-11 h-11 shrink-0 border border-white/20 text-white hover:bg-white/10 transition-colors"
                 style={{ borderRadius: 0 }}
               >
                 <ChevronRight size={16} />
@@ -136,26 +170,28 @@ export default function AboutSection() {
 
             {/* Dots + label */}
             <div className="flex items-center justify-center gap-3 mt-4">
-              <span className="text-lime text-xs font-bold uppercase tracking-widest">
+              <span aria-live="polite" className="text-lime text-xs font-bold uppercase tracking-widest">
                 {pairs[currentPair].label}
               </span>
               <div className="flex gap-1.5">
-                {pairs.map((_, i) => (
+                {pairs.map((pair, i) => (
                   <button
                     key={i}
+                    type="button"
+                    aria-label={`Lihat perbandingan ${pair.label}`}
+                    aria-pressed={i === currentPair}
                     onClick={() => setCurrentPair(i)}
-                    className={`h-1.5 transition-all ${
-                      i === currentPair ? "bg-lime w-4" : "bg-white/30 w-1.5"
-                    }`}
-                    style={{ borderRadius: 0 }}
-                  />
+                    className="inline-flex h-11 w-11 items-center justify-center"
+                  >
+                    <span aria-hidden="true" className={`h-1.5 transition-all ${i === currentPair ? "bg-lime w-4" : "bg-white/60 w-1.5"}`} />
+                  </button>
                 ))}
               </div>
             </div>
 
             {/* 48+ badge */}
             <div
-              className="absolute -bottom-2 -right-2 bg-lime p-5 shadow-xl"
+              className="mt-3 inline-block bg-lime p-5"
               style={{ borderRadius: 0 }}
             >
               <p className="text-navy font-black text-4xl leading-none">48+</p>
@@ -165,10 +201,9 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right — Content */}
           <div>
             <span className="text-lime text-xs font-bold uppercase tracking-[0.2em]">
-              — Tentang Kami
+              Tentang Kami
             </span>
             <h2 className="text-4xl font-black text-white mt-3 mb-4 uppercase leading-tight">
               Bengkel Terpercaya<br />
