@@ -10,7 +10,7 @@ import InstagramSection from "@/components/layout/InstagramSection";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div id="beranda" className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 pt-16">
         <Hero />

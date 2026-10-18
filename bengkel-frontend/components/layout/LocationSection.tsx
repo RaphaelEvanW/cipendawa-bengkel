@@ -30,10 +30,10 @@ export default function LocationSection() {
     <section id="lokasi" aria-labelledby="lokasi-heading" className="scroll-mt-24 py-14 sm:py-20 bg-navy-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 id="lokasi-heading" className="text-3xl sm:text-4xl font-bold text-white">
+          <h2 id="lokasi-heading" className="text-3xl sm:text-4xl font-bold text-lime">
             Temukan Kami di 3 Lokasi
           </h2>
-          <p className="text-white/70 mt-3 max-w-xl mx-auto">
+          <p className="text-white/85 mt-3 max-w-xl mx-auto">
             Hadir di Cianjur dan Sukabumi untuk memudahkan akses pelanggan kami.
           </p>
         </div>
@@ -50,7 +50,7 @@ export default function LocationSection() {
                 </div>
                 <div>
                   <h3 className="text-white font-semibold">{branch.name}</h3>
-                  <p className="text-white/70 text-sm mt-1 leading-relaxed">
+                  <p className="text-white/85 text-sm mt-1 leading-relaxed">
                     {branch.address}
                   </p>
                 </div>
@@ -77,11 +77,11 @@ export default function LocationSection() {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">
-                <span className="text-white/70">{workshopHours.days}</span>
+                <span className="text-white/85">{workshopHours.days}</span>
                 <span className="text-white">{workshopHours.time}</span>
               </div>
               <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">
-                <span className="text-white/70">{workshopHours.closedDay}</span>
+                <span className="text-white/85">{workshopHours.closedDay}</span>
                 <span className="text-red-400">Tutup</span>
               </div>
             </div>

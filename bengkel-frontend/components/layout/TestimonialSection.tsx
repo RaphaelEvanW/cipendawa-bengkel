@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Script from "next/script";
 import { useState } from "react";
@@ -13,7 +13,7 @@ export default function TestimonialSection() {
           <h2 id="ulasan-heading" className="text-3xl font-bold text-white sm:text-4xl">
             Apa Kata Pelanggan Kami
           </h2>
-          <p className="mx-auto mt-3 max-w-xl leading-relaxed text-white/75">
+          <p className="mx-auto mt-3 max-w-xl leading-relaxed text-white/85">
             Pengalaman pelanggan Cipendawa Motor melalui ulasan Google.
           </p>
         </div>
@@ -24,12 +24,12 @@ export default function TestimonialSection() {
           />
         </div>
         {loadFailed && (
-          <p role="status" className="mt-4 text-center text-white/75">
+          <p role="status" className="mt-4 text-center text-white/85">
             Ulasan Google belum dapat dimuat. Silakan muat ulang halaman.
           </p>
         )}
         <noscript>
-          <p className="mt-4 text-center text-white/75">
+          <p className="mt-4 text-center text-white/85">
             Aktifkan JavaScript untuk melihat ulasan Google.
           </p>
         </noscript>

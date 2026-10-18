@@ -1,0 +1,26 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.section::before {
+  content: "";
+  position: absolute;
+  inset: -12% 12% -18%;
+  background-image: url("/logo/cma_white.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 64% auto;
+  opacity: 0.12;
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .section::before {
+    inset: 2% -25% 0;
+    opacity: 0.09;
+    filter: blur(6px);
+  }
+}

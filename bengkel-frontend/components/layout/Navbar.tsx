@@ -58,7 +58,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="inline-flex min-h-11 items-center text-sm font-medium text-white/80 hover:text-lime transition-colors"
+                className="inline-flex min-h-11 items-center text-sm font-bold text-white hover:text-lime transition-colors"
               >
                 {link.label}
               </Link>
@@ -80,7 +80,7 @@ export default function Navbar() {
               aria-expanded={isOpen}
               aria-controls="mobile-navigation"
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-3 text-white"
+              className="md:hidden inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-3 font-bold text-white"
             >
               <span className="text-sm">Menu</span>
               {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
@@ -99,7 +99,7 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="inline-flex min-h-11 items-center text-sm font-medium text-white/80 hover:text-lime transition-colors"
+              className="inline-flex min-h-11 items-center text-sm font-bold text-white hover:text-lime transition-colors"
             >
               {link.label}
             </Link>

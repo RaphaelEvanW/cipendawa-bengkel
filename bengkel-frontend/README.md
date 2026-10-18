@@ -13,7 +13,7 @@ Keputusan scope dan gambaran seluruh repository tersedia di [README utama](../RE
 
 Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart & Variasi. Kebutuhan variasi menggunakan nomor WhatsApp Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
 
-Reservasi online masuk kembali ke rencana pengembangan, dengan automation ke WhatsApp pribadi pemilik untuk testing. Form dan integrasinya belum dipasang di website publik. Panel admin masih dipertimbangkan; cek status publik dan katalog produk belum masuk rencana yang disepakati. Nomor WA pribadi dan alat automation belum ditetapkan. Pengunjung beranda saat ini tidak perlu akun.
+Frontend reservasi tersedia sebagai pratinjau di `/reservasi`, dengan tiga langkah, validasi input, pilihan cabang, tanggal, preferensi waktu, dan ringkasan. Belum ada pengiriman ke backend atau WhatsApp. Automation nantinya memakai WA pribadi pemilik untuk testing; nomor dan alatnya belum ditetapkan. Panel admin masih dipertimbangkan; cek status publik dan katalog produk belum masuk rencana yang disepakati.
 
 ## Rencana Reservasi Berikutnya
 
@@ -26,7 +26,7 @@ Pemilik memberi referensi form tiga langkah: pilih layanan â†’ data pelanggan â†
 - Panel admin, penyedia WhatsApp, alat automation seperti n8n, penyimpanan, serta mekanisme konfirmasi jadwal belum diputuskan.
 - Screenshot menjadi acuan alur; tampilan nanti mengikuti identitas Cipendawa. Klaim garansi, durasi, konfirmasi 24 jam, dan batas pemesanan 18 jam dalam contoh belum disetujui sebagai kebijakan bengkel.
 
-Instruksi saat ini hanya memperbarui Markdown. CSS, JavaScript/TypeScript, HTML/JSX, route, dan tampilan yang sudah ada tetap seperti sekarang; implementasi reservasi menunggu instruksi berikutnya.
+Instruksi terbaru 18 Oktober 2026 mengizinkan implementasi frontend terlebih dahulu. Pemilik mengonfirmasi tiga kategori layanan, pemilihan cabang, tanggal, dan preferensi waktu. Detail implementasi dan batas pratinjau ada di [frontend reservasi](../docs/reservation-frontend.md). State hanya berada di memori halaman; refresh mengosongkan isian. Ringkasan tidak mengklaim reservasi berhasil.
 
 Pemilik project mengonfirmasi bahwa kontak, foto, dan informasi yang tersedia adalah benar. Materi before-after sudah ditambahkan di public/images/before_after/ dan terhubung ke slider. Gunakan foto asli yang tersedia.
 
@@ -60,7 +60,7 @@ ServiceSection menampilkan tiga ringkasan statis: Body Repair, Service, serta Sp
 
 Foto layanan menggunakan public/images/layanan/body_repair.png, service.png, dan sparepart_variasi.png. Pada desktop, pengantar section mengikuti scroll di kolom kiri, sementara foto dan informasi tiap layanan tampil di kanan. Pada HP, teks ditempatkan di bawah foto agar tidak menutupi subjek. Foto dimuat melalui next/image sesuai ukuran layar.
 
-Navbar, hero, dan footer mengarah ke section layanan, lokasi, dan kontak yang tersedia. CTA menampilkan tiga WhatsApp berdasarkan layanan. Halaman detail /layanan belum dibuat; ringkasan di beranda menyebutkan keterbatasan tersebut dan mengarahkan pengunjung ke kontak yang sesuai. Reservasi belum ditampilkan di beranda meskipun sudah masuk rencana berikutnya. Cek status publik belum diminta kembali.
+Navbar dan footer menyediakan tautan `/reservasi` melalui navigasi bersama. Hero dan CTA kontak tetap menyediakan jalur layanan, lokasi, serta tiga WhatsApp. Halaman detail /layanan belum dibuat; ringkasan di beranda menjelaskannya. Cek status publik belum diminta kembali.
 
 Menu mobile memiliki nama aksesibel, status buka/tutup, dan kendali Escape. Perbandingan foto dapat dioperasikan dengan tombol arah, Page Up/Down, Home, serta End; tombol pemilih foto memiliki label dan target sentuh yang lebih besar. Pemeriksaan tampilan dan interaksi di browser tetap diperlukan sebelum rilis.
 

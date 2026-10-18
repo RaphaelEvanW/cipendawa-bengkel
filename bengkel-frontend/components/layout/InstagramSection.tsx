@@ -20,12 +20,12 @@ export default function InstagramSection() {
           />
         </div>
         {loadFailed && (
-          <p role="status" className="mt-4 text-white/70">
+          <p role="status" className="mt-4 text-white/85">
             Feed Instagram belum dapat dimuat. Silakan muat ulang halaman.
           </p>
         )}
         <noscript>
-          <p className="text-white/70">Aktifkan JavaScript untuk melihat feed Instagram.</p>
+          <p className="text-white/85">Aktifkan JavaScript untuk melihat feed Instagram.</p>
         </noscript>
         <Script
           src="https://www.zyff.app/w/instagram.js"

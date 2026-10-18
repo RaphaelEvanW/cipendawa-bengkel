@@ -14,13 +14,13 @@ Keputusan scope dikonfirmasi pemilik project pada 17 Oktober 2026:
 - Tiga WhatsApp dipisahkan berdasarkan Service, Body Repair, dan Sparepart & Variasi. Variasi menggunakan nomor Sparepart.
 - Ringkasan layanan menggunakan konten statis untuk sekarang. Halaman detail layanan belum dibuat.
 - Jam operasional Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup.
-- Reservasi online masuk kembali ke rencana pengembangan. Keputusan ini menggantikan pembatalan reservasi sebelumnya; form belum diimplementasikan di website publik.
+- Reservasi online masuk kembali ke rencana pengembangan. Pada 18 Oktober 2026, frontend pratinjau tersedia di `/reservasi`; pengiriman ke backend dan WhatsApp belum diaktifkan.
 - Panel admin masih dipertimbangkan dan belum diputuskan; reservasi tidak otomatis berarti panel admin ikut dibuat.
 - Automation reservasi direncanakan mengirim informasi ke WhatsApp. Pada tahap testing, tujuan pengiriman adalah WA pribadi pemilik project; nomor dan penyedia integrasi belum diberikan.
 - Halaman pengecekan status reservasi belum diminta kembali dan belum masuk rencana yang disepakati.
 - Katalog produk tidak masuk scope. Informasi sparepart atau variasi dapat menjelaskan layanan yang memang tersedia, tanpa katalog jual beli.
 
-Keputusan terbaru ini menjadi acuan ketika dokumentasi lama menyebut reservasi dibatalkan. Pembaruan saat ini hanya dokumentasi; CSS, JavaScript/TypeScript, HTML/JSX, backend, dan konfigurasi aplikasi tetap seperti sebelumnya.
+Keputusan terbaru ini menjadi acuan ketika dokumentasi lama menyebut reservasi dibatalkan. Instruksi dokumentasi saja pada sesi sebelumnya telah digantikan oleh permintaan implementasi frontend tanggal 18 Oktober 2026. Backend dikerjakan setelah frontend.
 
 ## Konten Website Publik
 
@@ -40,7 +40,7 @@ Pemilik project mengonfirmasi bahwa informasi perusahaan, kontak, foto, dan mate
 3. Memilih layanan yang relevan dengan kebutuhan kendaraan.
 4. Menghubungi bengkel atau membuka petunjuk lokasi untuk berkunjung.
 
-Keberhasilan website saat ini dinilai dari kemudahan memahami layanan dan menemukan kontak atau lokasi. Beranda saat ini belum memiliki form reservasi dan tidak memerlukan akun. Form reservasi menjadi pengembangan berikutnya, mengikuti arah di bawah.
+Keberhasilan website dinilai dari kemudahan memahami layanan, menemukan kontak atau lokasi, dan menyusun rencana kunjungan. Tautan Reservasi pada navigasi membuka `/reservasi`. Form saat ini merupakan pratinjau tanpa akun dan tanpa pengiriman data; lihat [frontend reservasi](docs/reservation-frontend.md).
 
 ## Rencana Reservasi dan Automation WhatsApp
 
@@ -50,15 +50,15 @@ Keberhasilan website saat ini dinilai dari kemudahan memahami layanan dan menemu
 - Tiga screenshot dari pemilik menjadi referensi alur form tiga langkah. Screenshot adalah gambaran, bukan keputusan untuk menyalin warna, teks, daftar layanan, atau ketentuan bisnis contoh.
 - Automation mengirim informasi reservasi ke WhatsApp; untuk testing, kirim ke WA pribadi pemilik project. Nomor testing belum diberikan dan tidak boleh diasumsikan sama dengan tiga nomor layanan publik.
 - Panel admin masih dipertimbangkan. Belum ada keputusan untuk membuat dashboard maupun mewajibkan admin sebagai bagian dari alur reservasi.
-- Pekerjaan saat ini hanya memperbarui Markdown. Jangan membuat form, route, CTA reservasi, automation, atau perubahan tampilan sebelum ada instruksi implementasi berikutnya.
+- Pemilik meminta implementasi frontend terlebih dahulu pada 18 Oktober 2026: tiga layanan, pilihan cabang, tanggal, dan preferensi waktu. Form berakhir pada pratinjau berstatus Belum terkirim; automation belum diaktifkan.
 
 ### Gambaran Alur dari Referensi
 
 | Langkah | Isi yang terlihat pada referensi | Status |
 | --- | --- | --- |
-| 1. Pilih layanan | Pilihan layanan dan opsi kebutuhan lain | Arah alur disetujui secara umum; jenis layanan rinci dan pilihan tunggal/jamak belum ditetapkan |
-| 2. Data pelanggan | Nama, nomor telepon/WhatsApp, email opsional | Acuan field; validasi final belum ditentukan |
-| 3. Kendaraan dan jadwal | Tahun, merek, model, tanggal/jam pilihan, keluhan opsional, ringkasan dan tombol kirim | Acuan field dan konfirmasi; field wajib serta aturan jadwal belum ditentukan |
+| 1. Pilih layanan | Body Repair, Service, atau Sparepart & Variasi; pilih satu cabang | Tiga kategori dan pilihan cabang dikonfirmasi pemilik |
+| 2. Data pelanggan | Nama dan WhatsApp; email dan deskripsi mobil opsional | Frontend memvalidasi kontak; deskripsi mobil menggabungkan merek/model/tahun dalam satu field |
+| 3. Jadwal | Tanggal dan preferensi waktu, keluhan opsional, ringkasan | Preferensi waktu dikonfirmasi pemilik; ketersediaan slot dan pengiriman belum terhubung |
 
 Tombol kembali dan lanjut pada referensi menunjukkan perpindahan antar langkah. Reservasi yang dikirim perlu dibedakan dari jadwal yang sudah dikonfirmasi; mekanisme penerimaan dan konfirmasi bengkel masih perlu ditetapkan.
 
@@ -72,7 +72,7 @@ Kebutuhan yang belum diputuskan:
 
 - Nomor WA pribadi tujuan testing, penyedia/API WhatsApp, dan alat automation. n8n yang sudah ada di kode dapat dievaluasi; pengguna belum menetapkannya sebagai pilihan final.
 - Penyimpanan data reservasi, kontrak API, format pesan, penanganan kegagalan kirim, serta pencegahan notifikasi ganda.
-- Daftar layanan yang dapat direservasi, pilihan cabang, slot/kapasitas, jeda pemesanan, dan proses konfirmasi, perubahan, atau pembatalan.
+- Slot/kapasitas per cabang, jeda pemesanan, dan proses konfirmasi, perubahan, atau pembatalan. Tiga kategori layanan dan pemilihan satu cabang sudah dikonfirmasi.
 - Perlu atau tidaknya balasan otomatis ke pelanggan dan tujuan WhatsApp saat produksi. Saat ini yang disepakati hanya tujuan pribadi pemilik untuk testing.
 
 Jam operasional yang sudah dikonfirmasi tetap Senin sampai Sabtu 08.00 sampai 17.00 WIB, Minggu tutup. Aturan ketersediaan slot reservasi belum ditetapkan dan tidak boleh disimpulkan hanya dari jam operasional.
@@ -182,7 +182,7 @@ Beranda saat ini dapat berjalan tanpa n8n. Pemanggilan webhook hardcoded http://
 
 ## Prioritas Pengembangan
 
-1. Pada sesi implementasi berikutnya, tetapkan rincian form reservasi, jadwal, dan tujuan WA pribadi untuk testing berdasarkan referensi di atas.
+1. Tinjau frontend pratinjau `/reservasi`, lalu tetapkan aturan jadwal operasional dan tujuan WA pribadi untuk testing.
 2. Tinjau API reservasi dan integrasi lama, lalu tentukan penyimpanan serta jalur automation WhatsApp.
 3. Siapkan konten rinci dan halaman detail layanan ketika materi siap.
 4. Periksa tampilan di HP, akses keyboard, pemuatan gambar, dan metadata pencarian sebelum rilis.
@@ -192,7 +192,7 @@ Domain, hosting, dan cara pengelolaan konten setelah rilis belum diputuskan. Pen
 
 ## Di Luar Scope Saat Ini
 
-Cek status reservasi publik, dashboard/kalender operasional, katalog produk, keranjang, checkout, pembayaran online, kasir, invoice, akuntansi, dan inventori belum masuk rencana yang disepakati. Panel admin masih belum diputuskan. Reservasi online dan automation WhatsApp sudah masuk rencana, tetapi implementasinya belum dimulai pada pembaruan dokumentasi ini.
+Cek status reservasi publik, dashboard/kalender operasional, katalog produk, keranjang, checkout, pembayaran online, kasir, invoice, akuntansi, dan inventori belum masuk rencana yang disepakati. Panel admin masih belum diputuskan. Frontend reservasi sudah berupa pratinjau; integrasi backend dan automation WhatsApp menjadi pekerjaan berikutnya.
 
 ## Lisensi
 

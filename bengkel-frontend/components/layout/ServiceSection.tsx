@@ -38,15 +38,9 @@ export default function ServiceSection() {
             <h2 id="layanan-heading" className="max-w-lg text-4xl font-black leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[2.75rem]">
               Layanan untuk <span className="text-lime">mobil Anda.</span>
             </h2>
-            <p className="mt-5 max-w-sm leading-relaxed text-white/75">
+            <p className="mt-5 max-w-sm leading-relaxed text-white/85">
               Body repair, service, sparepart, dan variasi di Cipendawa Motor.
               Hubungi tim sesuai kebutuhan kendaraan Anda.
-            </p>
-            <p className="mt-8 hidden max-w-xs border-t border-white/20 pt-5 text-sm leading-relaxed text-white/70 lg:block">
-              Halaman detail layanan belum tersedia. Untuk informasi lebih lanjut,{" "}
-              <Link href="/#kontak" className={contactLinkClass}>
-                pilih WhatsApp sesuai kebutuhan Anda
-              </Link>
             </p>
           </div>
 
@@ -68,7 +62,7 @@ export default function ServiceSection() {
                 </div>
                 <div className="relative z-10 px-6 py-7 sm:w-[58%] sm:p-8 xl:w-[54%] xl:p-10">
                 <h3 className="text-3xl font-black uppercase leading-[1.04] tracking-tight text-white sm:text-4xl xl:text-[2.75rem]">{service.name}</h3>
-                <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/80 sm:text-base">{service.description}</p>
+                <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85 sm:text-base">{service.description}</p>
                 {contact ? (
                   <a
                     href={`https://wa.me/${contact.number}`}
@@ -90,12 +84,6 @@ export default function ServiceSection() {
         </div>
         </div>
 
-        <p className="mt-8 max-w-2xl text-sm leading-relaxed text-white/70 lg:hidden">
-          Halaman detail layanan belum tersedia. Untuk informasi lebih lanjut,{" "}
-          <Link href="/#kontak" className={contactLinkClass}>
-            pilih WhatsApp sesuai kebutuhan Anda
-          </Link>
-        </p>
       </div>
     </section>
   );

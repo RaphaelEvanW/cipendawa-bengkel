@@ -11,7 +11,8 @@ export const workshopHours = {
 } as const;
 
 export const publicNavLinks = [
-  { href: "/", label: "Beranda" },
+  { href: "/#beranda", label: "Beranda" },
   { href: "/#layanan", label: "Layanan" },
+  { href: "/reservasi", label: "Reservasi" },
   { href: "/#lokasi", label: "Lokasi" },
 ] as const;

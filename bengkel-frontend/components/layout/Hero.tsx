@@ -31,7 +31,7 @@ export default function Hero() {
           </h1>
 
           {/* Description */}
-          <p className="text-base text-white/80 leading-relaxed mb-10 max-w-md">
+          <p className="text-base text-white/85 leading-relaxed mb-10 max-w-md">
             Body repair, service, sparepart, dan variasi mobil.
             Lebih dari 48 tahun melayani puluhan ribu pelanggan
             di Cianjur dan Sukabumi.
@@ -64,7 +64,7 @@ export default function Hero() {
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-3xl font-black text-lime leading-none">{stat.value}</p>
-                <p className="text-xs text-white/75 uppercase tracking-widest mt-2">{stat.label}</p>
+                <p className="text-xs text-white/85 uppercase tracking-widest mt-2">{stat.label}</p>
               </div>
             ))}
           </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { publicNavLinks, workshopContacts, workshopHours } from "@/lib/content/workshop";
 
@@ -32,14 +33,20 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="lg:col-span-1">
-            <span className="text-xl font-bold text-white">
-              Cipendawa<span className="text-lime">Motor</span>
-            </span>
-            <p className="mt-3 text-sm text-white/70 leading-relaxed">
+            <Link href="/" className="inline-flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime">
+              <Image
+                src="/logo/cma_white.png"
+                alt="Cipendawa Motor"
+                width={90}
+                height={100}
+                className="object-contain"
+              />
+            </Link>
+            <p className="mt-3 text-sm text-white/85 leading-relaxed">
               Spesialis Body Repair, Service, Sparepart & Variasi Mobil sejak
               1976. Dipercaya puluhan ribu pelanggan di Cianjur dan Sukabumi.
             </p>
-            <div className="mt-4 flex items-start gap-2 text-sm text-white/70">
+            <div className="mt-4 flex items-start gap-2 text-sm text-white/85">
               <Clock size={14} aria-hidden="true" className="mt-1 shrink-0 text-lime" />
               <p>
                 {workshopHours.days}, {workshopHours.time}
@@ -66,10 +73,10 @@ export default function Footer() {
                     className="text-lime mt-0.5 shrink-0 group-hover:text-lime-dark"
                   />
                   <div>
-                    <p className="text-sm font-medium text-white/80 group-hover:text-lime transition-colors">
+                    <p className="text-sm font-medium text-white/85 group-hover:text-lime transition-colors">
                       {branch.name}
                     </p>
-                    <p className="text-xs text-white/70 leading-relaxed">
+                    <p className="text-xs text-white/85 leading-relaxed">
                       {branch.address}
                     </p>
                   </div>
@@ -96,8 +103,8 @@ export default function Footer() {
                     className="text-lime group-hover:text-lime-dark"
                   />
                   <div>
-                    <p className="text-xs text-white/70">{c.label}</p>
-                    <p className="text-sm text-white/80 group-hover:text-lime transition-colors">
+                    <p className="text-xs text-white/85">{c.label}</p>
+                    <p className="text-sm text-white/85 group-hover:text-lime transition-colors">
                       +{c.number}
                     </p>
                   </div>
@@ -113,7 +120,7 @@ export default function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="inline-flex min-h-11 items-center py-2 text-sm text-white/70 hover:text-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime"
+                  className="inline-flex min-h-11 items-center py-2 text-sm text-white/85 hover:text-lime transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime"
                 >
                   {link.label}
                 </Link>
@@ -123,10 +130,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/70">
+          <p className="text-xs text-white/85">
             {new Date().getFullYear()} Cipendawa Motor. All rights reserved.
           </p>
-          <p className="text-xs text-white/70">
+          <p className="text-xs text-white/85">
             Spesialis Body Repair Sejak 1976
           </p>
         </div>

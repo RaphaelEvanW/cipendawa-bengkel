@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { workshopContacts } from "@/lib/content/workshop";
+import styles from "./CTASection.module.css";
 
 export default function CTASection() {
   return (
-    <section id="kontak" aria-labelledby="contact-heading" className="scroll-mt-24 py-16 sm:py-20 bg-navy">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="kontak" aria-labelledby="contact-heading" className={`${styles.section} scroll-mt-24 py-16 sm:py-20 bg-navy`}>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="border-t border-white/15 pt-10 sm:pt-12 text-center">
             <h2 id="contact-heading" className="text-3xl sm:text-4xl font-bold text-white mb-4">
               Hubungi Tim Cipendawa Motor
             </h2>
-            <p className="text-white/75 text-base sm:text-lg mb-8 max-w-xl mx-auto">
+            <p className="text-white/85 text-base sm:text-lg mb-8 max-w-xl mx-auto">
               Pilih WhatsApp sesuai kebutuhan mobil Anda. Tanyakan layanan,
               kebutuhan sparepart, atau estimasi biaya langsung kepada tim kami.
             </p>
@@ -29,7 +30,7 @@ export default function CTASection() {
                 </a>
               ))}
             </div>
-            <Link href="/#lokasi" className="inline-flex min-h-11 items-center mt-5 text-white/80 underline underline-offset-4 hover:text-lime">
+            <Link href="/#lokasi" className="inline-flex min-h-11 items-center mt-5 text-white/85 underline underline-offset-4 hover:text-lime">
               Lihat lokasi dan jam operasional
             </Link>
         </div>

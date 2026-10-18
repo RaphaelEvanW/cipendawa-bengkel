@@ -223,13 +223,13 @@ export default function AboutSection() {
               Bengkel Terpercaya<br />
               <span className="text-lime">Keluarga Cianjur</span>
             </h2>
-            <p className="text-white/60 leading-relaxed mb-3 text-sm">
+            <p className="text-white/85 leading-relaxed mb-3 text-sm">
               Cipendawa Motor berdiri sejak tahun 1976 sebagai bengkel spesialis
               body repair di Cianjur. Selama hampir lima dekade, kami telah
               berkembang menjadi bengkel lengkap yang melayani service, sparepart,
               dan variasi kendaraan.
             </p>
-            <p className="text-white/60 leading-relaxed mb-8 text-sm">
+            <p className="text-white/85 leading-relaxed mb-8 text-sm">
               Dengan 3 cabang yang tersebar di Cianjur dan Sukabumi, kami
               berkomitmen memberikan pelayanan terbaik dengan standar kualitas
               yang konsisten di setiap cabang.
@@ -240,7 +240,7 @@ export default function AboutSection() {
               {highlights.map((item) => (
                 <div key={item} className="flex items-start gap-2">
                   <CheckCircle size={14} className="text-lime mt-0.5 shrink-0" />
-                  <span className="text-xs text-white/70 leading-relaxed">{item}</span>
+                  <span className="text-xs text-white/85 leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
