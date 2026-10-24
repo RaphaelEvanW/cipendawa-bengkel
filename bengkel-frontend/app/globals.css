@@ -40,7 +40,7 @@
   --color-status-rejected: var(--status-rejected);
   --color-status-cancelled: var(--status-cancelled);
 
-  --font-sans: "Inter", Arial, sans-serif;
+  --font-sans: Arial, "Helvetica Neue", sans-serif;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);

@@ -8,21 +8,21 @@ const services = [
     name: "Body Repair",
     image: "/images/layanan/body_repair.png",
     imageAlt: "Proses pengamplasan panel bodi mobil sebelum pengecatan",
-    description: "Layanan perbaikan bodi mobil. Diskusikan kondisi kendaraan Anda dengan tim Body Repair.",
+    description: "Perbaikan bodi dan pengecatan mobil. Ceritakan bagian yang ingin diperbaiki agar tim kami bisa membantu.",
   },
   {
     id: "service",
     name: "Service",
     image: "/images/layanan/service.png",
     imageAlt: "Pengerjaan perawatan mobil pada ruang mesin",
-    description: "Layanan perawatan mobil. Sampaikan kebutuhan kendaraan Anda kepada tim Service.",
+    description: "Ada keluhan pada mobil atau sudah waktunya servis? Bahas kondisi dan kebutuhan perawatan mobil Anda dengan tim kami.",
   },
   {
     id: "sparepart",
     name: "Sparepart & Variasi",
     image: "/images/layanan/sparepart_variasi.png",
     imageAlt: "Pemilihan komponen mobil di antara rak sparepart dan velg",
-    description: "Kebutuhan suku cadang dan variasi mobil. Tanyakan ketersediaan serta kesesuaian untuk kendaraan Anda.",
+    description: "Cari suku cadang atau variasi untuk mobil Anda. Cek ketersediaan dan kecocokannya sebelum berkunjung.",
   },
 ] as const;
 
@@ -49,18 +49,19 @@ export default function ServiceSection() {
             const contact = workshopContacts.find((item) => item.id === service.id);
 
             return (
-              <article key={service.id} className="relative isolate bg-navy sm:flex sm:min-h-[430px] sm:items-end">
-                <div className="relative aspect-[4/3] sm:absolute sm:inset-0 sm:aspect-auto">
+              <article key={service.id} className="relative isolate flex min-h-[380px] items-end bg-navy sm:min-h-[430px]">
+                <div className="absolute inset-0">
                   <Image
                     src={service.image}
                     alt={service.imageAlt}
                     fill
+                    loading={service.id === "body_repair" ? "eager" : "lazy"}
                     sizes="(min-width: 1280px) 825px, (min-width: 1024px) 66vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 32px)"
                     className="object-cover object-[65%_center]"
                   />
-                  <div aria-hidden="true" className="absolute inset-0 hidden bg-gradient-to-r from-navy/95 via-navy/55 to-transparent sm:block" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/70 to-navy/10 sm:via-navy/55 sm:to-transparent" />
                 </div>
-                <div className="relative z-10 px-6 py-7 sm:w-[58%] sm:p-8 xl:w-[54%] xl:p-10">
+                <div className="relative z-10 w-[78%] px-5 py-7 sm:w-[58%] sm:p-8 xl:w-[54%] xl:p-10">
                 <h3 className="text-3xl font-black uppercase leading-[1.04] tracking-tight text-white sm:text-4xl xl:text-[2.75rem]">{service.name}</h3>
                 <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85 sm:text-base">{service.description}</p>
                 {contact ? (

@@ -196,7 +196,7 @@
 
 .serviceCopy > span {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
   color: #bbc2d5;
   margin-top: 5px;
@@ -298,6 +298,13 @@
   line-height: 1.65;
   color: #bbc2d5;
   margin-top: 8px;
+}
+
+.requiredHint {
+  margin: -14px 0 24px;
+  color: #bbc2d5;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .error {
@@ -656,7 +663,7 @@
   }
 
   .step {
-    font-size: 11px;
+    font-size: 12px;
     gap: 6px;
     padding: 20px 0 16px;
   }
@@ -678,11 +685,11 @@
   }
 
   .serviceCopy strong {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .serviceCopy > span {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .servicePhoto {
@@ -713,11 +720,11 @@
   }
 
   .period strong {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .period > span {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .summaryList {

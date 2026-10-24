@@ -161,21 +161,22 @@ export default function ReservationFlow() {
               <form ref={formRef} noValidate onSubmit={submit} className={styles.formBody}>
                 <h2 ref={titleRef} tabIndex={-1}>{["Apa yang mobil Anda butuhkan?", "Kenalan dulu, yuk.", "Kapan ingin berkunjung?"][step]}</h2>
                 <p className={styles.lead}>{["Pilih satu layanan untuk memulai kunjungan Anda.", "Isi kontak yang bisa dihubungi untuk konfirmasi kunjungan.", "Pilih tanggal dan rentang waktu yang Anda inginkan."][step]}</p>
+                <p className={styles.requiredHint}>Isian tanpa label Opsional wajib diisi.</p>
                 {Object.values(errors).some(Boolean) && <p role="alert" className={styles.errorSummary}>Ada isian yang perlu diperiksa. Lihat keterangan di bawahnya.</p>}
 
                 {step === 0 && <>
                   <fieldset className={styles.serviceList} aria-describedby={errors.service ? "service-error" : undefined}>
                     <legend className={styles.srOnly}>Layanan yang ingin direservasi</legend>
                     {services.map((item) => <label key={item.id} className={`${styles.service} ${data.service === item.id ? styles.selected : ""}`}>
-                      <input type="radio" name="service" value={item.id} checked={data.service === item.id} onChange={() => update("service", item.id)} />
+                      <input type="radio" required name="service" value={item.id} checked={data.service === item.id} onChange={() => update("service", item.id)} />
                       <span className={styles.serviceCopy}><strong>{item.name}</strong><span>{item.description}</span></span>
-                      <span className={styles.servicePhoto}><Image src={item.image} alt="" fill sizes="(max-width: 600px) 95px, 170px" className={styles.photo} /></span>
+                      <span className={styles.servicePhoto}><Image src={item.image} alt="" fill loading={item.id === "body_repair" ? "eager" : "lazy"} sizes="(max-width: 600px) 95px, 170px" className={styles.photo} /></span>
                     </label>)}
                   </fieldset>
                   {fieldError("service")}
                   <div className={styles.field}>
                     <label htmlFor="branch">Cabang tujuan</label>
-                    <select id="branch" name="branch" value={data.branch} onChange={(e) => update("branch", e.target.value)} aria-invalid={!!errors.branch} aria-describedby={errors.branch ? "branch-error" : "branch-detail"}>
+                    <select id="branch" name="branch" required value={data.branch} onChange={(e) => update("branch", e.target.value)} aria-invalid={!!errors.branch} aria-describedby={errors.branch ? "branch-error" : "branch-detail"}>
                       <option value="">Pilih cabang bengkel</option>
                       {branches.map((item) => <option value={item.id} key={item.id}>{item.name}</option>)}
                     </select>
@@ -185,17 +186,17 @@ export default function ReservationFlow() {
                 </>}
 
                 {step === 1 && <div className={styles.fields}>
-                  <div className={styles.field}><label htmlFor="name">Nama lengkap</label><input id="name" name="name" autoComplete="name" maxLength={100} value={data.name} onChange={(e) => update("name", e.target.value)} placeholder="Nama Anda" aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} />{fieldError("name")}</div>
-                  <div className={styles.field}><label htmlFor="phone">Nomor WhatsApp</label><input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={22} value={data.phone} onChange={(e) => update("phone", e.target.value)} placeholder="08xxxxxxxxxx" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : "phone-hint"} /><p id="phone-hint" className={styles.hint}>Gunakan nomor aktif yang bisa dihubungi tim bengkel.</p>{fieldError("phone")}</div>
+                  <div className={styles.field}><label htmlFor="name">Nama lengkap</label><input id="name" name="name" required autoComplete="name" maxLength={100} value={data.name} onChange={(e) => update("name", e.target.value)} placeholder="Nama Anda" aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} />{fieldError("name")}</div>
+                  <div className={styles.field}><label htmlFor="phone">Nomor WhatsApp</label><input id="phone" name="phone" required type="tel" autoComplete="tel" maxLength={22} value={data.phone} onChange={(e) => update("phone", e.target.value)} placeholder="08xxxxxxxxxx" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : "phone-hint"} /><p id="phone-hint" className={styles.hint}>Gunakan nomor aktif yang bisa dihubungi tim bengkel.</p>{fieldError("phone")}</div>
                   <div className={styles.field}><label htmlFor="email">Email <span>Opsional</span></label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} value={data.email} onChange={(e) => update("email", e.target.value)} placeholder="nama@email.com" aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} />{fieldError("email")}</div>
                   <div className={styles.field}><label htmlFor="vehicle">Mobil Anda <span>Opsional</span></label><input id="vehicle" name="vehicle" maxLength={120} value={data.vehicle} onChange={(e) => update("vehicle", e.target.value)} placeholder="Contoh: Toyota Avanza 2020" /><p className={styles.hint}>Merek, model, dan tahun jika diketahui.</p></div>
                 </div>}
 
                 {step === 2 && <div className={styles.fields}>
-                  <div className={styles.field}><label htmlFor="date">Tanggal kunjungan</label><input id="date" name="date" type="date" min={today} value={data.date} onChange={(e) => update("date", e.target.value)} aria-invalid={!!errors.date} aria-describedby={errors.date ? "date-error" : "date-hint"} /><p id="date-hint" className={styles.hint}>Senin–Sabtu. Hari Minggu bengkel tutup.</p>{fieldError("date")}</div>
+                  <div className={styles.field}><label htmlFor="date">Tanggal kunjungan</label><input id="date" name="date" required type="date" min={today} value={data.date} onChange={(e) => update("date", e.target.value)} aria-invalid={!!errors.date} aria-describedby={errors.date ? "date-error" : "date-hint"} /><p id="date-hint" className={styles.hint}>Senin–Sabtu. Hari Minggu bengkel tutup.</p>{fieldError("date")}</div>
                   <fieldset className={styles.periodField} aria-describedby={errors.period ? "period-error" : "period-hint"}>
                     <legend>Preferensi waktu <span>WIB</span></legend>
-                    <div className={styles.periods}>{periods.map((item) => <label key={item.id} className={`${styles.period} ${data.period === item.id ? styles.periodSelected : ""}`}><input type="radio" name="period" value={item.id} checked={data.period === item.id} onChange={() => update("period", item.id)} /><strong>{item.label}</strong><span>{item.hours}</span></label>)}</div>
+                    <div className={styles.periods}>{periods.map((item) => <label key={item.id} className={`${styles.period} ${data.period === item.id ? styles.periodSelected : ""}`}><input type="radio" required name="period" value={item.id} checked={data.period === item.id} onChange={() => update("period", item.id)} /><strong>{item.label}</strong><span>{item.hours}</span></label>)}</div>
                     <p id="period-hint" className={styles.hint}>Ini preferensi kunjungan. Ketersediaan dan jam pasti akan dikonfirmasi tim.</p>{fieldError("period")}
                   </fieldset>
                   <div className={styles.field}><label htmlFor="notes">Ada yang perlu kami tahu? <span>Opsional</span></label><textarea id="notes" name="notes" rows={4} maxLength={1000} value={data.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Ceritakan keluhan atau kebutuhan mobil Anda." /><p className={styles.hint}>{data.notes.length}/1.000 karakter</p></div>
@@ -212,7 +213,7 @@ export default function ReservationFlow() {
           <aside className={styles.summary} aria-label="Ringkasan kunjungan">
             <div className={styles.summaryHeading}><h2>Kunjungan Anda</h2><span>{review ? "Pratinjau" : `${step + 1} / 3`}</span></div>
             <div className={styles.summaryPhoto}>
-              <Image src={service?.image || "/photos/1.jpg"} alt={service?.alt || "Bengkel Cipendawa Motor"} fill sizes="(max-width: 900px) 1px, 360px" className={styles.photo} />
+              <Image src={service?.image || "/photos/1.jpg"} alt={service?.alt || "Bengkel Cipendawa Motor"} fill loading="eager" sizes="(max-width: 900px) 1px, 360px" className={styles.photo} />
             </div>
             <dl className={styles.summaryList}>
               <div><dt>Layanan</dt><dd>{service?.name || "Pilih kebutuhan mobil Anda"}</dd></div>

@@ -48,7 +48,7 @@ Sumber token: [app/globals.css](app/globals.css).
 
 Gunakan lime untuk mengarahkan perhatian ke aksi penting. Foto bengkel dan pekerjaan asli membantu pengunjung mengenali perusahaan serta pekerjaan yang ditangani. Layout dan jarak antarelemen perlu membantu pengunjung membaca informasi layanan dan kontak di HP.
 
-CSS mendeklarasikan Inter dengan fallback Arial, sans-serif dan radius dasar 8px. Deklarasi ini belum berarti font Inter sudah dimuat. Token warna status reservasi masih tersimpan dari implementasi sebelumnya; penggunaannya pada rencana baru belum ditetapkan.
+Font website memakai Arial dengan fallback Helvetica Neue dan sans-serif, tanpa bergantung pada font eksternal. Radius dasar 8px. Token warna status reservasi masih tersimpan dari implementasi sebelumnya; penggunaannya pada rencana baru belum ditetapkan.
 
 ## Implementasi Saat Ini
 

@@ -37,9 +37,9 @@ export default function Footer() {
               <Image
                 src="/logo/cma_white.png"
                 alt="Cipendawa Motor"
-                width={90}
-                height={100}
-                className="object-contain"
+                width={952}
+                height={481}
+                className="h-auto w-[90px] object-contain"
               />
             </Link>
             <p className="mt-3 text-sm text-white/85 leading-relaxed">

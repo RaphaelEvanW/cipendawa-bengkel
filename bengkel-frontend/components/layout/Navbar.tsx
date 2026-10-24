@@ -47,9 +47,9 @@ export default function Navbar() {
             <Image
               src="/logo/cma_white.png"
               alt="Cipendawa Motor"
-              width={90}
-              height={100}
-              className="object-contain"
+              width={952}
+              height={481}
+              className="h-auto w-[90px] object-contain"
             />
           </Link>
 
