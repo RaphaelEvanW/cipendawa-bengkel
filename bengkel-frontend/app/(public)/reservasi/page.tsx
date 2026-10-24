@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ReservationFlow from "@/components/reservation/ReservationFlow";
+import { isReservationDemo } from "@/lib/reservation-mode";
 
 export const metadata: Metadata = {
   title: "Reservasi | Cipendawa Motor",
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ReservationPage() {
-  return <ReservationFlow />;
+  return <ReservationFlow demoMode={isReservationDemo()} />;
 }

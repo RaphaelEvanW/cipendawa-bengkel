@@ -28,6 +28,7 @@ const steps = ["Layanan", "Data Anda", "Jadwal"];
 const initialData = { service: "", branch: "", name: "", phone: "", email: "", vehicle: "", date: "", period: "", notes: "" };
 type Data = typeof initialData;
 type Errors = Partial<Record<keyof Data, string>>;
+type DemoReceipt = { booking_code: string; status: "demo" };
 const backendFields: Record<string, keyof Data> = {
   service_code: "service", branch_code: "branch", customer_name: "name", customer_phone: "phone",
   customer_email: "email", customer_vehicle: "vehicle", reservation_date: "date", preferred_period: "period", notes: "notes",
@@ -46,14 +47,14 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat("id-ID", { dateStyle: "full", timeZone: "Asia/Jakarta" }).format(new Date(`${value}T12:00:00+07:00`));
 }
 
-export default function ReservationFlow() {
+export default function ReservationFlow({ demoMode }: { demoMode: boolean }) {
   const [data, setData] = useState<Data>(initialData);
   const [step, setStep] = useState(0);
   const [review, setReview] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [pending, setPending] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [receipt, setReceipt] = useState<BookingReceipt | null>(null);
+  const [receipt, setReceipt] = useState<BookingReceipt | DemoReceipt | null>(null);
   const [copyStatus, setCopyStatus] = useState("");
   const submissionRef = useRef<{ payload: string; key: string } | null>(null);
   const submittingRef = useRef(false);
@@ -143,6 +144,11 @@ export default function ReservationFlow() {
     setPending(true);
     setSubmitError("");
     try {
+      if (demoMode) {
+        setReceipt({ booking_code: `DEMO-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, status: "demo" });
+        focusTitle();
+        return;
+      }
       const payload = JSON.stringify({
         service_code: data.service, branch_code: data.branch, reservation_date: data.date,
         preferred_period: data.period, customer_name: data.name.trim(), customer_phone: data.phone.trim(),
@@ -213,6 +219,7 @@ export default function ReservationFlow() {
   }
 
   if (receipt) {
+    const isDemoReceipt = receipt.status === "demo";
     const visitDate = new Date(`${data.date}T12:00:00+07:00`);
     const dateLabel = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(visitDate);
     const weekday = new Intl.DateTimeFormat("id-ID", { weekday: "long", timeZone: "Asia/Jakarta" }).format(visitDate);
@@ -222,18 +229,18 @@ export default function ReservationFlow() {
         <div className={styles.receiptShell}>
           <header className={styles.receiptHeading}>
             <div>
-              <p className={styles.savedState}><Check size={18} aria-hidden="true" /> Data berhasil disimpan</p>
-              <h1 ref={titleRef} tabIndex={-1}>Reservasi Anda tersimpan.</h1>
-              <p>Terima kasih, {data.name.trim()}. Periksa rincian kunjungan Anda di bawah ini.</p>
+              <p className={styles.savedState}><Check size={18} aria-hidden="true" /> {isDemoReceipt ? "Mode demo · Simulasi selesai" : "Data berhasil disimpan"}</p>
+              <h1 ref={titleRef} tabIndex={-1}>{isDemoReceipt ? "Simulasi reservasi selesai." : "Reservasi Anda tersimpan."}</h1>
+              <p>{isDemoReceipt ? "Ini contoh hasil reservasi. Website tidak menyimpan data atau mengirim permintaan ke bengkel." : `Terima kasih, ${data.name.trim()}. Periksa rincian kunjungan Anda di bawah ini.`}</p>
             </div>
             <Link href="/" className={styles.receiptHome}>Kembali ke beranda <ArrowRight size={16} aria-hidden="true" /></Link>
           </header>
 
-          <section className={styles.receiptSheet} aria-label="Bukti reservasi">
+          <section className={styles.receiptSheet} aria-label={isDemoReceipt ? "Hasil simulasi reservasi" : "Bukti reservasi"}>
             <div className={styles.receiptMain}>
               <div className={styles.receiptCode}>
                 <div>
-                  <span>Kode reservasi</span>
+                  <span>{isDemoReceipt ? "Kode simulasi" : "Kode reservasi"}</span>
                   <strong>{receipt.booking_code}</strong>
                 </div>
                 <button type="button" onClick={copyBookingCode} className={styles.copyButton}>
@@ -255,7 +262,7 @@ export default function ReservationFlow() {
 
               <div className={styles.confirmationNote}>
                 <Clock3 size={18} aria-hidden="true" />
-                <div><strong>Menunggu konfirmasi bengkel</strong><p>Jadwal yang Anda pilih perlu dikonfirmasi oleh tim bengkel.</p></div>
+                <div><strong>{isDemoReceipt ? "Contoh jadwal kunjungan" : "Menunggu konfirmasi bengkel"}</strong><p>{isDemoReceipt ? "Bengkel tidak menerima jadwal ini. Untuk kunjungan sungguhan, hubungi tim melalui WhatsApp." : "Jadwal yang Anda pilih perlu dikonfirmasi oleh tim bengkel."}</p></div>
               </div>
 
               <dl className={styles.receiptDetails}>
@@ -266,7 +273,7 @@ export default function ReservationFlow() {
                 {data.email.trim() && <div><dt>Email</dt><dd>{data.email.trim()}</dd></div>}
                 {data.notes.trim() && <div><dt>Catatan</dt><dd>{data.notes.trim()}</dd></div>}
               </dl>
-              <p className={styles.receiptKeep}>Simpan kode reservasi atau ambil tangkapan layar halaman ini untuk ditunjukkan saat berkunjung.</p>
+              <p className={styles.receiptKeep}>{isDemoReceipt ? "Kode demo hanya untuk mencoba alur reservasi. Isian akan hilang saat halaman dimuat ulang." : "Simpan kode reservasi atau ambil tangkapan layar halaman ini untuk ditunjukkan saat berkunjung."}</p>
             </div>
 
             <aside className={styles.receiptAside} aria-label="Informasi setelah reservasi">
@@ -274,8 +281,8 @@ export default function ReservationFlow() {
                 <Image src={service?.image || "/photos/1.jpg"} alt={service?.alt || "Bengkel Cipendawa Motor"} fill sizes="(max-width: 700px) 100vw, 360px" className={styles.photo} />
               </div>
               <div className={styles.receiptAsideBody}>
-                <h2>Sebelum berkunjung</h2>
-                <p>Konfirmasikan jadwal dengan tim bengkel sebelum datang. Sebutkan kode reservasi agar detail kunjungan Anda mudah ditemukan.</p>
+                <h2>{isDemoReceipt ? "Ingin berkunjung?" : "Sebelum berkunjung"}</h2>
+                <p>{isDemoReceipt ? "Hubungi tim bengkel melalui kontak di beranda untuk menanyakan layanan dan jadwal kunjungan." : "Konfirmasikan jadwal dengan tim bengkel sebelum datang. Sebutkan kode reservasi agar detail kunjungan Anda mudah ditemukan."}</p>
                 <div className={styles.receiptHours}><span>Jam operasional</span><p>Senin–Sabtu<br />08.00–17.00 WIB</p><span>Minggu tutup</span></div>
                 <Link href="/#lokasi" className={styles.receiptLocation}>Lihat lokasi bengkel <ArrowRight size={16} aria-hidden="true" /></Link>
               </div>
@@ -284,10 +291,10 @@ export default function ReservationFlow() {
 
           <div className={styles.receiptFooter}>
             <div className={styles.simulationNote}>
-              <p><strong>Mode demo.</strong> Data reservasi tersimpan. Pesan WhatsApp hanya berupa simulasi dan tidak dikirim.</p>
-              <details><summary>Lihat simulasi pesan WhatsApp</summary><p>{receipt.notification.message}</p></details>
+              <p>{isDemoReceipt ? <><strong>Simulasi.</strong> Data hanya tampil di halaman ini. Tidak ada reservasi atau pesan WhatsApp yang dikirim.</> : <><strong>WhatsApp simulasi.</strong> Data reservasi tersimpan. Pesan WhatsApp tidak dikirim.</>}</p>
+              {receipt.status === "pending" && <details><summary>Lihat simulasi pesan WhatsApp</summary><p>{receipt.notification.message}</p></details>}
             </div>
-            <button type="button" onClick={restart} className={styles.newReservation}>Buat reservasi lain <ArrowRight size={16} aria-hidden="true" /></button>
+            <button type="button" onClick={restart} className={styles.newReservation}>{isDemoReceipt ? "Coba simulasi lagi" : "Buat reservasi lain"} <ArrowRight size={16} aria-hidden="true" /></button>
           </div>
         </div>
       </div>
@@ -302,7 +309,7 @@ export default function ReservationFlow() {
           <h1>Rencanakan<br /><span>kunjungan Anda.</span></h1>
           <div className={styles.intro}>
             <p>Pilih layanan, cabang tujuan, dan waktu kunjungan. Jadwal perlu dikonfirmasi oleh tim bengkel.</p>
-            <p className={styles.previewNote}>Mode demo: data reservasi tersimpan. Pesan WhatsApp tidak dikirim.</p>
+            <p className={styles.previewNote}>{demoMode ? "Mode demo: gunakan data contoh. Isian hanya tampil di halaman ini; website tidak menyimpan reservasi atau mengirim pesan WhatsApp." : "Data reservasi akan disimpan. Pengiriman WhatsApp masih berupa simulasi."}</p>
           </div>
         </header>
 
@@ -320,9 +327,9 @@ export default function ReservationFlow() {
             {review ? (
               <div className={styles.formBody} aria-busy={pending}>
                 <h2 ref={titleRef} tabIndex={-1}>Rencana kunjungan Anda</h2>
-                <p className={styles.lead}>Pastikan rincian kunjungan sudah benar sebelum menyimpan reservasi.</p>
+                <p className={styles.lead}>{demoMode ? "Periksa isian sebelum menyelesaikan simulasi." : "Pastikan rincian kunjungan sudah benar sebelum menyimpan reservasi."}</p>
                 <div className={styles.reviewNotice} role="status">
-                  <strong>Reservasi belum disimpan</strong><p>Tekan Simpan reservasi untuk melanjutkan. Jadwal perlu dikonfirmasi oleh tim bengkel. Pada mode demo, pesan WhatsApp tidak dikirim.</p>
+                  <strong>{demoMode ? "Ringkasan simulasi" : "Reservasi belum disimpan"}</strong><p>{demoMode ? "Tekan Selesaikan simulasi untuk melihat contoh hasil reservasi. Bengkel tidak menerima isian ini." : "Tekan Simpan reservasi untuk melanjutkan. Jadwal perlu dikonfirmasi oleh tim bengkel. Pesan WhatsApp tidak dikirim."}</p>
                 </div>
                 {submitError && <p role="alert" className={styles.errorSummary}>{submitError}</p>}
                 <dl className={styles.reviewList}>
@@ -332,9 +339,9 @@ export default function ReservationFlow() {
                 </dl>
                 <div className={styles.actions}>
                     <button type="button" className={styles.secondary} disabled={pending} onClick={() => goTo(2)}>Ubah isian</button>
-                    <button type="button" className={styles.primary} disabled={pending} onClick={saveReservation}>{pending ? "Menyimpan reservasi…" : "Simpan reservasi"}<ArrowRight size={17} aria-hidden="true" /></button>
+                    <button type="button" className={styles.primary} disabled={pending} onClick={saveReservation}>{pending ? (demoMode ? "Menyiapkan simulasi…" : "Menyimpan reservasi…") : (demoMode ? "Selesaikan simulasi" : "Simpan reservasi")}<ArrowRight size={17} aria-hidden="true" /></button>
                 </div>
-                <p className={styles.footnote}>Jika reservasi gagal disimpan, Anda bisa mencoba lagi tanpa mengisi ulang selama halaman ini tetap terbuka.</p>
+                <p className={styles.footnote}>{demoMode ? "Simulasi ini tidak memesan slot kunjungan. Isian akan hilang saat halaman dimuat ulang." : "Jika reservasi gagal disimpan, Anda bisa mencoba lagi tanpa mengisi ulang selama halaman ini tetap terbuka."}</p>
               </div>
             ) : (
               <form ref={formRef} noValidate onSubmit={submit} className={styles.formBody}>

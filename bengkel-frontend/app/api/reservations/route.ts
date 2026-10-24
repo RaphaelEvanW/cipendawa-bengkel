@@ -1,4 +1,5 @@
 import { bookingFields, isBookingReceipt } from "@/lib/api/booking";
+import { isReservationDemo } from "@/lib/reservation-mode";
 
 const maxBodyBytes = 16 * 1024;
 const unavailable = "Reservasi belum dapat disimpan. Silakan coba lagi.";
@@ -36,6 +37,9 @@ async function readBounded(stream: ReadableStream<Uint8Array> | null) {
 }
 
 export async function POST(request: Request) {
+  if (isReservationDemo()) {
+    return failure("Mode demo aktif. Gunakan form simulasi; website tidak menyimpan reservasi.", 503);
+  }
   const key = request.headers.get("Idempotency-Key") ?? "";
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key)) {
     return failure("Permintaan reservasi tidak dikenali. Muat ulang halaman, lalu coba lagi.", 400);

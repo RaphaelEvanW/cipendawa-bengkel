@@ -14,7 +14,7 @@ Scope aktif, diperbarui 24 Oktober 2026:
 - Tiga WhatsApp dipisahkan berdasarkan Service, Body Repair, dan Sparepart & Variasi. Variasi menggunakan nomor Sparepart.
 - Ringkasan layanan menggunakan konten statis untuk sekarang. Halaman detail layanan belum dibuat.
 - Jam operasional Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup.
-- Reservasi di `/reservasi` tersambung ke API Go dan PostgreSQL lokal; status awal pending.
+- Reservasi di `/reservasi` menyediakan demo tanpa backend untuk Vercel, serta mode API Go dan PostgreSQL dengan status awal pending.
 - Panel admin masih dipertimbangkan dan belum diputuskan; reservasi tidak otomatis berarti panel admin ikut dibuat.
 - WhatsApp menggunakan mock dengan status simulated. Tidak ada pesan keluar, penyedia berbayar, atau workflow n8n aktif.
 - Halaman pengecekan status reservasi belum diminta kembali dan belum masuk rencana yang disepakati.
@@ -43,6 +43,10 @@ Pemilik project mengonfirmasi bahwa informasi perusahaan, kontak, foto, dan mate
 Keberhasilan website dinilai dari kemudahan memahami layanan, menemukan kontak atau lokasi, dan menyusun rencana kunjungan. Tautan Reservasi pada navigasi membuka `/reservasi`. Form memakai backend lokal tanpa akun dengan WhatsApp simulasi; lihat [frontend reservasi](docs/reservation-frontend.md).
 
 ## Reservasi dan WhatsApp Simulasi
+
+Untuk portfolio di Vercel, gunakan `RESERVATION_MODE=demo` pada frontend. Tanpa konfigurasi mode dan URL backend, demo aktif otomatis. Form menampilkan hasil simulasi berawalan DEMO tanpa menyimpan data atau mengirim permintaan ke bengkel. Isian hilang saat halaman dimuat ulang. Detail pengaturan tersedia di [README frontend](bengkel-frontend/README.md#deploy-frontend-di-vercel).
+
+Alur berikut berlaku untuk mode backend (`RESERVATION_MODE=backend` dan `BACKEND_API_URL`):
 
 1. Pelanggan memilih layanan dan cabang yang akan dikunjungi. Semua cabang menerima tiga kategori layanan.
 2. Pelanggan mengisi nama, WhatsApp, serta email dan deskripsi mobil opsional.

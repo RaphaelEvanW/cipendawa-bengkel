@@ -14,15 +14,19 @@ Panel form memakai navy medium yang lebih terang dari latar halaman, dengan teks
 
 Preferensi waktu: pagi 08.00–11.00, siang 11.00–14.00, sore 14.00–17.00 WIB. Rentang ini bukan jaminan slot. Frontend dan backend menolak tanggal lewat, Minggu, dan rentang yang sudah berakhir hari ini menggunakan waktu Asia/Jakarta.
 
-Ringkasan akhir diberi status **Belum disimpan**. Tombol Simpan reservasi mengirim data melalui server Next.js ke API Go. Jika penyimpanan berhasil, halaman menampilkan kode reservasi, status pending, serta keterangan WhatsApp simulasi. Tidak ada pesan sungguhan yang dikirim. Data yang sudah disimpan berada di PostgreSQL; draft yang belum disimpan masih hilang jika halaman dimuat ulang.
+Dalam mode backend, ringkasan akhir diberi status **Belum disimpan**. Tombol Simpan reservasi mengirim data melalui server Next.js ke API Go. Jika penyimpanan berhasil, halaman menampilkan kode reservasi, status pending, serta keterangan WhatsApp simulasi. Tidak ada pesan sungguhan yang dikirim. Data yang sudah disimpan berada di PostgreSQL; draft yang belum disimpan masih hilang jika halaman dimuat ulang.
 
 Tombol simpan dan edit dinonaktifkan selama pengiriman. Percobaan ulang dengan isian sama memakai Idempotency-Key yang sama untuk mencegah data ganda. Kesalahan backend ditampilkan tanpa menghapus isian. Semua cabang menerima semua layanan; cabang adalah tujuan kunjungan pelanggan.
 
 Isian wajib memakai atribut HTML `required` dan keterangan yang terlihat; validasi khusus frontend tetap dijalankan. Deskripsi pilihan layanan minimal 13px pada HP, dengan gaya navy/lime dan foto yang sama seperti desktop.
 
+## Demo tanpa backend
+
+Untuk showcase di Vercel, gunakan `RESERVATION_MODE=demo`. Tanpa `RESERVATION_MODE` dan tanpa `BACKEND_API_URL`, demo aktif otomatis. Form memakai validasi dan langkah yang sama, tetapi tombol akhirnya adalah Selesaikan simulasi. Hasil berlabel Simulasi reservasi dengan kode DEMO. Isian hanya ada di memori halaman dan hilang saat reload; browser tidak mengirimnya ke API, database, atau WhatsApp. Gunakan data contoh. Route POST `/api/reservations` juga menolak penyimpanan ketika mode demo aktif.
+
 ## Backend Showcase
 
-Gunakan `BACKEND_API_URL` server-side, default `http://127.0.0.1:8080/api`. Jalankan backend dan migration sesuai [README backend](../bengkel-backend/README.md). Tanpa backend, form menampilkan kegagalan penyimpanan dan mempertahankan draft. Panel admin, pengiriman WhatsApp sungguhan, dan kapasitas slot ditunda.
+Gunakan `RESERVATION_MODE=backend` dan `BACKEND_API_URL=http://127.0.0.1:8080/api` untuk lokal, atau URL backend online untuk deployment. Konfigurasi lama yang hanya mengisi URL tetap memakai backend. Jalankan backend dan migration sesuai [README backend](../bengkel-backend/README.md). Jika backend terkonfigurasi tetapi tidak tersedia, form menampilkan kegagalan penyimpanan dan mempertahankan draft; kegagalan tidak diubah menjadi sukses demo. Redeploy Vercel setelah mengubah konfigurasi. Panel admin, pengiriman WhatsApp sungguhan, dan kapasitas slot ditunda.
 
 ## Aset
 

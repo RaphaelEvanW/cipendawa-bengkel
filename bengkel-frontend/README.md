@@ -13,14 +13,15 @@ Keputusan scope dan gambaran seluruh repository tersedia di [README utama](../RE
 
 Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart & Variasi. Kebutuhan variasi menggunakan nomor WhatsApp Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
 
-Reservasi tersedia di `/reservasi` dengan tiga langkah dan ringkasan sebelum disimpan. Route server Next.js meneruskan data ke API Go dan PostgreSQL lokal. Respons sukses menampilkan kode dan status pending; notifikasi WhatsApp berstatus simulated tanpa pengiriman sungguhan. Panel admin ditunda. Lihat README backend untuk setup.
+Reservasi tersedia di `/reservasi` dengan tiga langkah dan ringkasan. Tanpa konfigurasi backend, form berjalan sebagai simulasi di browser dan tidak menyimpan data. Dengan backend aktif, route server Next.js meneruskan data ke API Go dan PostgreSQL. Respons sukses backend menampilkan kode dan status pending; notifikasi WhatsApp berstatus simulated tanpa pengiriman sungguhan. Panel admin ditunda.
 
 ## Reservasi Showcase
 
 - Tiga layanan: Body Repair, Service, dan Sparepart & Variasi. Semua cabang menerima ketiganya.
 - Cabang dipilih sebagai lokasi kunjungan. Pemindahan pekerjaan kompleks ke Cianjur ditangani manual.
 - Form mengumpulkan nama, WhatsApp, email dan kendaraan opsional, tanggal, preferensi waktu, serta keluhan opsional.
-- Ringkasan ditampilkan sebelum penyimpanan. Keberhasilan baru muncul setelah API menyimpan reservasi dan catatan notifikasi dalam satu transaksi.
+- Ringkasan ditampilkan sebelum langkah akhir. Dalam mode demo, hasil berlabel Simulasi reservasi dan kode berawalan DEMO; tidak ada permintaan ke API, penyimpanan browser, database, atau pengiriman WhatsApp.
+- Dalam mode backend, keberhasilan baru muncul setelah API menyimpan reservasi dan catatan notifikasi dalam satu transaksi.
 - Status awal pending; preferensi waktu bukan jaminan slot. WhatsApp simulated berarti tidak ada pesan sungguhan.
 - Percobaan ulang dengan data dan idempotency key sama mengembalikan kode semula. Isian yang belum disimpan tetap berada di memori halaman.
 - Panel admin dan integrasi WhatsApp berbayar tidak termasuk tahap lokal ini.
@@ -102,13 +103,24 @@ npm install
 npm run dev
 ```
 
-Buka http://localhost:3000. Beranda dapat ditampilkan tanpa backend. Untuk menyimpan reservasi, jalankan backend dan PostgreSQL mengikuti README backend, lalu buat .env.local:
+Buka http://localhost:3000. Beranda dan simulasi reservasi dapat digunakan tanpa backend. Untuk memaksa demo meskipun URL backend sudah ada di `.env.local`, gunakan:
 
 ```dotenv
+RESERVATION_MODE=demo
+```
+
+Untuk menyimpan reservasi, jalankan backend dan PostgreSQL mengikuti README backend, lalu atur `.env.local`:
+
+```dotenv
+RESERVATION_MODE=backend
 BACKEND_API_URL=http://127.0.0.1:8080/api
 ```
 
-URL backend hanya digunakan di server Next.js. Browser mengirim ke route same-origin /api/reservations.
+URL backend hanya digunakan di server Next.js. Dalam mode backend, browser mengirim ke route same-origin `/api/reservations`. Jika backend tidak tersedia, form mempertahankan isian dan menampilkan error; tidak ada pengalihan diam-diam ke demo.
+
+### Deploy frontend di Vercel
+
+Pilih Root Directory `bengkel-frontend`. Untuk showcase tanpa server Go atau PostgreSQL, atur `RESERVATION_MODE=demo` di environment Vercel lalu deploy. Jika kedua variabel belum diatur, mode demo juga aktif secara otomatis. Jika hanya `BACKEND_API_URL` yang diatur, form memakai backend untuk menjaga kompatibilitas konfigurasi lokal sebelumnya. Setelah mengubah mode atau URL pada Vercel, lakukan redeploy.
 
 Perintah yang tersedia:
 
