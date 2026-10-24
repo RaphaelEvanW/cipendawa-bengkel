@@ -72,7 +72,7 @@ Beranda sudah diarahkan ke informasi perusahaan, layanan statis, lokasi, dan pil
 
 Kontak, navigasi publik, dan jam operasional menggunakan data bersama di bengkel-frontend/lib/content/workshop.ts. Ringkasan layanan berada di komponen ServiceSection. Tidak ada pengambilan data layanan dari API pada beranda.
 
-Feed Instagram menggunakan widget Zyff lbwI2zYe3hkE2g dari pemilik project. Urutan konten setelah profil adalah Instagram, layanan, lalu testimoni. Feed membutuhkan JavaScript dan koneksi ke Zyff.
+Feed Instagram menggunakan widget Elfsight 20629220-dcc2-4ddb-9846-817bfe7e1f51 dari pemilik project. Urutan konten setelah profil adalah Instagram, layanan, lalu testimoni. Feed membutuhkan JavaScript dan koneksi ke Elfsight.
 
 Section testimoni menggunakan Google Reviews melalui widget Elfsight 2bb9cb75-042f-4397-aaf8-042019b45792 dari pemilik project. Daftar testimoni statis telah diganti; pengelolaan ulasan dan konfigurasi widget dilakukan di Elfsight.
 

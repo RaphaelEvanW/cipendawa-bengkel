@@ -25,12 +25,12 @@ func (h *Handler) Create(c *gin.Context) {
 	decoder := json.NewDecoder(c.Request.Body)
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(&req); err != nil || req == nil {
-		pkg.SendError(c, http.StatusBadRequest, "Body JSON tidak valid atau terlalu besar")
+		pkg.SendError(c, http.StatusBadRequest, "Data reservasi tidak valid atau terlalu panjang.")
 		return
 	}
 	var extra interface{}
 	if err := decoder.Decode(&extra); err != io.EOF {
-		pkg.SendError(c, http.StatusBadRequest, "Body JSON tidak valid atau terlalu besar")
+		pkg.SendError(c, http.StatusBadRequest, "Data reservasi tidak valid atau terlalu panjang.")
 		return
 	}
 	receipt, replay, err := h.service.CreateWithKey(*req, c.GetHeader("Idempotency-Key"))
@@ -38,9 +38,9 @@ func (h *Handler) Create(c *gin.Context) {
 		var fields ValidationError
 		switch {
 		case errors.As(err, &fields):
-			c.JSON(http.StatusUnprocessableEntity, gin.H{"success": false, "message": "Periksa kembali data reservasi", "errors": fields})
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"success": false, "message": "Periksa kolom yang ditandai sebelum melanjutkan.", "errors": fields})
 		case errors.Is(err, ErrIdempotencyConflict):
-			pkg.SendError(c, http.StatusConflict, "Kunci pengiriman sudah digunakan untuk data lain")
+			pkg.SendError(c, http.StatusConflict, "Permintaan sebelumnya berisi data yang berbeda. Periksa isian sebelum mencoba lagi.")
 		default:
 			pkg.SendError(c, http.StatusServiceUnavailable, "Reservasi belum dapat disimpan. Coba lagi dengan data yang sama.")
 		}
@@ -50,7 +50,7 @@ func (h *Handler) Create(c *gin.Context) {
 	if replay {
 		status = http.StatusOK
 	}
-	pkg.SendSuccess(c, status, "Reservasi tersimpan; pesan WhatsApp masih berupa simulasi", receipt)
+	pkg.SendSuccess(c, status, "Reservasi tersimpan. Pesan WhatsApp hanya berupa simulasi dan tidak dikirim.", receipt)
 }
 func (h *Handler) CheckStatus(c *gin.Context) {
 	var req CheckStatusRequest
