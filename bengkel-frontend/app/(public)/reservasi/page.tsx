@@ -3,7 +3,7 @@ import ReservationFlow from "@/components/reservation/ReservationFlow";
 
 export const metadata: Metadata = {
   title: "Reservasi | Cipendawa Motor",
-  description: "Rencanakan layanan, cabang, dan waktu kunjungan Anda ke Cipendawa Motor.",
+  description: "Pilih layanan, cabang, dan jadwal kunjungan ke Cipendawa Motor. Jadwal reservasi perlu dikonfirmasi oleh tim bengkel.",
   robots: { index: false, follow: true },
 };
 

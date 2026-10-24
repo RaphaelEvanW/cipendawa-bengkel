@@ -51,7 +51,7 @@ Font website memakai Arial dengan fallback Helvetica Neue dan sans-serif, tanpa 
 
 ## Implementasi Saat Ini
 
-Beranda pada app/page.tsx merangkai navbar, hero, profil, Instagram, layanan, testimoni, lokasi, CTA, dan footer. InstagramSection memuat widget Zyff lbwI2zYe3hkE2g melalui https://www.zyff.app/w/instagram.js setelah hidrasi. Feed membutuhkan koneksi ke Zyff dan JavaScript pengunjung.
+Beranda pada app/page.tsx merangkai navbar, hero, profil, Instagram, layanan, testimoni, lokasi, CTA, dan footer. InstagramSection memuat widget Elfsight 20629220-dcc2-4ddb-9846-817bfe7e1f51 melalui https://elfsightcdn.com/platform.js setelah hidrasi. Script yang sama juga digunakan section Google Reviews. Feed membutuhkan koneksi ke Elfsight dan JavaScript pengunjung.
 
 TestimonialSection menampilkan Google Reviews melalui widget Elfsight 2bb9cb75-042f-4397-aaf8-042019b45792 dari pemilik project, menggantikan daftar testimoni statis. Script https://elfsightcdn.com/platform.js dimuat setelah hidrasi dan widget menggunakan pemuatan lazy bawaan Elfsight. Konten ulasan serta tampilannya dikelola melalui Elfsight; widget membutuhkan JavaScript dan koneksi ke layanan tersebut.
 

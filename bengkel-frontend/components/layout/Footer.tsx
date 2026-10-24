@@ -43,8 +43,8 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-3 text-sm text-white/85 leading-relaxed">
-              Spesialis Body Repair, Service, Sparepart & Variasi Mobil sejak
-              1976. Dipercaya puluhan ribu pelanggan di Cianjur dan Sukabumi.
+              Spesialis body repair sejak 1976. Melayani servis, suku cadang,
+              dan variasi mobil untuk puluhan ribu pelanggan di Cianjur dan Sukabumi.
             </p>
             <div className="mt-4 flex items-start gap-2 text-sm text-white/85">
               <Clock size={14} aria-hidden="true" className="mt-1 shrink-0 text-lime" />
@@ -57,7 +57,7 @@ export default function Footer() {
 
           <div className="lg:col-span-1">
             <h3 className="text-sm font-semibold text-white mb-4">
-              Lokasi Cabang
+              Lokasi cabang
             </h3>
             <div className="flex flex-col gap-4">
               {branches.map((branch) => (
@@ -87,7 +87,7 @@ export default function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold text-white mb-4">
-              Hubungi Kami
+              Hubungi kami
             </h3>
             <div className="flex flex-col gap-3">
               {workshopContacts.map((c) => (
@@ -131,10 +131,10 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/85">
-            {new Date().getFullYear()} Cipendawa Motor. All rights reserved.
+            {new Date().getFullYear()} Cipendawa Motor. Hak cipta dilindungi.
           </p>
           <p className="text-xs text-white/85">
-            Spesialis Body Repair Sejak 1976
+            Spesialis body repair sejak 1976
           </p>
         </div>
       </div>

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Cipendawa Motor — Spesialis Body Repair Sejak 1976",
+  title: "Cipendawa Motor | Spesialis Body Repair Sejak 1976",
   description:
-    "Bengkel spesialis body repair, service, sparepart, dan variasi mobil terpercaya di Cianjur dan Sukabumi sejak 1976.",
+    "Cipendawa Motor, spesialis body repair sejak 1976. Layanan servis, suku cadang, dan variasi mobil di tiga cabang di Cianjur dan Sukabumi.",
 };
 
 export default function RootLayout({

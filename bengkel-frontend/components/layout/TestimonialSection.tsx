@@ -15,10 +15,10 @@ export default function TestimonialSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 id="ulasan-heading" className="text-3xl font-bold text-white sm:text-4xl">
-            Apa Kata Pelanggan Kami
+            Apa kata pelanggan kami
           </h2>
           <p className="mx-auto mt-3 max-w-xl leading-relaxed text-white/85">
-            Pengalaman pelanggan Cipendawa Motor melalui ulasan Google.
+            Baca pengalaman pelanggan Cipendawa Motor di Google.
           </p>
         </div>
         <div>
@@ -35,12 +35,12 @@ export default function TestimonialSection() {
         )}
         {status === "unavailable" && (
           <p role="status" className="mt-4 text-center text-white/85">
-            Ulasan belum tampil. Buka Google Maps melalui tautan di bawah.
+            Ulasan tidak dapat dimuat. Anda tetap bisa membacanya di Google Maps.
           </p>
         )}
         <noscript>
           <p className="mt-4 text-center text-white/85">
-            Lihat ulasan melalui tautan Google Maps di bawah.
+            Baca ulasan pelanggan di Google Maps.
           </p>
         </noscript>
         <p className="mt-4 text-center">
@@ -50,7 +50,7 @@ export default function TestimonialSection() {
             rel="noopener noreferrer"
             className="text-white underline underline-offset-4 hover:text-white/85"
           >
-            Buka di Google Maps
+            Baca ulasan di Google Maps
           </a>
         </p>
         <Script

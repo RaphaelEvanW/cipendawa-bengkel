@@ -7,7 +7,7 @@ const INSTAGRAM_URL = "https://www.instagram.com/cipendawamotor.id/";
 
 export default function InstagramSection() {
   const { containerRef, status, reportError } = useWidgetStatus(
-    'a[href*="instagram.com/p/"] img, a[href*="instagram.com/reel/"] img, video, iframe[src*="instagram.com"], iframe[src*="zyff.app"]',
+    '.es-media-image, a[href*="instagram.com/p/"] img, a[href*="instagram.com/reel/"] img, .eapps-instagram-feed-posts-item-image, [class*="MediaImage"] img, video, iframe[src*="instagram.com"], iframe[src*="elfsight"]',
   );
 
   return (
@@ -19,23 +19,22 @@ export default function InstagramSection() {
         <div className="rounded-lg bg-white p-4 text-navy sm:p-6">
           <div
             ref={containerRef}
-            className="zyff-instagram min-h-48"
-            data-zyff-widget="instagram"
-            data-zyff-id="lbwI2zYe3hkE2g"
+            className="elfsight-app-20629220-dcc2-4ddb-9846-817bfe7e1f51 min-h-48"
+            data-elfsight-app-lazy
           />
         </div>
         {status === "loading" && (
           <p role="status" className="mt-4 text-sm text-white/85">
-            Memuat feed Instagram…
+            Memuat unggahan Instagram…
           </p>
         )}
         {status === "unavailable" && (
           <p role="status" className="mt-4 text-white/85">
-            Feed belum tampil. Lihat unggahan melalui tautan Instagram di bawah.
+            Unggahan tidak dapat dimuat. Anda tetap bisa melihatnya di Instagram.
           </p>
         )}
         <noscript>
-          <p className="mt-4 text-white/85">Lihat unggahan melalui tautan Instagram di bawah.</p>
+          <p className="mt-4 text-white/85">Lihat unggahan langsung di Instagram.</p>
         </noscript>
         <p className="mt-4">
           <a
@@ -48,7 +47,7 @@ export default function InstagramSection() {
           </a>
         </p>
         <Script
-          src="https://www.zyff.app/w/instagram.js"
+          src="https://elfsightcdn.com/platform.js"
           strategy="afterInteractive"
           onError={reportError}
         />

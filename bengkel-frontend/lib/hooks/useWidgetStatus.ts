@@ -17,21 +17,39 @@ export function useWidgetStatus(contentSelector: string) {
 
     let ready = false;
     let timeout: ReturnType<typeof setTimeout> | undefined;
+    let discovery: ReturnType<typeof setInterval> | undefined;
     const loadedFrames = new WeakSet<HTMLIFrameElement>();
+    const observedRoots = new Set<Element | ShadowRoot>();
 
     const checkContent = () => {
-      const hasContent = Array.from(container.querySelectorAll(contentSelector)).some((element) => {
+      if (ready) return;
+      const roots: (Element | ShadowRoot)[] = [container];
+      for (let index = 0; index < roots.length; index++) {
+        const root = roots[index];
+        if (!observedRoots.has(root)) {
+          observedRoots.add(root);
+          mutations.observe(root, { childList: true, subtree: true, attributes: true, characterData: true });
+          root.addEventListener("load", handleLoad, true);
+          root.addEventListener("loadeddata", checkContent, true);
+        }
+        root.querySelectorAll("*").forEach((element) => {
+          if (element.shadowRoot) roots.push(element.shadowRoot);
+        });
+      }
+
+      const hasContent = roots.some((root) => Array.from(root.querySelectorAll(contentSelector)).some((element) => {
         if (element instanceof HTMLImageElement) {
           return element.complete && element.naturalWidth > 64 && element.naturalHeight > 64;
         }
         if (element instanceof HTMLVideoElement) return element.readyState >= 2;
         if (element instanceof HTMLIFrameElement) return loadedFrames.has(element);
         return Boolean(element.textContent?.trim());
-      });
+      }));
 
       if (hasContent && !ready) {
         ready = true;
         clearTimeout(timeout);
+        clearInterval(discovery);
         setStatus("ready");
       }
     };
@@ -42,9 +60,6 @@ export function useWidgetStatus(contentSelector: string) {
     };
 
     const mutations = new MutationObserver(checkContent);
-    mutations.observe(container, { childList: true, subtree: true, attributes: true, characterData: true });
-    container.addEventListener("load", handleLoad, true);
-    container.addEventListener("loadeddata", checkContent, true);
 
     const viewport = new IntersectionObserver((entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -52,8 +67,10 @@ export function useWidgetStatus(contentSelector: string) {
       checkContent();
       if (ready) return;
       setStatus((current) => current === "unavailable" ? current : "loading");
+      discovery = setInterval(checkContent, 500);
       timeout = setTimeout(() => {
         checkContent();
+        clearInterval(discovery);
         if (!ready) setStatus("unavailable");
       }, 15_000);
     });
@@ -63,10 +80,13 @@ export function useWidgetStatus(contentSelector: string) {
 
     return () => {
       clearTimeout(timeout);
+      clearInterval(discovery);
       mutations.disconnect();
       viewport.disconnect();
-      container.removeEventListener("load", handleLoad, true);
-      container.removeEventListener("loadeddata", checkContent, true);
+      observedRoots.forEach((root) => {
+        root.removeEventListener("load", handleLoad, true);
+        root.removeEventListener("loadeddata", checkContent, true);
+      });
     };
   }, [contentSelector]);
 

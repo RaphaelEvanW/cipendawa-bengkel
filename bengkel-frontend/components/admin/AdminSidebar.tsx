@@ -14,12 +14,12 @@ import {
 import { logout } from "@/lib/api/auth";
 
 const menuItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Ringkasan", icon: LayoutDashboard },
   { href: "/reservasi", label: "Reservasi", icon: CalendarCheck },
-  { href: "/jadwal", label: "Jadwal & Operasional", icon: Calendar },
+  { href: "/jadwal", label: "Jadwal dan operasional", icon: Calendar },
   { href: "/layanan", label: "Layanan", icon: Wrench },
   { href: "/notifikasi", label: "Notifikasi", icon: Bell },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/settings", label: "Pengaturan", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -32,7 +32,7 @@ export default function AdminSidebar() {
         <span className="text-lg font-bold text-white">
           Cipendawa<span className="text-lime">Motor</span>
         </span>
-        <p className="text-xs text-white/40 mt-0.5">Admin Panel</p>
+        <p className="text-xs text-white/40 mt-0.5">Panel admin</p>
       </div>
 
       {/* Menu */}
@@ -64,7 +64,7 @@ export default function AdminSidebar() {
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/60 hover:text-red-400 hover:bg-red-400/10 transition-colors w-full"
         >
           <LogOut size={18} />
-          Logout
+          Keluar
         </button>
       </div>
     </aside>

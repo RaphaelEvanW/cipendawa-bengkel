@@ -31,10 +31,10 @@ export default function LocationSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 id="lokasi-heading" className="text-3xl sm:text-4xl font-bold text-lime">
-            Temukan Kami di 3 Lokasi
+            Temukan kami di 3 lokasi
           </h2>
           <p className="text-white/85 mt-3 max-w-xl mx-auto">
-            Hadir di Cianjur dan Sukabumi untuk memudahkan akses pelanggan kami.
+            Pilih cabang di Cianjur atau Sukabumi yang ingin Anda kunjungi.
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function LocationSection() {
               <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center text-lime">
                 <Clock size={18} />
               </div>
-              <h3 className="text-white font-semibold">Jam Operasional</h3>
+              <h3 className="text-white font-semibold">Jam operasional</h3>
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">

@@ -5,12 +5,12 @@ import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 const highlights = [
-  "Spesialis body repair terpercaya sejak 1976",
+  "Spesialis body repair sejak 1976",
   "Melayani semua jenis kendaraan roda empat",
-  "Menggunakan cat dan bahan berkualitas tinggi",
+  "Cat dan bahan berkualitas",
   "Teknisi bersertifikat dan berpengalaman",
-  "Sparepart original dan bergaransi",
-  "Estimasi biaya transparan tanpa biaya tersembunyi",
+  "Suku cadang asli dan bergaransi",
+  "Rincian estimasi biaya tanpa biaya tersembunyi",
 ];
 
 const pairs = [
@@ -162,7 +162,7 @@ export default function AboutSection() {
                 <ChevronLeft size={16} />
               </button>
 
-              <div className="min-w-0 flex-1 aspect-[4/5] rounded-2xl overflow-hidden bg-navy border border-white/10 focus-within:ring-2 focus-within:ring-lime">
+              <div className="min-w-0 flex-1 aspect-[4/5] rounded-2xl overflow-hidden bg-navy border border-white/10 ring-2 ring-lime">
                 <BeforeAfterSlider
                   key={currentPair}
                   before={pairs[currentPair].before}
@@ -220,19 +220,17 @@ export default function AboutSection() {
               Tentang Kami
             </span>
             <h2 id="about-heading" className="text-4xl font-black text-white mt-3 mb-4 uppercase leading-tight">
-              Bengkel Terpercaya<br />
-              <span className="text-lime">Keluarga Cianjur</span>
+              Mengenal<br />
+              <span className="text-lime">Cipendawa Motor</span>
             </h2>
             <p className="text-white/85 leading-relaxed mb-3 text-sm">
-              Cipendawa Motor berdiri sejak tahun 1976 sebagai bengkel spesialis
-              body repair di Cianjur. Selama hampir lima dekade, kami telah
-              berkembang menjadi bengkel lengkap yang melayani service, sparepart,
-              dan variasi kendaraan.
+              Cipendawa Motor berdiri pada 1976 sebagai bengkel spesialis
+              body repair di Cianjur. Kini, kami juga melayani servis mobil,
+              penyediaan suku cadang, dan variasi mobil.
             </p>
             <p className="text-white/85 leading-relaxed mb-8 text-sm">
-              Dengan 3 cabang yang tersebar di Cianjur dan Sukabumi, kami
-              berkomitmen memberikan pelayanan terbaik dengan standar kualitas
-              yang konsisten di setiap cabang.
+              Kami melayani pelanggan di tiga cabang di Cianjur dan Sukabumi,
+              dengan standar pengerjaan yang sama di setiap cabang.
             </p>
 
             {/* Highlights */}

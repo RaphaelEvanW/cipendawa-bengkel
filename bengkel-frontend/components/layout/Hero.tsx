@@ -26,13 +26,13 @@ export default function Hero() {
           {/* Heading */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6 uppercase">
             Bengkel<br />
-            Terpercaya<br />
+            Mobil di<br />
             <span className="text-lime">Cianjur.</span>
           </h1>
 
           {/* Description */}
           <p className="text-base text-white/85 leading-relaxed mb-10 max-w-md">
-            Body repair, service, sparepart, dan variasi mobil.
+            Body repair, servis, suku cadang, dan variasi mobil.
             Lebih dari 48 tahun melayani puluhan ribu pelanggan
             di Cianjur dan Sukabumi.
           </p>
@@ -78,7 +78,7 @@ export default function Hero() {
           className="text-white/15 text-xs uppercase tracking-[0.3em] font-bold"
           style={{ writingMode: "vertical-rl" }}
         >
-          Cipendawa Motor. Est. 1976
+          Cipendawa Motor. Sejak 1976
         </p>
         <div className="w-px h-16 bg-white/10" />
       </div>

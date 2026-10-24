@@ -18,7 +18,7 @@ export default function LoginPage() {
       await login(form.username, form.password);
       router.push("/dashboard");
     } catch {
-      setError("Username atau password salah");
+      setError("Tidak dapat masuk. Periksa nama pengguna dan kata sandi, lalu coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,7 @@ export default function LoginPage() {
           <span className="text-2xl font-bold text-white">
             Cipendawa<span className="text-lime">Motor</span>
           </span>
-          <p className="text-white/50 text-sm mt-1">Admin Panel</p>
+          <p className="text-white/50 text-sm mt-1">Panel admin</p>
         </div>
 
         {/* Card */}
@@ -42,7 +42,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label className="text-sm text-white/60 mb-1.5 block">
-                Username
+                Nama pengguna
               </label>
               <input
                 type="text"
@@ -50,7 +50,7 @@ export default function LoginPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, username: e.target.value }))
                 }
-                placeholder="Masukkan username"
+                placeholder="Masukkan nama pengguna"
                 className="w-full bg-navy border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-lime transition-colors"
                 required
               />
@@ -58,7 +58,7 @@ export default function LoginPage() {
 
             <div>
               <label className="text-sm text-white/60 mb-1.5 block">
-                Password
+                Kata sandi
               </label>
               <input
                 type="password"
@@ -66,7 +66,7 @@ export default function LoginPage() {
                 onChange={(e) =>
                   setForm((prev) => ({ ...prev, password: e.target.value }))
                 }
-                placeholder="Masukkan password"
+                placeholder="Masukkan kata sandi"
                 className="w-full bg-navy border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-lime transition-colors"
                 required
               />

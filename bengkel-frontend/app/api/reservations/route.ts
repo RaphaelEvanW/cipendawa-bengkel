@@ -38,12 +38,12 @@ async function readBounded(stream: ReadableStream<Uint8Array> | null) {
 export async function POST(request: Request) {
   const key = request.headers.get("Idempotency-Key") ?? "";
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(key)) {
-    return failure("Kunci reservasi tidak valid. Muat ulang halaman lalu coba lagi.", 400);
+    return failure("Permintaan reservasi tidak dikenali. Muat ulang halaman, lalu coba lagi.", 400);
   }
   if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") {
-    return failure("Gunakan format JSON untuk reservasi.", 415);
+    return failure("Format data reservasi tidak didukung. Muat ulang halaman, lalu coba lagi.", 415);
   }
-  if (Number(request.headers.get("content-length")) > maxBodyBytes) return failure("Isian terlalu besar.", 413);
+  if (Number(request.headers.get("content-length")) > maxBodyBytes) return failure("Data reservasi terlalu panjang. Persingkat isian, lalu coba lagi.", 413);
 
   let body: string;
   try {
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const parsed = JSON.parse(body);
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return failure("Isian reservasi tidak valid.", 400);
   } catch (error) {
-    return failure(error instanceof RangeError ? "Isian terlalu besar." : "Isian reservasi tidak valid.", error instanceof RangeError ? 413 : 400);
+    return failure(error instanceof RangeError ? "Data reservasi terlalu panjang. Persingkat isian, lalu coba lagi." : "Isian reservasi tidak valid.", error instanceof RangeError ? 413 : 400);
   }
 
   try {

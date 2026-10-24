@@ -8,21 +8,21 @@ const services = [
     name: "Body Repair",
     image: "/images/layanan/body_repair.png",
     imageAlt: "Proses pengamplasan panel bodi mobil sebelum pengecatan",
-    description: "Perbaikan bodi dan pengecatan mobil. Ceritakan bagian yang ingin diperbaiki agar tim kami bisa membantu.",
+    description: "Perbaikan bodi dan pengecatan mobil. Konsultasikan bagian yang rusak dan kebutuhan pengerjaannya dengan tim bengkel.",
   },
   {
     id: "service",
     name: "Service",
     image: "/images/layanan/service.png",
     imageAlt: "Pengerjaan perawatan mobil pada ruang mesin",
-    description: "Ada keluhan pada mobil atau sudah waktunya servis? Bahas kondisi dan kebutuhan perawatan mobil Anda dengan tim kami.",
+    description: "Servis dan pemeriksaan keluhan mobil. Hubungi tim bengkel untuk membahas kondisi serta perawatan yang dibutuhkan.",
   },
   {
     id: "sparepart",
     name: "Sparepart & Variasi",
     image: "/images/layanan/sparepart_variasi.png",
     imageAlt: "Pemilihan komponen mobil di antara rak sparepart dan velg",
-    description: "Cari suku cadang atau variasi untuk mobil Anda. Cek ketersediaan dan kecocokannya sebelum berkunjung.",
+    description: "Suku cadang dan variasi mobil. Tanyakan ketersediaan serta kecocokan komponen dengan mobil Anda sebelum berkunjung.",
   },
 ] as const;
 
@@ -39,8 +39,8 @@ export default function ServiceSection() {
               Layanan untuk <span className="text-lime">mobil Anda.</span>
             </h2>
             <p className="mt-5 max-w-sm leading-relaxed text-white/85">
-              Body repair, service, sparepart, dan variasi di Cipendawa Motor.
-              Hubungi tim sesuai kebutuhan kendaraan Anda.
+              Pilih layanan yang Anda butuhkan, lalu hubungi tim bengkel
+              untuk konsultasi sebelum berkunjung.
             </p>
           </div>
 

@@ -9,7 +9,7 @@ import styles from "./ReservationFlow.module.css";
 
 const services = [
   { id: "body_repair", name: "Body Repair", description: "Perbaikan bodi dan pengecatan mobil.", image: "/images/layanan/body_repair.png", alt: "Pengerjaan panel bodi mobil" },
-  { id: "service", name: "Service", description: "Perawatan untuk kebutuhan mobil Anda.", image: "/images/layanan/service.png", alt: "Perawatan pada ruang mesin mobil" },
+  { id: "service", name: "Service", description: "Servis dan perawatan mobil.", image: "/images/layanan/service.png", alt: "Perawatan pada ruang mesin mobil" },
   { id: "sparepart", name: "Sparepart & Variasi", description: "Suku cadang dan kelengkapan kendaraan.", image: "/images/layanan/sparepart_variasi.png", alt: "Pemilihan komponen dan variasi mobil" },
 ] as const;
 
@@ -54,6 +54,7 @@ export default function ReservationFlow() {
   const [pending, setPending] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [receipt, setReceipt] = useState<BookingReceipt | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
   const submissionRef = useRef<{ payload: string; key: string } | null>(null);
   const submittingRef = useRef(false);
   const [today] = useState(() => jakartaNow().date);
@@ -84,11 +85,11 @@ export default function ReservationFlow() {
   function validate(target: number): Errors {
     const next: Errors = {};
     if (target === 0) {
-      if (!service) next.service = "Pilih layanan untuk kunjungan Anda.";
+      if (!service) next.service = "Pilih layanan yang Anda butuhkan.";
       if (!branch) next.branch = "Pilih cabang yang ingin Anda kunjungi.";
     }
     if (target === 1) {
-      if (data.name.trim().length < 2) next.name = "Isi nama Anda, minimal 2 karakter.";
+      if (data.name.trim().length < 2) next.name = "Masukkan nama, minimal 2 karakter.";
       const phone = data.phone.replace(/[\s()-]/g, "");
       if (!/^(?:\+62|62|0)8\d{8,11}$/.test(phone)) next.phone = "Gunakan nomor WhatsApp Indonesia, misalnya 081234567890.";
       if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) next.email = "Periksa kembali alamat email Anda.";
@@ -99,7 +100,7 @@ export default function ReservationFlow() {
       if (!data.date || Number.isNaN(parsed.getTime())) next.date = "Pilih tanggal kunjungan.";
       else if (data.date < now.date) next.date = "Pilih hari ini atau tanggal setelahnya.";
       else if (parsed.getUTCDay() === 0) next.date = "Bengkel tutup pada hari Minggu. Pilih Senin sampai Sabtu.";
-      if (!period) next.period = "Pilih preferensi waktu kunjungan.";
+      if (!period) next.period = "Pilih rentang waktu kunjungan.";
       else if (data.date === now.date && period.end <= now.time) next.period = "Rentang waktu ini sudah lewat. Pilih waktu atau tanggal lain.";
     }
     return next;
@@ -178,7 +179,7 @@ export default function ReservationFlow() {
       }
       setSubmitError(typeof result?.message === "string" ? result.message : "Reservasi belum dapat disimpan. Silakan coba lagi.");
     } catch {
-      setSubmitError("Belum ada konfirmasi penyimpanan. Coba lagi dengan isian yang sama untuk memeriksa hasilnya.");
+      setSubmitError("Kami belum dapat memastikan reservasi tersimpan. Coba lagi dengan isian yang sama agar tidak membuat reservasi ganda.");
     } finally {
       submittingRef.current = false;
       setPending(false);
@@ -186,6 +187,7 @@ export default function ReservationFlow() {
   }
 
   function restart() {
+    setCopyStatus("");
     setReceipt(null);
     setData(initialData);
     setReview(false);
@@ -200,6 +202,98 @@ export default function ReservationFlow() {
     return errors[key] ? <p className={styles.error} id={`${key}-error`}>{errors[key]}</p> : null;
   }
 
+  async function copyBookingCode() {
+    if (!receipt) return;
+    try {
+      await navigator.clipboard.writeText(receipt.booking_code);
+      setCopyStatus("Kode disalin");
+    } catch {
+      setCopyStatus("Kode belum dapat disalin. Pilih teks kode di atas untuk menyalinnya secara manual.");
+    }
+  }
+
+  if (receipt) {
+    const visitDate = new Date(`${data.date}T12:00:00+07:00`);
+    const dateLabel = new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(visitDate);
+    const weekday = new Intl.DateTimeFormat("id-ID", { weekday: "long", timeZone: "Asia/Jakarta" }).format(visitDate);
+
+    return (
+      <div className={`${styles.page} ${styles.receiptPage}`}>
+        <div className={styles.receiptShell}>
+          <header className={styles.receiptHeading}>
+            <div>
+              <p className={styles.savedState}><Check size={18} aria-hidden="true" /> Data berhasil disimpan</p>
+              <h1 ref={titleRef} tabIndex={-1}>Reservasi Anda tersimpan.</h1>
+              <p>Terima kasih, {data.name.trim()}. Periksa rincian kunjungan Anda di bawah ini.</p>
+            </div>
+            <Link href="/" className={styles.receiptHome}>Kembali ke beranda <ArrowRight size={16} aria-hidden="true" /></Link>
+          </header>
+
+          <section className={styles.receiptSheet} aria-label="Bukti reservasi">
+            <div className={styles.receiptMain}>
+              <div className={styles.receiptCode}>
+                <div>
+                  <span>Kode reservasi</span>
+                  <strong>{receipt.booking_code}</strong>
+                </div>
+                <button type="button" onClick={copyBookingCode} className={styles.copyButton}>
+                  {copyStatus === "Kode disalin" ? <><Check size={15} aria-hidden="true" /> Disalin</> : "Salin kode"}
+                </button>
+              </div>
+              <p role="status" className={styles.copyStatus}>{copyStatus}</p>
+
+              <div className={styles.visitSchedule}>
+                <div>
+                  <span>{weekday}</span>
+                  <p>{dateLabel}</p>
+                </div>
+                <div>
+                  <span>Preferensi waktu · {period?.label}</span>
+                  <p>{period?.hours}<small> WIB</small></p>
+                </div>
+              </div>
+
+              <div className={styles.confirmationNote}>
+                <Clock3 size={18} aria-hidden="true" />
+                <div><strong>Menunggu konfirmasi bengkel</strong><p>Jadwal yang Anda pilih perlu dikonfirmasi oleh tim bengkel.</p></div>
+              </div>
+
+              <dl className={styles.receiptDetails}>
+                <div><dt>Layanan</dt><dd>{service?.name}</dd></div>
+                <div><dt>Cabang tujuan</dt><dd>{branch?.name}<span>{branch?.address}</span></dd></div>
+                <div><dt>Atas nama</dt><dd>{data.name.trim()}<span>{data.phone}</span></dd></div>
+                {data.vehicle.trim() && <div><dt>Mobil</dt><dd>{data.vehicle.trim()}</dd></div>}
+                {data.email.trim() && <div><dt>Email</dt><dd>{data.email.trim()}</dd></div>}
+                {data.notes.trim() && <div><dt>Catatan</dt><dd>{data.notes.trim()}</dd></div>}
+              </dl>
+              <p className={styles.receiptKeep}>Simpan kode reservasi atau ambil tangkapan layar halaman ini untuk ditunjukkan saat berkunjung.</p>
+            </div>
+
+            <aside className={styles.receiptAside} aria-label="Informasi setelah reservasi">
+              <div className={styles.receiptPhoto}>
+                <Image src={service?.image || "/photos/1.jpg"} alt={service?.alt || "Bengkel Cipendawa Motor"} fill sizes="(max-width: 700px) 100vw, 360px" className={styles.photo} />
+              </div>
+              <div className={styles.receiptAsideBody}>
+                <h2>Sebelum berkunjung</h2>
+                <p>Konfirmasikan jadwal dengan tim bengkel sebelum datang. Sebutkan kode reservasi agar detail kunjungan Anda mudah ditemukan.</p>
+                <div className={styles.receiptHours}><span>Jam operasional</span><p>Senin–Sabtu<br />08.00–17.00 WIB</p><span>Minggu tutup</span></div>
+                <Link href="/#lokasi" className={styles.receiptLocation}>Lihat lokasi bengkel <ArrowRight size={16} aria-hidden="true" /></Link>
+              </div>
+            </aside>
+          </section>
+
+          <div className={styles.receiptFooter}>
+            <div className={styles.simulationNote}>
+              <p><strong>Mode demo.</strong> Data reservasi tersimpan. Pesan WhatsApp hanya berupa simulasi dan tidak dikirim.</p>
+              <details><summary>Lihat simulasi pesan WhatsApp</summary><p>{receipt.notification.message}</p></details>
+            </div>
+            <button type="button" onClick={restart} className={styles.newReservation}>Buat reservasi lain <ArrowRight size={16} aria-hidden="true" /></button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.shell}>
@@ -207,8 +301,8 @@ export default function ReservationFlow() {
         <header className={styles.header}>
           <h1>Rencanakan<br /><span>kunjungan Anda.</span></h1>
           <div className={styles.intro}>
-            <p>Pilih layanan, tentukan cabang, lalu atur waktu yang cocok untuk mobil Anda.</p>
-            <p className={styles.previewNote}>Demo reservasi: data disimpan. WhatsApp simulasi, tidak ada pesan terkirim.</p>
+            <p>Pilih layanan, cabang tujuan, dan waktu kunjungan. Jadwal perlu dikonfirmasi oleh tim bengkel.</p>
+            <p className={styles.previewNote}>Mode demo: data reservasi tersimpan. Pesan WhatsApp tidak dikirim.</p>
           </div>
         </header>
 
@@ -225,32 +319,30 @@ export default function ReservationFlow() {
 
             {review ? (
               <div className={styles.formBody} aria-busy={pending}>
-                <h2 ref={titleRef} tabIndex={-1}>{receipt ? "Reservasi tersimpan" : "Rencana kunjungan Anda"}</h2>
-                <p className={styles.lead}>{receipt ? "Simpan kode reservasi Anda. Jadwal masih menunggu konfirmasi tim bengkel." : "Periksa kembali detailnya sebelum menyimpan reservasi."}</p>
+                <h2 ref={titleRef} tabIndex={-1}>Rencana kunjungan Anda</h2>
+                <p className={styles.lead}>Pastikan rincian kunjungan sudah benar sebelum menyimpan reservasi.</p>
                 <div className={styles.reviewNotice} role="status">
-                  {receipt ? <><strong>Kode reservasi: {receipt.booking_code}</strong><p>Status: pending · Menunggu konfirmasi</p><p>WhatsApp simulasi, tidak ada pesan terkirim.</p><p>{receipt.notification.message}</p></> : <><strong>Belum disimpan</strong><p>Reservasi dibuat setelah Anda menekan Simpan reservasi. Jadwal tetap perlu dikonfirmasi tim bengkel. WhatsApp simulasi, tidak ada pesan terkirim.</p></>}
+                  <strong>Reservasi belum disimpan</strong><p>Tekan Simpan reservasi untuk melanjutkan. Jadwal perlu dikonfirmasi oleh tim bengkel. Pada mode demo, pesan WhatsApp tidak dikirim.</p>
                 </div>
                 {submitError && <p role="alert" className={styles.errorSummary}>{submitError}</p>}
                 <dl className={styles.reviewList}>
-                  {[["Layanan", service?.name], ["Cabang", branch?.name], ["Nama", data.name.trim()], ["WhatsApp", data.phone], ["Email", data.email.trim() || "Tidak diisi"], ["Mobil", data.vehicle.trim() || "Belum diisi"], ["Tanggal", formatDate(data.date)], ["Preferensi waktu", `${period?.label} · ${period?.hours} WIB`], ["Catatan", data.notes.trim() || "Tidak ada catatan"]].map(([label, value]) => (
+                  {[["Layanan", service?.name], ["Cabang", branch?.name], ["Nama", data.name.trim()], ["WhatsApp", data.phone], ["Email", data.email.trim() || "Tidak diisi"], ["Mobil", data.vehicle.trim() || "Tidak diisi"], ["Tanggal", formatDate(data.date)], ["Preferensi waktu", `${period?.label} · ${period?.hours} WIB`], ["Catatan", data.notes.trim() || "Tidak ada catatan"]].map(([label, value]) => (
                     <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
                   ))}
                 </dl>
                 <div className={styles.actions}>
-                  {receipt ? <button type="button" className={styles.primary} onClick={restart}>Buat reservasi baru <ArrowRight size={17} aria-hidden="true" /></button> : <>
                     <button type="button" className={styles.secondary} disabled={pending} onClick={() => goTo(2)}>Ubah isian</button>
                     <button type="button" className={styles.primary} disabled={pending} onClick={saveReservation}>{pending ? "Menyimpan reservasi…" : "Simpan reservasi"}<ArrowRight size={17} aria-hidden="true" /></button>
-                  </>}
                 </div>
-                <p className={styles.footnote}>{receipt ? "Reservasi dan catatan notifikasi simulasi telah disimpan." : "Jika penyimpanan gagal, isian tetap tersedia selama halaman ini terbuka."}</p>
+                <p className={styles.footnote}>Jika reservasi gagal disimpan, Anda bisa mencoba lagi tanpa mengisi ulang selama halaman ini tetap terbuka.</p>
               </div>
             ) : (
               <form ref={formRef} noValidate onSubmit={submit} className={styles.formBody}>
-                <h2 ref={titleRef} tabIndex={-1}>{["Apa yang mobil Anda butuhkan?", "Kenalan dulu, yuk.", "Kapan ingin berkunjung?"][step]}</h2>
-                <p className={styles.lead}>{["Pilih satu layanan untuk memulai kunjungan Anda.", "Isi kontak yang bisa dihubungi untuk konfirmasi kunjungan.", "Pilih tanggal dan rentang waktu yang Anda inginkan."][step]}</p>
-                <p className={styles.requiredHint}>Isian tanpa label Opsional wajib diisi.</p>
+                <h2 ref={titleRef} tabIndex={-1}>{["Pilih layanan dan cabang", "Data pelanggan", "Jadwal kunjungan"][step]}</h2>
+                <p className={styles.lead}>{["Pilih layanan yang dibutuhkan dan cabang yang ingin Anda kunjungi.", "Masukkan kontak yang dapat dihubungi untuk konfirmasi jadwal.", "Pilih tanggal dan rentang waktu kunjungan yang Anda inginkan."][step]}</p>
+                <p className={styles.requiredHint}>Semua kolom wajib diisi, kecuali yang bertanda Opsional.</p>
                 {submitError && <p role="alert" className={styles.errorSummary}>{submitError}</p>}
-                {Object.values(errors).some(Boolean) && <p role="alert" className={styles.errorSummary}>Ada isian yang perlu diperiksa. Lihat keterangan di bawahnya.</p>}
+                {Object.values(errors).some(Boolean) && <p role="alert" className={styles.errorSummary}>Periksa kolom yang ditandai sebelum melanjutkan.</p>}
 
                 {step === 0 && <>
                   <fieldset className={styles.serviceList} aria-describedby={errors.service ? "service-error" : undefined}>
@@ -285,7 +377,7 @@ export default function ReservationFlow() {
                   <fieldset className={styles.periodField} aria-describedby={errors.period ? "period-error" : "period-hint"}>
                     <legend>Preferensi waktu <span>WIB</span></legend>
                     <div className={styles.periods}>{periods.map((item) => <label key={item.id} className={`${styles.period} ${data.period === item.id ? styles.periodSelected : ""}`}><input type="radio" required name="period" value={item.id} checked={data.period === item.id} onChange={() => update("period", item.id)} /><strong>{item.label}</strong><span>{item.hours}</span></label>)}</div>
-                    <p id="period-hint" className={styles.hint}>Ini preferensi kunjungan. Ketersediaan dan jam pasti akan dikonfirmasi tim.</p>{fieldError("period")}
+                    <p id="period-hint" className={styles.hint}>Waktu yang dipilih belum merupakan jadwal pasti. Konfirmasikan ketersediaannya dengan tim bengkel.</p>{fieldError("period")}
                   </fieldset>
                   <div className={styles.field}><label htmlFor="notes">Ada yang perlu kami tahu? <span>Opsional</span></label><textarea id="notes" name="notes" rows={4} maxLength={1000} value={data.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Ceritakan keluhan atau kebutuhan mobil Anda." aria-invalid={!!errors.notes} aria-describedby={errors.notes ? "notes-error" : undefined} /><p className={styles.hint}>{data.notes.length}/1.000 karakter</p>{fieldError("notes")}</div>
                 </div>}
@@ -304,7 +396,7 @@ export default function ReservationFlow() {
               <Image src={service?.image || "/photos/1.jpg"} alt={service?.alt || "Bengkel Cipendawa Motor"} fill loading="eager" sizes="(max-width: 900px) 1px, 360px" className={styles.photo} />
             </div>
             <dl className={styles.summaryList}>
-              <div><dt>Layanan</dt><dd>{service?.name || "Pilih kebutuhan mobil Anda"}</dd></div>
+              <div><dt>Layanan</dt><dd>{service?.name || "Belum dipilih"}</dd></div>
               <div><dt>Cabang</dt><dd>{branch?.name || "Belum dipilih"}</dd></div>
               <div><dt>Tanggal</dt><dd>{formatDate(data.date)}</dd></div>
               <div><dt>Waktu</dt><dd>{period ? `${period.label} · ${period.hours} WIB` : "Belum dipilih"}</dd></div>

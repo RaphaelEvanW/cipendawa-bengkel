@@ -9,11 +9,11 @@ export default function CTASection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="border-t border-white/15 pt-10 sm:pt-12 text-center">
             <h2 id="contact-heading" className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Hubungi Tim Cipendawa Motor
+              Hubungi tim Cipendawa Motor
             </h2>
             <p className="text-white/85 text-base sm:text-lg mb-8 max-w-xl mx-auto">
-              Pilih WhatsApp sesuai kebutuhan mobil Anda. Tanyakan layanan,
-              kebutuhan sparepart, atau estimasi biaya langsung kepada tim kami.
+              Tanyakan layanan, ketersediaan suku cadang, atau estimasi biaya.
+              Pilih tim yang sesuai dengan kebutuhan mobil Anda.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-4xl mx-auto">

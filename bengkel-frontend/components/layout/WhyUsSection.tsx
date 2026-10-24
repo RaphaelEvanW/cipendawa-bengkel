@@ -3,39 +3,39 @@ import { Shield, Clock, Award, Users, MapPin, Wrench } from "lucide-react";
 const features = [
   {
     icon: Award,
-    title: "Pengalaman 48+ Tahun",
+    title: "Pengalaman lebih dari 48 tahun",
     description:
-      "Berdiri sejak 1976, kami telah melayani puluhan ribu pelanggan dengan standar kualitas yang terus meningkat.",
+      "Sejak 1976, kami melayani puluhan ribu pelanggan dan terus memperbaiki standar pengerjaan.",
   },
   {
     icon: Shield,
-    title: "Garansi Pengerjaan",
+    title: "Garansi pengerjaan",
     description:
-      "Setiap pekerjaan dilengkapi dengan garansi resmi. Kami bertanggung jawab atas kualitas hasil kerja kami.",
+      "Setiap pekerjaan disertai garansi resmi sebagai tanggung jawab kami atas hasil pengerjaan.",
   },
   {
     icon: Wrench,
-    title: "Teknisi Berpengalaman",
+    title: "Teknisi berpengalaman",
     description:
-      "Tim teknisi profesional dengan pengalaman puluhan tahun di bidang body repair, service, dan variasi kendaraan.",
+      "Teknisi kami berpengalaman puluhan tahun menangani body repair, servis, dan variasi mobil.",
   },
   {
     icon: Users,
-    title: "Pelayanan Ramah",
+    title: "Pelayanan ramah",
     description:
-      "Kami mengutamakan kepuasan pelanggan dengan pelayanan yang ramah, transparan, dan profesional.",
+      "Pelayanan yang ramah dan profesional, dengan penjelasan terbuka kepada pelanggan.",
   },
   {
     icon: MapPin,
-    title: "3 Lokasi Strategis",
+    title: "Tiga cabang",
     description:
-      "Hadir di 3 lokasi strategis di Cianjur dan Sukabumi untuk memudahkan akses pelanggan kami.",
+      "Pilih cabang di Cianjur atau Sukabumi yang mudah Anda kunjungi.",
   },
   {
     icon: Clock,
-    title: "Estimasi Tepat Waktu",
+    title: "Waktu pengerjaan",
     description:
-      "Kami berkomitmen menyelesaikan pekerjaan sesuai estimasi waktu yang telah disepakati bersama.",
+      "Kami berupaya menyelesaikan pekerjaan sesuai estimasi yang disepakati dengan pelanggan.",
   },
 ];
 
@@ -45,14 +45,14 @@ export default function WhyUsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span className="text-lime text-sm font-semibold uppercase tracking-widest">
-            Keunggulan Kami
+            Keunggulan kami
           </span>
           <h2 className="text-4xl font-bold text-white mt-2">
-            Mengapa Memilih Cipendawa Motor?
+            Mengapa memilih Cipendawa Motor?
           </h2>
           <p className="text-white/50 mt-3 max-w-xl mx-auto">
-            Kami tidak hanya memperbaiki kendaraan, kami membangun kepercayaan
-            yang telah terbukti selama hampir 5 dekade.
+            Kenali pengalaman tim, garansi pengerjaan, dan pilihan cabang
+            sebelum membawa mobil Anda ke bengkel.
           </p>
         </div>
 
