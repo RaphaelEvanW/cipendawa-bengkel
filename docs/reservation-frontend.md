@@ -16,6 +16,8 @@ Preferensi waktu awal: pagi 08.00–11.00, siang 11.00–14.00, sore 14.00–17.
 
 Ringkasan akhir diberi status **Belum terkirim**. Tidak ada API, notifikasi WhatsApp, penyimpanan server, atau klaim reservasi berhasil. Data berada dalam state halaman dan hilang jika halaman dimuat ulang. Tombol kembali/edit mempertahankan isian, tombol mulai ulang mengosongkannya.
 
+Isian wajib memakai atribut HTML `required` dan keterangan yang terlihat; validasi khusus frontend tetap dijalankan. Deskripsi pilihan layanan minimal 13px pada HP, dengan gaya navy/lime dan foto yang sama seperti desktop.
+
 ## Integrasi Berikutnya
 
 Tentukan kontrak backend, penyimpanan, slot dan kapasitas per cabang, serta nomor WA pribadi untuk testing sebelum mengaktifkan pengiriman. Validasi frontend harus dilengkapi validasi server. Panel admin belum diputuskan. Jangan menganggap API lama kompatibel hanya karena file-nya tersedia.
