@@ -12,15 +12,17 @@ Panel form memakai navy medium yang lebih terang dari latar halaman, dengan teks
 2. Isi nama dan WhatsApp; email serta deskripsi mobil opsional.
 3. Pilih tanggal, preferensi waktu, dan catatan opsional; buka ringkasan.
 
-Preferensi waktu awal: pagi 08.00–11.00, siang 11.00–14.00, sore 14.00–17.00 WIB. Pembagian ini merupakan keputusan frontend untuk pratinjau, bukan slot reservasi backend. Tanggal lewat, Minggu, dan rentang yang sudah berakhir hari ini ditolak menggunakan waktu Asia/Jakarta.
+Preferensi waktu: pagi 08.00–11.00, siang 11.00–14.00, sore 14.00–17.00 WIB. Rentang ini bukan jaminan slot. Frontend dan backend menolak tanggal lewat, Minggu, dan rentang yang sudah berakhir hari ini menggunakan waktu Asia/Jakarta.
 
-Ringkasan akhir diberi status **Belum terkirim**. Tidak ada API, notifikasi WhatsApp, penyimpanan server, atau klaim reservasi berhasil. Data berada dalam state halaman dan hilang jika halaman dimuat ulang. Tombol kembali/edit mempertahankan isian, tombol mulai ulang mengosongkannya.
+Ringkasan akhir diberi status **Belum disimpan**. Tombol Simpan reservasi mengirim data melalui server Next.js ke API Go. Jika penyimpanan berhasil, halaman menampilkan kode reservasi, status pending, serta keterangan WhatsApp simulasi. Tidak ada pesan sungguhan yang dikirim. Data yang sudah disimpan berada di PostgreSQL; draft yang belum disimpan masih hilang jika halaman dimuat ulang.
+
+Tombol simpan dan edit dinonaktifkan selama pengiriman. Percobaan ulang dengan isian sama memakai Idempotency-Key yang sama untuk mencegah data ganda. Kesalahan backend ditampilkan tanpa menghapus isian. Semua cabang menerima semua layanan; cabang adalah tujuan kunjungan pelanggan.
 
 Isian wajib memakai atribut HTML `required` dan keterangan yang terlihat; validasi khusus frontend tetap dijalankan. Deskripsi pilihan layanan minimal 13px pada HP, dengan gaya navy/lime dan foto yang sama seperti desktop.
 
-## Integrasi Berikutnya
+## Backend Showcase
 
-Tentukan kontrak backend, penyimpanan, slot dan kapasitas per cabang, serta nomor WA pribadi untuk testing sebelum mengaktifkan pengiriman. Validasi frontend harus dilengkapi validasi server. Panel admin belum diputuskan. Jangan menganggap API lama kompatibel hanya karena file-nya tersedia.
+Gunakan `BACKEND_API_URL` server-side, default `http://127.0.0.1:8080/api`. Jalankan backend dan migration sesuai [README backend](../bengkel-backend/README.md). Tanpa backend, form menampilkan kegagalan penyimpanan dan mempertahankan draft. Panel admin, pengiriman WhatsApp sungguhan, dan kapasitas slot ditunda.
 
 ## Aset
 

@@ -1,11 +1,9 @@
 package reservation
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
+
 	"strings"
 	"time"
 
@@ -17,6 +15,8 @@ import (
 )
 
 type Service struct {
+	store        reservationStore
+	now          func() time.Time
 	repo         *Repository
 	scheduleRepo *schedule.Repository
 	cfg          *config.Config
@@ -33,128 +33,12 @@ func (s *Service) generateBookingCode() string {
 }
 
 func (s *Service) Create(req CreateReservationRequest) (*Reservation, error) {
-	// validasi tanggal
-	resDate, err := time.Parse("2006-01-02", req.ReservationDate)
+	receipt, _, err := s.CreateWithKey(req, uuid.NewString())
 	if err != nil {
-		return nil, errors.New("format tanggal tidak valid, gunakan YYYY-MM-DD")
+		return nil, err
 	}
-	if resDate.Before(time.Now().Truncate(24 * time.Hour)) {
-		return nil, errors.New("tanggal reservasi tidak boleh di masa lalu")
-	}
-
-	// validasi jam
-	_, err = time.Parse("15:04", req.ReservationTime)
-	if err != nil {
-		return nil, errors.New("format jam tidak valid, gunakan HH:MM")
-	}
-
-	// cek availability via schedule
-	config, err := s.scheduleRepo.GetConfig()
-	if err != nil {
-		return nil, errors.New("gagal ambil config bengkel")
-	}
-
-	// cek hari operasional
-	dayOfWeek := int(resDate.Weekday())
-	isOpenDay := false
-	for _, d := range config.OpenDays {
-		if d == dayOfWeek {
-			isOpenDay = true
-			break
-		}
-	}
-	if !isOpenDay {
-		return nil, errors.New("bengkel tidak beroperasi di hari tersebut")
-	}
-
-	// cek closure
-	closure, err := s.scheduleRepo.GetClosureByDate(req.ReservationDate)
-	if err == nil && closure.IsClosed {
-		reason := "bengkel tutup di tanggal tersebut"
-		if closure.Note != "" {
-			reason = closure.Note
-		}
-		return nil, errors.New(reason)
-	}
-
-	// cek kapasitas — warning kalau penuh tapi tetap boleh submit
-	count, _ := s.scheduleRepo.CountBookingsByDate(req.ReservationDate)
-	isOverCapacity := count >= int64(config.MaxBookingsPerDay)
-
-	// validasi reschedule kalau bersedia
-	if req.RescheduleWilling {
-		if req.RescheduleDateFrom == "" || req.RescheduleDateTo == "" {
-			return nil, errors.New("tanggal reschedule harus diisi jika bersedia reschedule")
-		}
-		if req.RescheduleTimeFrom == "" || req.RescheduleTimeTo == "" {
-			return nil, errors.New("jam reschedule harus diisi jika bersedia reschedule")
-		}
-		dateFrom, err := time.Parse("2006-01-02", req.RescheduleDateFrom)
-		if err != nil {
-			return nil, errors.New("format tanggal reschedule tidak valid")
-		}
-		dateTo, err := time.Parse("2006-01-02", req.RescheduleDateTo)
-		if err != nil {
-			return nil, errors.New("format tanggal reschedule tidak valid")
-		}
-		if dateFrom.Before(time.Now().Truncate(24 * time.Hour)) {
-			return nil, errors.New("tanggal reschedule tidak boleh di masa lalu")
-		}
-		if dateTo.Before(dateFrom) {
-			return nil, errors.New("tanggal akhir reschedule tidak boleh sebelum tanggal awal")
-		}
-	}
-
-	reservation := &Reservation{
-		ID:                 uuid.New().String(),
-		BookingCode:        s.generateBookingCode(),
-		ServiceID:          req.ServiceID,
-		ReservationDate:    req.ReservationDate,
-		ReservationTime:    req.ReservationTime,
-		CustomerName:       req.CustomerName,
-		CustomerPhone:      req.CustomerPhone,
-		CustomerVehicle:    req.CustomerVehicle,
-		Notes:              req.Notes,
-		RescheduleWilling:  req.RescheduleWilling,
-		RescheduleDateFrom: req.RescheduleDateFrom,
-		RescheduleDateTo:   req.RescheduleDateTo,
-		RescheduleTimeFrom: req.RescheduleTimeFrom,
-		RescheduleTimeTo:   req.RescheduleTimeTo,
-		Status:             "pending",
-	}
-
-	if err := s.repo.Create(reservation); err != nil {
-		return nil, errors.New("gagal membuat reservasi")
-	}
-
-	// trigger notif ke n8n (non-blocking)
-	go s.triggerN8N(reservation, isOverCapacity)
-
-	return reservation, nil
+	return s.repo.FindByBookingCode(receipt.BookingCode)
 }
-
-func (s *Service) triggerN8N(reservation *Reservation, isOverCapacity bool) {
-	n8nURL := "http://localhost:5678/webhook/reservasi-baru"
-	payload := map[string]interface{}{
-		"booking_code":         reservation.BookingCode,
-		"customer_name":        reservation.CustomerName,
-		"customer_phone":       reservation.CustomerPhone,
-		"customer_vehicle":     reservation.CustomerVehicle,
-		"service_id":           reservation.ServiceID,
-		"reservation_date":     reservation.ReservationDate,
-		"reservation_time":     reservation.ReservationTime,
-		"notes":                reservation.Notes,
-		"reschedule_willing":   reservation.RescheduleWilling,
-		"reschedule_date_from": reservation.RescheduleDateFrom,
-		"reschedule_date_to":   reservation.RescheduleDateTo,
-		"reschedule_time_from": reservation.RescheduleTimeFrom,
-		"reschedule_time_to":   reservation.RescheduleTimeTo,
-		"is_over_capacity":     isOverCapacity,
-	}
-	body, _ := json.Marshal(payload)
-	http.Post(n8nURL, "application/json", bytes.NewBuffer(body))
-}
-
 func (s *Service) GetAll(status, date string) ([]Reservation, error) {
 	return s.repo.FindWithFilter(status, date)
 }

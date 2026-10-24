@@ -1,6 +1,9 @@
 package reservation
 
 import (
+	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 
 	"bengkel-backend/pkg"
@@ -17,19 +20,38 @@ func NewHandler(service *Service) *Handler {
 }
 
 func (h *Handler) Create(c *gin.Context) {
-	var req CreateReservationRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		pkg.SendError(c, http.StatusBadRequest, "Input tidak valid: "+err.Error())
+	var req *CreateReservationRequest
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 16*1024)
+	decoder := json.NewDecoder(c.Request.Body)
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&req); err != nil || req == nil {
+		pkg.SendError(c, http.StatusBadRequest, "Body JSON tidak valid atau terlalu besar")
 		return
 	}
-	reservation, err := h.service.Create(req)
+	var extra interface{}
+	if err := decoder.Decode(&extra); err != io.EOF {
+		pkg.SendError(c, http.StatusBadRequest, "Body JSON tidak valid atau terlalu besar")
+		return
+	}
+	receipt, replay, err := h.service.CreateWithKey(*req, c.GetHeader("Idempotency-Key"))
 	if err != nil {
-		pkg.SendError(c, http.StatusBadRequest, err.Error())
+		var fields ValidationError
+		switch {
+		case errors.As(err, &fields):
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"success": false, "message": "Periksa kembali data reservasi", "errors": fields})
+		case errors.Is(err, ErrIdempotencyConflict):
+			pkg.SendError(c, http.StatusConflict, "Kunci pengiriman sudah digunakan untuk data lain")
+		default:
+			pkg.SendError(c, http.StatusServiceUnavailable, "Reservasi belum dapat disimpan. Coba lagi dengan data yang sama.")
+		}
 		return
 	}
-	pkg.SendSuccess(c, http.StatusCreated, "Reservasi berhasil dibuat", reservation)
+	status := http.StatusCreated
+	if replay {
+		status = http.StatusOK
+	}
+	pkg.SendSuccess(c, status, "Reservasi tersimpan; pesan WhatsApp masih berupa simulasi", receipt)
 }
-
 func (h *Handler) CheckStatus(c *gin.Context) {
 	var req CheckStatusRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

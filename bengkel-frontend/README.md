@@ -13,20 +13,19 @@ Keputusan scope dan gambaran seluruh repository tersedia di [README utama](../RE
 
 Tersedia tiga WhatsApp terpisah untuk Service, Body Repair, dan Sparepart & Variasi. Kebutuhan variasi menggunakan nomor WhatsApp Sparepart. Jam operasional yang dikonfirmasi adalah Senin sampai Sabtu 08.00 sampai 17.00 WIB; Minggu tutup. Informasi layanan menggunakan konten statis untuk sekarang.
 
-Frontend reservasi tersedia sebagai pratinjau di `/reservasi`, dengan tiga langkah, validasi input, pilihan cabang, tanggal, preferensi waktu, dan ringkasan. Belum ada pengiriman ke backend atau WhatsApp. Automation nantinya memakai WA pribadi pemilik untuk testing; nomor dan alatnya belum ditetapkan. Panel admin masih dipertimbangkan; cek status publik dan katalog produk belum masuk rencana yang disepakati.
+Reservasi tersedia di `/reservasi` dengan tiga langkah dan ringkasan sebelum disimpan. Route server Next.js meneruskan data ke API Go dan PostgreSQL lokal. Respons sukses menampilkan kode dan status pending; notifikasi WhatsApp berstatus simulated tanpa pengiriman sungguhan. Panel admin ditunda. Lihat README backend untuk setup.
 
-## Rencana Reservasi Berikutnya
+## Reservasi Showcase
 
-Pemilik memberi referensi form tiga langkah: pilih layanan → data pelanggan → kendaraan, jadwal, dan ringkasan konfirmasi. Detail keputusan dan hal yang belum diputuskan ada di [rencana reservasi README utama](../README.md#rencana-reservasi-dan-automation-whatsapp).
+- Tiga layanan: Body Repair, Service, dan Sparepart & Variasi. Semua cabang menerima ketiganya.
+- Cabang dipilih sebagai lokasi kunjungan. Pemindahan pekerjaan kompleks ke Cianjur ditangani manual.
+- Form mengumpulkan nama, WhatsApp, email dan kendaraan opsional, tanggal, preferensi waktu, serta keluhan opsional.
+- Ringkasan ditampilkan sebelum penyimpanan. Keberhasilan baru muncul setelah API menyimpan reservasi dan catatan notifikasi dalam satu transaksi.
+- Status awal pending; preferensi waktu bukan jaminan slot. WhatsApp simulated berarti tidak ada pesan sungguhan.
+- Percobaan ulang dengan data dan idempotency key sama mengembalikan kode semula. Isian yang belum disimpan tetap berada di memori halaman.
+- Panel admin dan integrasi WhatsApp berbayar tidak termasuk tahap lokal ini.
 
-- Langkah layanan mengacu pada kebutuhan bengkel Cipendawa; daftar serta durasi pada screenshot tidak otomatis menjadi layanan resmi.
-- Data pelanggan pada referensi mencakup nama, nomor telepon/WhatsApp, dan email opsional.
-- Langkah terakhir menampilkan tahun/merek/model kendaraan, tanggal/jam pilihan, keluhan opsional, dan ringkasan. Field wajib dan aturan slot masih perlu ditentukan.
-- Pengiriman reservasi direncanakan memicu automation ke WA pribadi pemilik untuk testing. Jangan memakai nomor Service, Body Repair, atau Sparepart sebagai tujuan testing tanpa konfirmasi nomor.
-- Panel admin, penyedia WhatsApp, alat automation seperti n8n, penyimpanan, serta mekanisme konfirmasi jadwal belum diputuskan.
-- Screenshot menjadi acuan alur; tampilan nanti mengikuti identitas Cipendawa. Klaim garansi, durasi, konfirmasi 24 jam, dan batas pemesanan 18 jam dalam contoh belum disetujui sebagai kebijakan bengkel.
-
-Instruksi terbaru 18 Oktober 2026 mengizinkan implementasi frontend terlebih dahulu. Pemilik mengonfirmasi tiga kategori layanan, pemilihan cabang, tanggal, dan preferensi waktu. Detail implementasi dan batas pratinjau ada di [frontend reservasi](../docs/reservation-frontend.md). State hanya berada di memori halaman; refresh mengosongkan isian. Ringkasan tidak mengklaim reservasi berhasil.
+Detail alur ada di [dokumentasi reservasi](../docs/reservation-frontend.md), setup API dan database di [README backend](../bengkel-backend/README.md).
 
 Pemilik project mengonfirmasi bahwa kontak, foto, dan informasi yang tersedia adalah benar. Materi before-after sudah ditambahkan di public/images/before_after/ dan terhubung ke slider. Gunakan foto asli yang tersedia.
 
@@ -58,17 +57,17 @@ TestimonialSection menampilkan Google Reviews melalui widget Elfsight 2bb9cb75-0
 
 ServiceSection menampilkan tiga ringkasan statis: Body Repair, Service, serta Sparepart & Variasi. Beranda tidak mengambil layanan dari API dan tidak memerlukan backend atau database. Kontak, navigasi publik, serta jam operasional bersumber dari lib/content/workshop.ts.
 
-Foto layanan menggunakan public/images/layanan/body_repair.png, service.png, dan sparepart_variasi.png. Pada desktop, pengantar section mengikuti scroll di kolom kiri, sementara foto dan informasi tiap layanan tampil di kanan. Pada HP, teks ditempatkan di bawah foto agar tidak menutupi subjek. Foto dimuat melalui next/image sesuai ukuran layar.
+Foto layanan menggunakan public/images/layanan/body_repair.png, service.png, dan sparepart_variasi.png. Pada desktop, pengantar section mengikuti scroll di kolom kiri, sementara foto dan informasi tiap layanan tampil di kanan. Pada HP, foto tetap menjadi latar dengan teks di atasnya seperti desktop; ukuran dan susunan menyesuaikan ruang. Foto dimuat melalui next/image sesuai ukuran layar.
 
-Navbar dan footer menyediakan tautan `/reservasi` melalui navigasi bersama. Hero dan CTA kontak tetap menyediakan jalur layanan, lokasi, serta tiga WhatsApp. Halaman detail /layanan belum dibuat; ringkasan di beranda menjelaskannya. Cek status publik belum diminta kembali.
+Navbar dan footer menyediakan tautan `/reservasi` melalui navigasi bersama. Hero dan CTA kontak tetap menyediakan jalur layanan, lokasi, serta tiga WhatsApp. Halaman detail /layanan belum dibuat; informasi layanan tersedia di beranda. Cek status publik belum diminta kembali.
 
 Menu mobile memiliki nama aksesibel, status buka/tutup, dan kendali Escape. Perbandingan foto dapat dioperasikan dengan tombol arah, Page Up/Down, Home, serta End; tombol pemilih foto memiliki label dan target sentuh yang lebih besar. Pemeriksaan tampilan dan interaksi di browser tetap diperlukan sebelum rilis.
 
-Halaman /login, layout admin, sidebar, dashboard placeholder, hook auth, serta API client modul operasional masih tersimpan. Panel admin belum diputuskan. API client reservasi yang sudah ada perlu ditinjau sebelum digunakan untuk alur baru; belum ada perubahan integrasi pada pembaruan dokumentasi ini.
+Halaman /login, layout admin, sidebar, dashboard placeholder, hook auth, serta API client modul operasional masih tersimpan. Panel admin belum diputuskan. Reservasi publik memakai lib/api/booking.ts dan route server app/api/reservations/route.ts. Modul admin lama tidak digunakan oleh alur ini.
 
 ## Teknologi
 
-- Next.js dengan App Router; package.json saat ini mendeklarasikan ^16.4.2.
+- Next.js dengan App Router; package.json saat ini mendeklarasikan ^16.4.3.
 - React dan React DOM 19.2.4, serta TypeScript.
 - Tailwind CSS 4 dan Lucide React.
 - Axios masih tersedia untuk API client dari scope lama; beranda memakai konten statis.
@@ -103,13 +102,13 @@ npm install
 npm run dev
 ```
 
-Buka http://localhost:3000. Beranda dan informasi layanan dapat ditampilkan tanpa backend. Jika menjalankan route lama yang memakai API, jalankan backend mengikuti README utama dan buat .env.local:
+Buka http://localhost:3000. Beranda dapat ditampilkan tanpa backend. Untuk menyimpan reservasi, jalankan backend dan PostgreSQL mengikuti README backend, lalu buat .env.local:
 
 ```dotenv
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+BACKEND_API_URL=http://127.0.0.1:8080/api
 ```
 
-Backend saat ini mengizinkan CORS dari http://localhost:3000. Origin lain memerlukan konfigurasi yang sesuai.
+URL backend hanya digunakan di server Next.js. Browser mengirim ke route same-origin /api/reservations.
 
 Perintah yang tersedia:
 

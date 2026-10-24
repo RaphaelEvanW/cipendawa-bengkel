@@ -411,6 +411,11 @@
   background: var(--lime-dark);
 }
 
+.primary:disabled, .secondary:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
 .secondary {
   padding-left: 0;
   color: #c4cadb;
@@ -529,6 +534,7 @@
 .reviewNotice strong {
   display: block;
   margin-bottom: 5px;
+  overflow-wrap: anywhere;
 }
 
 .reviewList {

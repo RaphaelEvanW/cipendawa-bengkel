@@ -19,7 +19,9 @@ Pemilik mengonfirmasi pada 18 Oktober 2026:
 - Alur tiga langkah mengikuti referensi: layanan, data pelanggan, lalu jadwal/ringkasan.
 - Aset foto layanan yang sudah tersedia digunakan untuk frontend awal.
 
-Tahap frontend menampilkan pratinjau yang tidak mengirim data. Automation WhatsApp direncanakan menggunakan nomor pribadi pemilik untuk testing; nomor, penyedia, dan integrasinya belum ditetapkan. Panel admin masih dipertimbangkan.
+Pada 24 Oktober 2026, pemilik menetapkan project sebagai showcase pribadi dengan backend dan database lokal sungguhan. Form menyimpan reservasi setelah ringkasan dikonfirmasi. WhatsApp memakai mode mock dengan status simulated; tidak ada pesan yang dikirim atau penyedia berbayar. Panel admin ditunda.
+
+Semua cabang menerima ketiga kategori layanan. Cabang yang dipilih pelanggan adalah lokasi kunjungan; pemindahan pekerjaan kompleks ke Cianjur ditangani manual oleh tim. Setiap reservasi mendapat kode dan status pending. Idempotency key mencegah percobaan ulang menambah data yang sama.
 
 ## Batasan Konten
 

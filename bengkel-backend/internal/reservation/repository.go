@@ -1,7 +1,11 @@
 package reservation
 
 import (
+	"encoding/json"
+	"errors"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Repository struct {
@@ -84,4 +88,61 @@ func (r *Repository) CountByDate(date string) (int64, error) {
 		Where("reservation_date = ? AND status NOT IN ?", date, []string{"rejected", "cancelled"}).
 		Count(&count).Error
 	return count, err
+}
+
+func (r *Repository) Save(reservation *Reservation, notification NotificationReceipt) (*Reservation, NotificationReceipt, bool, error) {
+	replay := false
+	err := r.db.Transaction(func(tx *gorm.DB) error {
+		result := tx.Omit("RescheduleDateFrom", "RescheduleDateTo", "RescheduleTimeFrom", "RescheduleTimeTo").Clauses(clause.OnConflict{Columns: []clause.Column{{Name: "idempotency_key"}}, DoNothing: true}).Create(reservation)
+		if result.Error != nil {
+			return result.Error
+		}
+		if result.RowsAffected == 0 {
+			replay = true
+			var original Reservation
+			if err := tx.Where("idempotency_key = ?", reservation.IdempotencyKey).First(&original).Error; err != nil {
+				return err
+			}
+			if original.RequestHash != reservation.RequestHash {
+				return ErrIdempotencyConflict
+			}
+			var saved struct{ Payload string }
+			if err := tx.Table("notification").Select("payload").Where("reservation_id = ? AND status = ?", original.ID, "simulated").Take(&saved).Error; err != nil {
+				return err
+			}
+			if err := json.Unmarshal([]byte(saved.Payload), &notification); err != nil {
+				return err
+			}
+			*reservation = original
+			return nil
+		}
+		payload, err := json.Marshal(notification)
+		if err != nil {
+			return err
+		}
+		return tx.Exec("INSERT INTO notification (id, reservation_id, channel, status, payload, sent_at) VALUES (?, ?, 'whatsapp', 'simulated', ?, NULL)", uuid.NewString(), reservation.ID, string(payload)).Error
+	})
+	return reservation, notification, replay, err
+}
+func (r *Repository) Lookup(key, hash string) (*Receipt, error) {
+	var original Reservation
+	err := r.db.Where("idempotency_key = ?", key).First(&original).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	if original.RequestHash != hash {
+		return nil, ErrIdempotencyConflict
+	}
+	var saved struct{ Payload string }
+	if err = r.db.Table("notification").Select("payload").Where("reservation_id = ? AND status = ?", original.ID, "simulated").Take(&saved).Error; err != nil {
+		return nil, err
+	}
+	var notification NotificationReceipt
+	if err = json.Unmarshal([]byte(saved.Payload), &notification); err != nil {
+		return nil, err
+	}
+	return &Receipt{BookingCode: original.BookingCode, Status: original.Status, Notification: notification}, nil
 }

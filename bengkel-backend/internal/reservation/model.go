@@ -3,6 +3,12 @@ package reservation
 import "time"
 
 type Reservation struct {
+	ServiceCode        string    `json:"service_code"`
+	BranchCode         string    `json:"branch_code"`
+	PreferredPeriod    string    `json:"preferred_period"`
+	CustomerEmail      string    `json:"customer_email"`
+	IdempotencyKey     string    `json:"-" gorm:"type:uuid"`
+	RequestHash        string    `json:"-"`
 	ID                 string    `json:"id" gorm:"type:uuid;primary_key"`
 	BookingCode        string    `json:"booking_code" gorm:"unique;not null"`
 	ServiceID          string    `json:"service_id" gorm:"type:uuid;not null"`
@@ -37,20 +43,16 @@ type ReservationLog struct {
 func (ReservationLog) TableName() string { return "reservation_log" }
 
 type CreateReservationRequest struct {
-	ServiceID          string `json:"service_id" binding:"required"`
-	ReservationDate    string `json:"reservation_date" binding:"required"`
-	ReservationTime    string `json:"reservation_time" binding:"required"`
-	CustomerName       string `json:"customer_name" binding:"required"`
-	CustomerPhone      string `json:"customer_phone" binding:"required"`
-	CustomerVehicle    string `json:"customer_vehicle"`
-	Notes              string `json:"notes"`
-	RescheduleWilling  bool   `json:"reschedule_willing"`
-	RescheduleDateFrom string `json:"reschedule_date_from"`
-	RescheduleDateTo   string `json:"reschedule_date_to"`
-	RescheduleTimeFrom string `json:"reschedule_time_from"`
-	RescheduleTimeTo   string `json:"reschedule_time_to"`
+	ServiceCode     string `json:"service_code"`
+	BranchCode      string `json:"branch_code"`
+	ReservationDate string `json:"reservation_date"`
+	PreferredPeriod string `json:"preferred_period"`
+	CustomerName    string `json:"customer_name"`
+	CustomerPhone   string `json:"customer_phone"`
+	CustomerEmail   string `json:"customer_email"`
+	CustomerVehicle string `json:"customer_vehicle"`
+	Notes           string `json:"notes"`
 }
-
 type UpdateStatusRequest struct {
 	Status string `json:"status" binding:"required"`
 	Note   string `json:"note"`

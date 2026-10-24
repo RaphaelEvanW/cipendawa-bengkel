@@ -1,134 +1,85 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"bengkel-backend/config"
-	"bengkel-backend/internal/auth"
-	"bengkel-backend/internal/dashboard"
-	"bengkel-backend/internal/notification"
 	"bengkel-backend/internal/reservation"
 	"bengkel-backend/internal/schedule"
-	"bengkel-backend/internal/service"
-	"bengkel-backend/internal/settings"
 	"bengkel-backend/pkg"
 
 	"github.com/gin-contrib/cors"
-
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
+
+func buildRouter(cfg *config.Config, db *gorm.DB) *gin.Engine {
+	router := gin.New()
+	_ = router.SetTrustedProxies(nil)
+	router.Use(gin.Logger(), gin.Recovery())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: cfg.CORSOrigins,
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodOptions},
+		AllowHeaders: []string{"Origin", "Content-Type", "Idempotency-Key"},
+		MaxAge:       time.Hour,
+	}))
+	router.GET("/ping", func(c *gin.Context) {
+		pkg.SendSuccess(c, http.StatusOK, "pong", nil)
+	})
+	repository := reservation.NewRepository(db)
+	scheduleRepository := schedule.NewRepository(db)
+	handler := reservation.NewHandler(reservation.NewService(repository, scheduleRepository, cfg))
+	router.POST("/api/reservations", handler.Create)
+	return router
+}
 
 func main() {
 	cfg := config.Load()
+	if err := cfg.Validate(); err != nil {
+		log.Fatal(err)
+	}
 	db := pkg.InitDB(cfg)
+	pool, err := db.DB()
+	if err != nil {
+		log.Fatal("Database pool unavailable")
+	}
+	defer pool.Close()
 
-	// auth
-	authService := auth.NewService(db, cfg)
-	authHandler := auth.NewHandler(authService)
-
-	// service
-	serviceRepo := service.NewRepository(db)
-	serviceService := service.NewService(serviceRepo)
-	serviceHandler := service.NewHandler(serviceService)
-
-	// schedule
-	scheduleRepo := schedule.NewRepository(db)
-	scheduleService := schedule.NewService(scheduleRepo, cfg)
-	scheduleHandler := schedule.NewHandler(scheduleService)
-
-	// reservation
-	reservationRepo := reservation.NewRepository(db)
-	reservationService := reservation.NewService(reservationRepo, scheduleRepo, cfg)
-	reservationHandler := reservation.NewHandler(reservationService)
-
-	// notification
-	notificationRepo := notification.NewRepository(db)
-	notificationService := notification.NewService(notificationRepo, cfg)
-	notificationHandler := notification.NewHandler(notificationService)
-
-	// dashboard
-	dashboardService := dashboard.NewService(db)
-	dashboardHandler := dashboard.NewHandler(dashboardService)
-
-	// settings
-	settingsRepo := settings.NewRepository(db)
-	settingsService := settings.NewService(settingsRepo)
-	settingsHandler := settings.NewHandler(settingsService)
-
-	r := gin.Default()
-
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-	}))
-
-	r.GET("/ping", func(c *gin.Context) {
-		pkg.SendSuccess(c, 200, "pong", nil)
-	})
-
-	api := r.Group("/api")
-	{
-		// auth
-		authRoutes := api.Group("/auth")
-		{
-			authRoutes.POST("/login", authHandler.Login)
+	gin.SetMode(gin.ReleaseMode)
+	server := &http.Server{
+		Addr:              net.JoinHostPort(cfg.ListenHost, cfg.Port),
+		Handler:           buildRouter(cfg, db),
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+		MaxHeaderBytes:    16 * 1024,
+	}
+	stop, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
+	serverErrors := make(chan error, 1)
+	go func() {
+		log.Printf("Showcase API listening on %s; WhatsApp mode: mock", server.Addr)
+		serverErrors <- server.ListenAndServe()
+	}()
+	select {
+	case err := <-serverErrors:
+		if !errors.Is(err, http.ErrServerClosed) {
+			log.Fatal(err)
 		}
-
-		// public routes
-		api.GET("/services", serviceHandler.GetAll)
-		api.GET("/services/:id", serviceHandler.GetByID)
-		api.GET("/book/config", scheduleHandler.GetConfig)
-		api.POST("/book/availability", scheduleHandler.CheckAvailability)
-		api.POST("/reservations", reservationHandler.Create)
-		api.POST("/reservations/status", reservationHandler.CheckStatus)
-
-		// admin routes
-		adminRoutes := api.Group("/admin")
-		adminRoutes.Use(auth.AuthMiddleware(cfg))
-		{
-			// service
-			adminRoutes.GET("/services", serviceHandler.GetAllAdmin)
-			adminRoutes.POST("/services", serviceHandler.Create)
-			adminRoutes.PUT("/services/:id", serviceHandler.Update)
-			adminRoutes.DELETE("/services/:id", serviceHandler.Delete)
-
-			// shop config
-			adminRoutes.PUT("/book/config", scheduleHandler.UpdateConfig)
-
-			// shop closures
-			adminRoutes.GET("/book/closures", scheduleHandler.GetClosures)
-			adminRoutes.POST("/book/closures", scheduleHandler.CreateClosure)
-			adminRoutes.POST("/book/closures/bulk", scheduleHandler.CreateClosureBulk)
-			adminRoutes.POST("/book/closures/range", scheduleHandler.CreateClosureRange)
-			adminRoutes.PATCH("/book/closures/:id", scheduleHandler.UpdateClosure)
-			adminRoutes.DELETE("/book/closures/:id", scheduleHandler.DeleteClosure)
-			adminRoutes.POST("/book/sync-holidays", scheduleHandler.SyncNationalHolidays)
-
-			// reservation
-			adminRoutes.GET("/reservations", reservationHandler.GetAll)
-			adminRoutes.GET("/reservations/:id", reservationHandler.GetByID)
-			adminRoutes.PATCH("/reservations/:id/status", reservationHandler.UpdateStatus)
-			adminRoutes.DELETE("/reservations/:id", reservationHandler.Delete)
-			adminRoutes.GET("/reservations/:id/logs", reservationHandler.GetLogs)
-
-			// notification
-			adminRoutes.GET("/notifications", notificationHandler.GetAll)
-			adminRoutes.GET("/notifications/reservation/:reservation_id", notificationHandler.GetByReservationID)
-			adminRoutes.POST("/notifications/:id/retry", notificationHandler.Retry)
-
-			// dashboard
-			adminRoutes.GET("/dashboard/summary", dashboardHandler.GetSummary)
-			adminRoutes.GET("/dashboard/chart", dashboardHandler.GetChartData)
-
-			adminRoutes.GET("/settings", settingsHandler.GetAll)
-			adminRoutes.GET("/settings/:key", settingsHandler.GetByKey)
-			adminRoutes.PUT("/settings/:key", settingsHandler.Update)
+	case <-stop.Done():
+		shutdown, done := context.WithTimeout(context.Background(), 10*time.Second)
+		defer done()
+		if err := server.Shutdown(shutdown); err != nil {
+			log.Print("Graceful shutdown timed out")
 		}
 	}
-
-	log.Printf("Server running on port %s", cfg.Port)
-	r.Run(":" + cfg.Port)
 }
