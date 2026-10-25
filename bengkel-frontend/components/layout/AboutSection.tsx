@@ -234,7 +234,7 @@ export default function AboutSection() {
             </p>
 
             {/* Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-2.5">
               {highlights.map((item) => (
                 <div key={item} className="flex items-start gap-2">
                   <CheckCircle size={14} className="text-lime mt-0.5 shrink-0" />

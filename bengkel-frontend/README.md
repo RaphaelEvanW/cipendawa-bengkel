@@ -140,7 +140,7 @@ npm run build -- --webpack
 
 ## Acuan Pengembangan
 
-- Baca [AGENTS.md](AGENTS.md) dan instruksi di root repository. Untuk API atau perilaku Next.js, baca panduan versi terpasang di node_modules/next/dist/docs/.
+- Untuk API atau perilaku Next.js, baca panduan versi terpasang di node_modules/next/dist/docs/.
 - Gunakan keputusan scope dalam README utama sebagai acuan ketika menemukan kode reservasi atau admin.
 - Pertahankan informasi perusahaan, kontak, dan aset yang sudah dikonfirmasi pemilik.
 - Buat CTA yang menjelaskan tindakan sebenarnya, seperti menghubungi bengkel atau membuka lokasi.

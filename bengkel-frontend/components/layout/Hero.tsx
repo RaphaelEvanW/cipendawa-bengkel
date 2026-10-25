@@ -1,4 +1,5 @@
 import Link from "next/link";
+import styles from "./Hero.module.css";
 
 export default function Hero() {
   return (
@@ -24,21 +25,21 @@ export default function Hero() {
           </p>
 
           {/* Heading */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6 uppercase">
+          <h1 className={`${styles.heading} text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-6 uppercase`}>
             Bengkel Mobil<br />
             Andalan di<br />
             <span className="text-lime">Cianjur &amp;<br />Sukabumi.</span>
           </h1>
 
           {/* Description */}
-          <p className="text-base text-white/85 leading-relaxed mb-10 max-w-md">
+          <p className={`${styles.description} text-base text-white/85 leading-relaxed mb-10 max-w-md`}>
             Body repair, servis, suku cadang, dan variasi mobil.
             Lebih dari 48 tahun melayani puluhan ribu pelanggan
             di Cianjur dan Sukabumi.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap gap-3">
+          <div className={`${styles.actions} flex flex-wrap gap-3`}>
             <Link
               href="/#kontak"
               className="inline-flex items-center gap-2 bg-lime text-navy font-black px-8 py-4 text-sm uppercase tracking-wider hover:bg-lime-dark transition-colors"
@@ -56,7 +57,7 @@ export default function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap gap-10 mt-4 pt-4 border-t border-white/10">
+          <div className={`${styles.stats} flex flex-wrap gap-10 mt-4 pt-4 border-t border-white/10`}>
             {[
               { value: "48+", label: "Tahun Pengalaman" },
               { value: "3", label: "Cabang" },

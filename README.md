@@ -108,7 +108,6 @@ Versi dependensi mengacu pada bengkel-frontend/package.json, lockfile, dan bengk
 - bengkel-backend/internal/: modul backend.
 - migrations/001_init.sql: skema dan seed database.
 - bengkel_erd.html: diagram database.
-- .opencode/skills/: skill antislop yang dipasang di project.
 
 Backend umumnya memakai pola handler -> service -> repository. Dokumentasi frontend dan identitas visual tersedia di [README frontend](bengkel-frontend/README.md).
 

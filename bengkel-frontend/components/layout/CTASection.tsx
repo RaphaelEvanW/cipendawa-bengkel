@@ -16,17 +16,17 @@ export default function CTASection() {
               Pilih tim yang sesuai dengan kebutuhan mobil Anda.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-3 gap-3 max-w-4xl mx-auto">
               {workshopContacts.map((contact) => (
                 <a
                   key={contact.id}
                   href={`https://wa.me/${contact.number}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex min-h-14 items-center justify-center gap-2 bg-lime text-navy font-bold px-4 py-4 hover:bg-lime-dark transition-colors"
+                  className="flex min-h-14 items-center justify-center gap-2 bg-lime text-navy text-sm sm:text-base font-bold px-3 sm:px-4 py-4 hover:bg-lime-dark transition-colors"
                 >
-                  <Phone size={18} aria-hidden="true" />
-                  WhatsApp {contact.label}
+                  <Phone size={18} aria-hidden="true" className="shrink-0" />
+                  <span>WhatsApp {contact.label}</span>
                 </a>
               ))}
             </div>

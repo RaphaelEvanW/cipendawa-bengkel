@@ -1044,10 +1044,6 @@
     padding: 14px;
   }
 
-  .stepCaption {
-    display: none;
-  }
-
   .periods {
     gap: 6px;
   }
@@ -1065,15 +1061,74 @@
     font-size: 12px;
   }
 
-  .summaryList {
-    grid-template-columns: 1fr;
-  }
-
   .reviewList > div {
     grid-template-columns: 1fr;
     gap: 4px;
   }
 
+}
+
+@media (min-width: 480px) and (max-width: 600px) {
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+  }
+
+  .header h1 {
+    font-size: clamp(26px, 5.3vw, 32px);
+  }
+
+  .intro {
+    margin-top: 0;
+    font-size: 13px;
+  }
+
+  .intro .previewNote {
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .formBody {
+    padding: 20px;
+  }
+
+  .formBody h2 {
+    font-size: 22px;
+  }
+
+  .requiredHint {
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+
+  .service {
+    min-height: 88px;
+  }
+
+  .serviceCopy {
+    padding-block: 12px;
+  }
+
+  .servicePhoto {
+    width: 30%;
+  }
+
+  .actions {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 479px) {
+  .stepCaption {
+    display: none;
+  }
+
+  .summaryList {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

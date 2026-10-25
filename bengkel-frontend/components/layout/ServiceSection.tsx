@@ -49,7 +49,7 @@ export default function ServiceSection() {
             const contact = workshopContacts.find((item) => item.id === service.id);
 
             return (
-              <article key={service.id} className="relative isolate flex min-h-[380px] items-end bg-navy sm:min-h-[430px]">
+              <article key={service.id} className="relative isolate flex min-h-[clamp(320px,60vw,430px)] items-end bg-navy sm:min-h-[430px]">
                 <div className="absolute inset-0">
                   <Image
                     src={service.image}
@@ -61,7 +61,7 @@ export default function ServiceSection() {
                   />
                   <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/70 to-navy/10 sm:via-navy/55 sm:to-transparent" />
                 </div>
-                <div className="relative z-10 w-[78%] px-5 py-7 sm:w-[58%] sm:p-8 xl:w-[54%] xl:p-10">
+                <div className="relative z-10 w-[70%] px-5 py-7 min-[480px]:w-[62%] sm:w-[58%] sm:p-8 xl:w-[54%] xl:p-10">
                 <h3 className="text-3xl font-black uppercase leading-[1.04] tracking-tight text-white sm:text-4xl xl:text-[2.75rem]">{service.name}</h3>
                 <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/85 sm:text-base">{service.description}</p>
                 {contact ? (

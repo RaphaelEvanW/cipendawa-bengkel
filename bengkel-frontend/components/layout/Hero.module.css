@@ -1,0 +1,37 @@
+@media (max-width: 767px) {
+  .heading {
+    font-size: clamp(32px, 8.4vw, 60px);
+  }
+
+  .description {
+    max-width: clamp(280px, 64vw, 448px);
+    font-size: clamp(14px, 2.25vw, 16px);
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 448px;
+    gap: clamp(8px, 1.7vw, 12px);
+  }
+
+  .actions a {
+    min-height: 48px;
+    justify-content: center;
+    padding-inline: 12px;
+    font-size: clamp(11px, 2vw, 14px);
+    text-align: center;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 448px;
+    gap: 12px;
+  }
+
+  .stats > div > p:last-child {
+    font-size: clamp(9px, 1.7vw, 12px);
+    letter-spacing: 0.06em;
+  }
+}

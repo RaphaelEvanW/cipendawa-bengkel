@@ -29,6 +29,16 @@ go.work.sum
 .env.showcase
 .local/
 
+# Local AI agent instructions, skills, and review artifacts
+.agents/
+.codex/
+.opencode/
+.impeccable/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+docs/superpowers/
+
 # Editor/IDE
 # .idea/
 # .vscode/

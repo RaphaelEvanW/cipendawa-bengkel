@@ -309,7 +309,7 @@ export default function ReservationFlow({ demoMode }: { demoMode: boolean }) {
           <h1>Rencanakan<br /><span>kunjungan Anda.</span></h1>
           <div className={styles.intro}>
             <p>Pilih layanan, cabang tujuan, dan waktu kunjungan. Jadwal perlu dikonfirmasi oleh tim bengkel.</p>
-            <p className={styles.previewNote}>{demoMode ? "Mode demo: gunakan data contoh. Isian hanya tampil di halaman ini; website tidak menyimpan reservasi atau mengirim pesan WhatsApp." : "Data reservasi akan disimpan. Pengiriman WhatsApp masih berupa simulasi."}</p>
+            <p className={styles.previewNote}>{demoMode ? "Mode demo: isian tidak disimpan. WhatsApp tidak dikirim." : "Data reservasi akan disimpan. Pengiriman WhatsApp masih berupa simulasi."}</p>
           </div>
         </header>
 
