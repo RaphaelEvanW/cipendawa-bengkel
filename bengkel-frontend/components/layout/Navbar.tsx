@@ -36,7 +36,7 @@ export default function Navbar() {
     <nav
       aria-label="Navigasi utama"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+        scrolled || isOpen
           ? "bg-navy/75 backdrop-blur-md shadow-lg shadow-black/30"
           : "bg-transparent backdrop-blur-sm"
       }`}
@@ -92,7 +92,7 @@ export default function Navbar() {
         <div
           id="mobile-navigation"
           hidden={!isOpen}
-          className={`${isOpen ? "flex" : "hidden"} md:hidden bg-navy border-t border-white/10 px-4 py-5 flex-col gap-2`}
+          className={`${isOpen ? "flex" : "hidden"} md:hidden border-t border-white/10 px-4 py-5 flex-col gap-2`}
         >
           {publicNavLinks.map((link) => (
             <Link
