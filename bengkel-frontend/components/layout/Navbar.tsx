@@ -92,14 +92,14 @@ export default function Navbar() {
         <div
           id="mobile-navigation"
           hidden={!isOpen}
-          className={`${isOpen ? "flex" : "hidden"} md:hidden border-t border-white/10 px-4 py-5 flex-col gap-2`}
+          className={`${isOpen ? "flex" : "hidden"} md:hidden border-t border-white/20 px-4 py-5 flex-col gap-2`}
         >
           {publicNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="inline-flex min-h-11 items-center text-sm font-bold text-white hover:text-lime transition-colors"
+              className="inline-flex min-h-11 items-center border-b border-white/25 pb-2 text-sm font-bold text-white hover:text-lime transition-colors"
             >
               {link.label}
             </Link>
